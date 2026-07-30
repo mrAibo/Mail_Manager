@@ -57,6 +57,7 @@
         <div id="toolsMenuPanel">
           <button id="logBtn" class="action-btn">📜 Protokoll</button>
           <button id="ruleManagerBtn" class="action-btn">⚙ Regeln</button>
+          <button id="customRegexBtn" class="action-btn">🔍 RegEx</button>
           <button id="protectManagerBtn" class="action-btn">🛡 Schutzliste</button>
           <button id="shortcutsBtn" class="action-btn">⌨ Tastaturkürzel</button>
           <button id="columnBtn" class="action-btn">📊 Spalten</button>
@@ -101,6 +102,7 @@
       <div id="actionButtons">
         <button id="trashBtn"  class="action-btn danger" disabled>🗑 Papierkorb</button>
         <button id="folderBtn" class="action-btn"        disabled>📁 In Ordner</button>
+        <button id="readBtn"   class="action-btn"        disabled>✓ Gelesen</button>
         <button id="tagBtn"    class="action-btn"        disabled>🏷 Tag</button>
         <button id="unsubBtn"  class="action-btn"        disabled>🚫 Abmelden</button>
         <button id="exportBtn" class="action-btn">💾 Export</button>
@@ -228,6 +230,19 @@
       <button id="cleanupRuleExport">Export JSON</button>
       <button id="cleanupRuleClear" class="danger">Alle löschen</button>
       <button id="cleanupRuleManagerClose">Schließen</button>
+    </div>
+  </dialog>
+
+  <dialog id="customRegexDialog">
+    <h3>Benutzerdefinierte RegEx-Regeln</h3>
+    <div class="custom-regex-list" id="customRegexList"></div>
+    <div class="custom-regex-add">
+      <input type="text" id="customRegexPattern" placeholder="RegEx-Muster (z. B. amazon|ebay)" />
+      <input type="text" id="customRegexTitle" placeholder="Titel (z. B. Shopping)" />
+      <button id="customRegexAddBtn">Hinzufügen</button>
+    </div>
+    <div class="dialog-buttons">
+      <button id="customRegexClose">Schließen</button>
     </div>
   </dialog>
   

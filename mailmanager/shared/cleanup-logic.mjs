@@ -1,3 +1,7 @@
+// ponytail: normalize Latin diacritics to ASCII. Covers German, French, Nordic, etc.
+const DIACRITIC_MAP = { à:"a", á:"a", â:"a", ã:"a", ä:"a", å:"a", æ:"ae", ç:"c", è:"e", é:"e", ê:"e", ë:"e", ì:"i", í:"i", î:"i", ï:"i", ñ:"n", ò:"o", ó:"o", ô:"o", õ:"o", ö:"o", ø:"o", ù:"u", ú:"u", û:"u", ü:"u", ý:"y", ÿ:"y", ß:"ss", À:"A", Á:"A", Â:"A", Ã:"A", Ä:"A", Å:"A", Æ:"AE", Ç:"C", È:"E", É:"E", Ê:"E", Ë:"E", Ì:"I", Í:"I", Î:"I", Ï:"I", Ñ:"N", Ò:"O", Ó:"O", Ô:"O", Õ:"O", Ö:"O", Ø:"O", Ù:"U", Ú:"U", Û:"U", Ü:"U", Ý:"Y"};
+function diacriticLess(s) { return String(s||"").replace(/[^\x00-\x7F]/g, c => DIACRITIC_MAP[c] || c); }
+
 export function computeCleanupScore(entry, now = new Date()) {
   const { count, readCount, oldestDate, newestDate } = entry;
 
@@ -26,11 +30,11 @@ export function computeCleanupScore(entry, now = new Date()) {
 }
 
 export function computeBulkScore(email, displayName = "", sampleSubjects = []) {
-  const text = [
+  const text = diacriticLess([
     email || "",
     displayName || "",
     ...(sampleSubjects || []),
-  ].join(" ").toLowerCase();
+  ].join(" ").toLowerCase());
 
   let score = 0;
   const reasons = [];
@@ -94,7 +98,7 @@ export function computeBulkScore(email, displayName = "", sampleSubjects = []) {
     }
   }
 
-  if (/@.*(mail|newsletter|news|marketing|promo|shop|store)/i.test(email || "")) {
+  if (/@.*(mail|newsletter|news|marketing|promo|shop|store)/i.test(diacriticLess(email || ""))) {
     score += 20;
     reasons.push("domain-pattern");
   }

@@ -967,6 +967,18 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       break;
     }
 
+    case "markAsRead": {
+      let count = 0;
+      for (const id of messageIds) {
+        await browser.messages.update(id, { read: true });
+        count++;
+      }
+      await browser.storage.session.set({
+        [undoKey]: { type: "markAsRead", messageIds, accountId },
+      });
+      return { success: true, undoable: true, markedCount: count };
+    }
+
     case "folder": {
       const { folderName, parentFolderId, existingFolderId } = options;
       let targetFolder;
@@ -1032,6 +1044,10 @@ async function handleUndo(tabId) {
       await browser.messages.update(id, {
         tags: (msg.tags || []).filter(t => t !== undoEntry.tagKey),
       });
+    }
+  } else if (undoEntry.type === "markAsRead") {
+    for (const id of undoEntry.messageIds) {
+      await browser.messages.update(id, { read: false });
     }
   }
 

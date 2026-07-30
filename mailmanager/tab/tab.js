@@ -42,6 +42,7 @@ const state = {
   activeScanFolderId:  null,
   scanCancelRequested: false,
   lastSelectedEmail:   null,
+  customRegexRules:    [],   // [{ pattern, title, enabled }]
 };
 
 const $ = id => document.getElementById(id);
@@ -86,6 +87,7 @@ function applyCleanupScoreLabels() {
 
 const SCAN_CACHE_PREFIX = "mailmanager.scanCache.v2:";
 const TRASH_RULE_PREF_KEY = "mailmanager.trashRules.v1";
+const CUSTOM_REGEX_RULES_KEY = "mailmanager.customRegexRules.v1";
 const CLEANUP_RULES_KEY = "mailmanager.cleanupRules.v1";
 const ACTION_LOG_KEY = "mailmanager.actionLog.v1";
 const UI_PREFS_KEY = "mailmanager.uiPrefs.v1";
@@ -147,7 +149,7 @@ async function saveScanCache(accountId, folderId, senders) {
   };
 
   try {
-    await browser.storage.session.set({ [key]: payload });
+    await browser.storage.local.set({ [key]: payload });
   } catch (err) {
     console.warn("MailManager: Scan-Cache konnte nicht gespeichert werden:", err);
   }
@@ -158,7 +160,7 @@ async function loadScanCache(accountId, folderId) {
   if (!key) return null;
 
   try {
-    const data = await browser.storage.session.get(key);
+    const data = await browser.storage.local.get(key);
     const entry = data?.[key];
 
     if (!entry || !Array.isArray(entry.senders)) return null;
@@ -1078,6 +1080,8 @@ function clearActiveScan() {
 async function init() {
   browser.runtime.onMessage.addListener(onBackgroundMessage);
 
+  state.customRegexRules = await loadCustomRegexRules();
+
   const columnVisibility = await loadColumnVisibility();
   applyColumnVisibility(columnVisibility);
 
@@ -1130,6 +1134,7 @@ async function init() {
   bindTrashRulePresets();
   document.addEventListener("keydown", handleKeyboardShortcuts);
   $("folderBtn").addEventListener("click", openFolderDialog);
+  $("readBtn").addEventListener("click", () => dispatchAction("markAsRead"));
   $("tagBtn").addEventListener("click", openTagDialog);
   $("unsubBtn").addEventListener("click", handleUnsubscribe);
   $("exportBtn").addEventListener("click", () => $("exportDialog").showModal());
@@ -1167,6 +1172,20 @@ async function init() {
   $("protectManagerClose")?.addEventListener("click", () => $("protectManagerDialog").close());
   $("protectManagerFilter")?.addEventListener("input", renderProtectManager);
   $("protectExport")?.addEventListener("click", exportProtectedEmails);
+
+  $("customRegexBtn")?.addEventListener("click", () => {
+    renderCustomRegexList();
+    $("customRegexDialog").showModal();
+  });
+  $("customRegexClose")?.addEventListener("click", () => $("customRegexDialog").close());
+  $("customRegexAddBtn")?.addEventListener("click", () => {
+    const pattern = $("customRegexPattern").value.trim();
+    const title = $("customRegexTitle").value.trim();
+    if (!pattern) return;
+    addCustomRegexRule(pattern, title);
+    $("customRegexPattern").value = "";
+    $("customRegexTitle").value = "";
+  });
   $("protectImport")?.addEventListener("click", () => $("protectImportFile")?.click());
   $("protectImportFile")?.addEventListener("change", importProtectedEmailsFromFile);
   $("protectClear")?.addEventListener("click", clearProtectedEmailsWithConfirm);
@@ -2367,6 +2386,11 @@ function createSenderRow(entry, nested = false) {
     ? `<span class="sender-flag" title="${escapeHtml(protectionCandidateReason(entry))}">🛡️</span>`
     : "";
 
+  const regexMatch = matchCustomRegexRules(entry);
+  const regexBadge = regexMatch
+    ? `<span class="sender-flag custom-regex-badge" title="RegEx-Treffer: ${escapeHtml(regexMatch)}">🔍</span>`
+    : "";
+
   row.innerHTML = `
     <input type="checkbox" class="row-check" aria-label="Absender ${safeDisplayName} auswählen" ${isSelected ? "checked" : ""} ${isProtected ? "disabled" : ""} />
     <div class="sender-main">
@@ -2374,7 +2398,7 @@ function createSenderRow(entry, nested = false) {
         entry.count > 1
           ? `<span class="sender-expand-toggle" title="Mails anzeigen">${state.expandedSenders.has(entry.email) ? "▾" : "▸"}</span>`
           : `<span class="sender-expand-spacer"></span>`
-      }${isProtected ? "📌 " : ""}${safeDisplayName}<span class="sender-flags">${bulkBadge}${unsubscribeBadge}${protectSuggestionBadge}</span></div>
+      }${isProtected ? "📌 " : ""}${safeDisplayName}<span class="sender-flags">${bulkBadge}${unsubscribeBadge}${protectSuggestionBadge}${regexBadge}</span></div>
       <div class="sender-subjects">${safeSubjects}</div>
     </div>
     <span class="col-count">${entry.count}</span>
@@ -2651,7 +2675,7 @@ function updateSelectionLabel() {
 
 function updateActionButtons() {
   const has = state.selected.size > 0 || state.selectedMessages.size > 0;
-  ["trashBtn", "folderBtn", "tagBtn", "unsubBtn"].forEach(id => $(id).disabled = !has);
+  ["trashBtn", "folderBtn", "readBtn", "tagBtn", "unsubBtn"].forEach(id => $(id).disabled = !has);
 }
 
 // ─── Message selection helpers ─────────────────────────────────────────────────
@@ -5370,6 +5394,84 @@ function handleExport(format) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// ─── Custom Regex Rules ────────────────────────────────────────────────────────
+
+async function loadCustomRegexRules() {
+  try {
+    const data = await browser.storage.local.get(CUSTOM_REGEX_RULES_KEY);
+    return Array.isArray(data?.[CUSTOM_REGEX_RULES_KEY])
+      ? data[CUSTOM_REGEX_RULES_KEY]
+      : [];
+  } catch (_) { return []; }
+}
+
+async function saveCustomRegexRules(rules) {
+  await browser.storage.local.set({ [CUSTOM_REGEX_RULES_KEY]: rules || [] });
+}
+
+function addCustomRegexRule(pattern, title) {
+  if (!pattern) return;
+  state.customRegexRules.push({
+    pattern,
+    title: title || pattern,
+    enabled: true,
+  });
+  saveCustomRegexRules(state.customRegexRules);
+  renderCustomRegexList();
+}
+
+async function deleteCustomRegexRule(index) {
+  state.customRegexRules.splice(index, 1);
+  await saveCustomRegexRules(state.customRegexRules);
+  renderCustomRegexList();
+}
+
+async function toggleCustomRegexRule(index) {
+  state.customRegexRules[index].enabled = !state.customRegexRules[index].enabled;
+  await saveCustomRegexRules(state.customRegexRules);
+  renderCustomRegexList();
+}
+
+function formatCustomRegexList() {
+  if (state.customRegexRules.length === 0) {
+    return '<div class="custom-regex-empty">Keine benutzerdefinierten RegEx-Regeln.</div>';
+  }
+  return state.customRegexRules.map((r, i) => `
+    <div class="custom-regex-entry ${r.enabled ? "" : "disabled"}">
+      <span class="custom-regex-toggle" data-regex-idx="${i}">${r.enabled ? "🟢" : "⚪"}</span>
+      <span class="custom-regex-title">${escapeHtml(r.title)}</span>
+      <code class="custom-regex-pattern">${escapeHtml(r.pattern)}</code>
+      <button class="custom-regex-delete" data-regex-idx="${i}" title="Löschen">✕</button>
+    </div>
+  `).join("");
+}
+
+function renderCustomRegexList() {
+  const list = $("#customRegexList");
+  if (!list) return;
+  list.innerHTML = formatCustomRegexList();
+
+  list.querySelectorAll(".custom-regex-delete").forEach(btn => {
+    btn.addEventListener("click", () => deleteCustomRegexRule(Number(btn.dataset.regexIdx)));
+  });
+  list.querySelectorAll(".custom-regex-toggle").forEach(el => {
+    el.addEventListener("click", () => toggleCustomRegexRule(Number(el.dataset.regexIdx)));
+  });
+}
+
+// ponytail: check sender against all enabled custom regex rules
+// returns first matching rule title, or null
+function matchCustomRegexRules(sender) {
+  const text = [sender.email, sender.displayName].filter(Boolean).join(" ").toLowerCase();
+  for (const rule of state.customRegexRules) {
+    if (!rule.enabled) continue;
+    try {
+      if (new RegExp(rule.pattern, "i").test(text)) return rule.title;
+    } catch (_) { /* invalid regex — skip */ }
+  }
+  return null;
 }
 
 document.addEventListener("DOMContentLoaded", init);
