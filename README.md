@@ -53,7 +53,7 @@ Eine `https:`-Abmelde-Adresse wird nur nach Bestätigung im Standardbrowser geö
 - Jeder MailManager-Tab akzeptiert nur Scan-Ereignisse seines aktiven `scanId`; Undo-Einträge sind tabbezogen.
 - Der CSV-Export escaped Anführungszeichen und neutralisiert Spreadsheet-Formelpräfixe in Absenderfeldern.
 - Die Bulk- und Score-Erkennung ist heuristisch und kann falsch liegen.
-- Es gibt noch keine signierte Veröffentlichung, keinen GitHub Release und keine festgelegte Lizenz.
+- Es gibt noch keine signierte Veröffentlichung und keinen GitHub Release.
 
 ## Voraussetzungen
 
@@ -120,6 +120,7 @@ Verschiebe- und Undo-Flows benötigen zusätzlich Integrationstests im laufenden
 
 ```text
 .github/workflows/ci.yml          # Unit-Tests, Syntaxprüfung und XPI-Build
+LICENSE                           # MIT-Lizenz
 mailmanager/
 ├── manifest.json
 ├── background/background.js   # Thunderbird-API, Scan und Aktionen
@@ -134,7 +135,11 @@ mailmanager/
 
 Weitere technische Details stehen in [`mailmanager/README.md`](mailmanager/README.md), Änderungen in [`CHANGELOG.md`](CHANGELOG.md).
 
+## Lizenz
+
+[MIT](LICENSE) © 2026 Aleksej Voronin.
+
 ## Nächste sinnvolle Schritte
 
 1. Background-/UI-Integrationstests im laufenden Thunderbird ergänzen.
-2. Lizenz festlegen und signierte Releases veröffentlichen.
+2. Signierte Releases veröffentlichen.

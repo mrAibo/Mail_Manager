@@ -19,6 +19,7 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden dokumentiert.
 ### Infrastruktur
 - Background-Sicherheitstests und UI-Regeltests ergänzt
 - GitHub Actions prüft Unit-Tests, Syntax und XPI-Build mit Node.js 20
+- Projekt unter die MIT-Lizenz gestellt
 
 ## [0.1.0] — 2026-05-16
 

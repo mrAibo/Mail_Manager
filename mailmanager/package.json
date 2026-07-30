@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "test": "node --test tests/*.mjs",
     "build": "node -e \"require('node:fs').rmSync('../mailmanager.xpi', { force: true })\" && zip -r -X ../mailmanager.xpi . -x '*.DS_Store' 'node_modules/*' 'tests/*' 'package.json' 'README.md'"

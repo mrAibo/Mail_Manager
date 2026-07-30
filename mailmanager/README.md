@@ -410,4 +410,5 @@ wenn du explizit exportierst.
 Version 0.1.0 — frühe Alpha mit schneller Analyse, Bulk-Aktionen, Vorschau,
 lokaler Nachvollziehbarkeit und Untersuchung einzelner Mails direkt in der
 Liste. Vor einer öffentlichen Veröffentlichung fehlen noch reale Thunderbird-
-Integrationstests, eine festgelegte Lizenz und die Signierung.
+Integrationstests und die Signierung. Der Quellcode steht unter der
+[MIT-Lizenz](../LICENSE).
