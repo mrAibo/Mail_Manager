@@ -878,11 +878,17 @@ async function protectMatchingSenders(predicate) {
   const ok = confirm(`${emails.length} Absender schützen?`);
   if (!ok) return;
 
-  const response = await browser.runtime.sendMessage({
-    action: "protectEmails",
-    emails,
-    protect: true,
-  });
+  let response;
+  try {
+    response = await browser.runtime.sendMessage({
+      action: "protectEmails",
+      emails,
+      protect: true,
+    });
+  } catch (err) {
+    showError("Schutz-Aktion fehlgeschlagen: " + (err.message || "Verbindungsfehler"));
+    return;
+  }
 
   if (response?.error) {
     showError(response.error);
@@ -2262,7 +2268,8 @@ function senderContextItems(entry) {
 function messageContextItems(meta) {
   const items = [
     { label: "↗ In Thunderbird öffnen", action: () => {
-        browser.runtime.sendMessage({ action: "openMessage", messageId: meta.id });
+        browser.runtime.sendMessage({ action: "openMessage", messageId: meta.id })
+          .catch(() => {}); // background event page may not be ready
       } },
     { label: "↩ Antworten", action: () => {
         browser.compose.beginReply(meta.id)
@@ -2526,13 +2533,17 @@ async function openSenderMessage(entry) {
   const messageId = entry.newestMessageId || entry.messageIds?.[0];
   if (!messageId) return;
 
-  const response = await browser.runtime.sendMessage({
-    action: "openMessage",
-    messageId,
-  });
+  try {
+    const response = await browser.runtime.sendMessage({
+      action: "openMessage",
+      messageId,
+    });
 
-  if (response?.error) {
-    showError("Mail konnte nicht geöffnet werden: " + response.error);
+    if (response?.error) {
+      showError("Mail konnte nicht geöffnet werden: " + response.error);
+    }
+  } catch (_) {
+    // background event page not ready — silently ignore
   }
 }
 
@@ -4559,14 +4570,20 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
 
   if (messageIds.length === 0) return;
 
-  const response = await browser.runtime.sendMessage({
-    action: "performAction",
-    type,
-    messageIds,
-    accountId,
-    folderId,
-    options,
-  });
+  let response;
+  try {
+    response = await browser.runtime.sendMessage({
+      action: "performAction",
+      type,
+      messageIds,
+      accountId,
+      folderId,
+      options,
+    });
+  } catch (err) {
+    showError("Aktion fehlgeschlagen: " + (err.message || "Verbindungsfehler"));
+    return;
+  }
 
   if (response?.error) {
     showError(response.error);
