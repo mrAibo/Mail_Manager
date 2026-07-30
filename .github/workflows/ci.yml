@@ -15,18 +15,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Unit tests
+      - name: Check
         working-directory: mailmanager
-        run: npm test
-      - name: Syntax checks
-        working-directory: mailmanager
-        run: |
-          node --check background/background.js
-          node --check tab/tab.js
-          node --check shared/utils.js
-          node --check tab/tab-utilities.js
+        run: npm run check
       - name: Build and validate XPI
         working-directory: mailmanager
         run: |
           npm run build
           unzip -t ../mailmanager.xpi
+      - name: Upload XPI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mailmanager.xpi
+          path: mailmanager.xpi
