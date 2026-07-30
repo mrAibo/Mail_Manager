@@ -22,9 +22,9 @@ async function handleMessage(message, tabId) {
     case "diagnostics":        return handleDiagnostics(message.accountId || null);
     case "scan":               return handleScan(message.accountId, message.folderId, message.scanId, tabId, message.options || {});
     case "cancelScan":         return handleCancelScan(message.scanId);
-    case "performAction":      return handlePerformAction(message.type, message.messageIds, message.accountId, message.folderId, message.options || {});
+    case "performAction":      return handlePerformAction(message.type, message.messageIds, message.accountId, message.folderId, message.options || {}, tabId);
     case "previewTrash":       return handlePreviewTrash(message.messageIds || [], message.options || {});
-    case "undo":               return handleUndo();
+    case "undo":               return handleUndo(tabId);
     case "toggleProtect":      return handleToggleProtect(message.email, message.protect, message.kind);
     case "protectEmails":      return handleProtectEmails(message.emails || [], message.protect !== false);
     case "setProtectedEmails": return handleSetProtectedEmails(message.emails || []);
@@ -746,9 +746,18 @@ async function readMessageBasics(messageIds) {
 async function filterMessageIdsForTrashRules(messageIds, options = {}) {
   const olderThanDays = Number.parseInt(options.olderThanDays || "0", 10);
   const keepNewest = Number.parseInt(options.keepNewest || "0", 10);
+  const authorized = new Set(messageIds.map(id => String(id)));
   const groups = Array.isArray(options.senderGroups) && options.senderGroups.length > 0
-    ? options.senderGroups
+    ? options.senderGroups.map(group => ({
+        ...group,
+        messageIds: [...new Set(Array.isArray(group.messageIds) ? group.messageIds : [])]
+          .filter(id => authorized.has(String(id))),
+      }))
     : [{ email: "", messageIds }];
+
+  const grouped = new Set(groups.flatMap(group => group.messageIds).map(id => String(id)));
+  const ungrouped = messageIds.filter(id => !grouped.has(String(id)));
+  if (ungrouped.length > 0) groups.push({ email: "", messageIds: ungrouped });
 
   const useOlderThan = Number.isFinite(olderThanDays) && olderThanDays > 0;
   const useKeepNewest = Number.isFinite(keepNewest) && keepNewest > 0;
@@ -831,9 +840,60 @@ async function handlePreviewTrash(messageIds, options = {}) {
 }
 
 // ─── Actions + Undo ───────────────────────────────────────────────────────────
-async function handlePerformAction(type, messageIds, accountId, folderId, options) {
+function undoStorageKey(tabId) {
+  return Number.isInteger(tabId) ? `undoEntry:${tabId}` : "";
+}
+
+async function actionProtectionError(messageIds, folderId) {
+  const { protectedFolderIds, protectedEmails } = await loadProtected();
+  const protectedFolderSet = new Set(protectedFolderIds.map(id => String(id)));
+  const protectedSenderSet = new Set(
+    protectedEmails.map(email => String(email).trim().toLowerCase())
+  );
+
+  if (protectedFolderSet.has(String(folderId))) {
+    return "Der Quell-Ordner ist geschützt.";
+  }
+  if (protectedFolderSet.size === 0 && protectedSenderSet.size === 0) return "";
+
+  const checked = await mapLimit([...new Set(messageIds)], 20, async id => {
+    try {
+      return await browser.messages.get(id);
+    } catch {
+      return null;
+    }
+  });
+
+  if (checked.some(message => !message)) {
+    return "Mindestens eine Mail konnte nicht sicher geprüft werden. Bitte neu scannen.";
+  }
+
+  if (protectedFolderSet.size > 0) {
+    if (checked.some(message => !message.folder?.id)) {
+      return "Mindestens ein Quell-Ordner konnte nicht sicher geprüft werden. Bitte neu scannen.";
+    }
+    if (checked.some(message => protectedFolderSet.has(String(message.folder.id)))) {
+      return "Der Quell-Ordner ist geschützt.";
+    }
+  }
+
+  const protectedMessage = checked.find(message =>
+    protectedSenderSet.has(parseAuthor(message.author).email)
+  );
+  return protectedMessage ? "Die Auswahl enthält einen geschützten Absender." : "";
+}
+
+async function handlePerformAction(type, messageIds, accountId, folderId, options, tabId) {
   if (!Array.isArray(messageIds) || messageIds.length === 0) {
     return { error: "Keine Nachrichten ausgewählt." };
+  }
+
+  const undoKey = undoStorageKey(tabId);
+  if (!undoKey) return { error: "Aktion ohne gültige MailManager-Tab-ID abgelehnt." };
+
+  if (["trash", "folder", "tag"].includes(type)) {
+    const protectionError = await actionProtectionError(messageIds, folderId);
+    if (protectionError) return { error: protectionError };
   }
 
   switch (type) {
@@ -877,7 +937,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       }
 
       await browser.storage.session.set({
-        undoEntry: {
+        [undoKey]: {
           type: "trash",
           messageIds: newIds,
           sourceFolderId: folderId,
@@ -894,13 +954,6 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
         totalInputCount: filterResult.totalInputCount,
       };
     }
-    
-
-    case "delete":
-      await browser.messages.delete(messageIds, { deletePermanently: true, isUserAction: true });
-      await browser.storage.session.remove("undoEntry");
-      break;
-
     case "tag": {
       const { tagKey } = options;
       if (!tagKey) return { error: "Kein tagKey angegeben." };
@@ -909,7 +962,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
         await browser.messages.update(id, { tags: [...new Set([...(msg.tags || []), tagKey])] });
       }
       await browser.storage.session.set({
-        undoEntry: { type: "tag", messageIds, tagKey, accountId },
+        [undoKey]: { type: "tag", messageIds, tagKey, accountId },
       });
       break;
     }
@@ -944,7 +997,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       }
 
       await browser.storage.session.set({
-        undoEntry: { type: "folder", messageIds: newIds, sourceFolderId: folderId, accountId },
+        [undoKey]: { type: "folder", messageIds: newIds, sourceFolderId: folderId, accountId },
       });
 
       return {
@@ -959,11 +1012,14 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       return { error: "Unbekannte Aktion: " + type };
   }
 
-  return { success: true, undoable: type !== "delete" };
+  return { success: true, undoable: true };
 }
 
-async function handleUndo() {
-  const { undoEntry } = await browser.storage.session.get("undoEntry");
+async function handleUndo(tabId) {
+  const key = undoStorageKey(tabId);
+  if (!key) return { error: "Rückgängig ohne gültige MailManager-Tab-ID abgelehnt." };
+  const data = await browser.storage.session.get(key);
+  const undoEntry = data[key];
   if (!undoEntry) return { error: "Nichts zum Rückgängigmachen." };
 
   if (undoEntry.type === "trash" || undoEntry.type === "folder") {
@@ -979,7 +1035,7 @@ async function handleUndo() {
     }
   }
 
-  await browser.storage.session.remove("undoEntry");
+  await browser.storage.session.remove(key);
   return { success: true };
 }
 

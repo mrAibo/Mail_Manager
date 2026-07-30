@@ -81,6 +81,18 @@ describe("toCSV", () => {
   it("quotes displayName containing a comma", () => {
     assert.ok(toCSV([{ ...sample[0], displayName: "Shop, GmbH" }]).includes('"Shop, GmbH"'));
   });
+  it("escapes quotes inside CSV fields", () => {
+    assert.ok(toCSV([{ ...sample[0], displayName: 'Alice "Admin", GmbH' }])
+      .includes('"Alice ""Admin"", GmbH"'));
+  });
+  it("neutralizes spreadsheet formulas in untrusted fields", () => {
+    const row = toCSV([{ ...sample[0], displayName: "=1+1" }]).trim().split("\n")[1];
+    assert.equal(row.split(",")[1], "'=1+1");
+  });
+  it("neutralizes formulas after leading whitespace", () => {
+    const row = toCSV([{ ...sample[0], displayName: " \t=1+1" }]).trim().split("\n")[1];
+    assert.equal(row.split(",")[1], "' \t=1+1");
+  });
 });
 
 describe("toJSON", () => {

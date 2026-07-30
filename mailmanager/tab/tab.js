@@ -1,7 +1,7 @@
 // MailManager — Tab UI (source of truth for sender data)
 import { formatSize, formatRelativeDate, toCSV, toJSON } from "../shared/utils.js";
 import { extractPreviewText } from "../shared/message-preview.mjs";
-import { escapeHtml, daysSince, cleanupScoreTooltip, matchesAdvancedFilter, isTextEntryTarget } from "./tab-utilities.js";
+import { escapeHtml, daysSince, cleanupScoreTooltip, matchesAdvancedFilter, isTextEntryTarget, isCurrentScanMessage, canConfirmTrash, isCurrentPreviewRequest } from "./tab-utilities.js";
 
 function emptyAdvancedFilter() {
   return {
@@ -468,14 +468,10 @@ function scheduleFeatureStatusUpdate() {
 const QUICK_FILTERS = [
   { key: "all",          label: "Alle" },
   { key: "highScore",    label: "Hoher Score" },
-  { key: "manyMails",    label: ">100 Mails" },
   { key: "largeSize",    label: ">100 MB" },
   { key: "inactiveYear", label: "Inaktiv >1 Jahr" },
-  { key: "recentMonth",  label: "Aktiv <30 Tage" },
-  { key: "unreadHigh",   label: "Ungelesen >50%" },
   { key: "bulk",         label: "Newsletter/Bulk" },
   { key: "unsubscribe",  label: "Abmeldbar" },
-  { key: "protectCandidates", label: "Schutz-Vorschläge" },
   { key: "selected",     label: "Ausgewählt" },
 ];
 
@@ -701,13 +697,8 @@ function ensureCleanupDashboard() {
 
   const dashboard = document.createElement("div");
   dashboard.id = "cleanupDashboard";
+  dashboard.hidden = true;
   dashboard.innerHTML = `
-    <div class="dashboard-card" data-dashboard-filter="highScore">
-      <div class="dashboard-label">Aufräum-Kandidaten</div>
-      <div class="dashboard-value" id="dashHighScore">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="highScore">Auswählen</button>
-    </div>
-
     <div class="dashboard-card" data-dashboard-filter="bulk">
       <div class="dashboard-label">Newsletter/Bulk</div>
       <div class="dashboard-value" id="dashBulk">0</div>
@@ -724,12 +715,6 @@ function ensureCleanupDashboard() {
       <div class="dashboard-label">Inaktiv &gt; 1 Jahr</div>
       <div class="dashboard-value" id="dashInactive">0</div>
       <button type="button" class="dashboard-action" data-dashboard-action="inactiveYear">Auswählen</button>
-    </div>
-
-    <div class="dashboard-card dashboard-card-wide">
-      <div class="dashboard-label">Kandidaten-Größe</div>
-      <div class="dashboard-value" id="dashCandidateSize">0 B</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="prepare">Aufräumen vorbereiten</button>
     </div>
   `;
 
@@ -819,26 +804,23 @@ function setDashboardValue(id, value) {
 function updateCleanupDashboard() {
   ensureCleanupDashboard();
 
+  const dashboard = $("cleanupDashboard");
+  if (dashboard) dashboard.hidden = state.allSenders.length === 0;
+
   if (!state.allSenders.length) {
-    setDashboardValue("dashHighScore", "0");
     setDashboardValue("dashBulk", "0");
     setDashboardValue("dashLarge", "0");
     setDashboardValue("dashInactive", "0");
-    setDashboardValue("dashCandidateSize", "0 B");
     return;
   }
 
-  const highScore = dashboardStatsFor(sender => (sender.riskScore || 0) >= 70);
-  const bulk      = dashboardStatsFor(sender => Boolean(sender.isBulkCandidate));
-  const large     = dashboardStatsFor(sender => (sender.totalSizeBytes || 0) >= 100 * 1024 * 1024);
-  const inactive  = dashboardStatsFor(sender => isInactiveForDays(sender.newestDate, 365));
-  const candidates = dashboardStatsFor(isDashboardCleanupCandidate);
+  const bulk     = dashboardStatsFor(sender => Boolean(sender.isBulkCandidate));
+  const large    = dashboardStatsFor(sender => (sender.totalSizeBytes || 0) >= 100 * 1024 * 1024);
+  const inactive = dashboardStatsFor(sender => isInactiveForDays(sender.newestDate, 365));
 
-  setDashboardValue("dashHighScore", `${highScore.senderCount} · ${highScore.mailCount} Mails`);
-  setDashboardValue("dashBulk",      `${bulk.senderCount} · ${bulk.mailCount} Mails`);
-  setDashboardValue("dashLarge",     `${large.senderCount} · ${formatSize(large.bytes)}`);
-  setDashboardValue("dashInactive",  `${inactive.senderCount} · ${inactive.mailCount} Mails`);
-  setDashboardValue("dashCandidateSize", formatSize(candidates.bytes));
+  setDashboardValue("dashBulk",     `${bulk.senderCount} · ${bulk.mailCount} Mails`);
+  setDashboardValue("dashLarge",    `${large.senderCount} · ${formatSize(large.bytes)}`);
+  setDashboardValue("dashInactive", `${inactive.senderCount} · ${inactive.mailCount} Mails`);
 }
 
 function senderStatsFor(predicate) {
@@ -1247,16 +1229,10 @@ async function init() {
 
   const uiPrefs = await loadUiPrefs();
   if (uiPrefs.sidebarCollapsed) $("sidebar").classList.add("collapsed");
-  if (uiPrefs.cleanupCollapsed) $("cleanupSection").classList.add("section-collapsed");
 
   $("sidebarToggle").addEventListener("click", () => {
     const collapsed = $("sidebar").classList.toggle("collapsed");
     saveUiPrefs({ sidebarCollapsed: collapsed });
-  });
-
-  $("cleanupSectionToggle").addEventListener("click", () => {
-    const collapsed = $("cleanupSection").classList.toggle("section-collapsed");
-    saveUiPrefs({ cleanupCollapsed: collapsed });
   });
 
   try {
@@ -1456,7 +1432,7 @@ async function cancelScan() {
 }
 
 function onBackgroundMessage(msg) {
-  if (msg.scanId && state.activeScanId && msg.scanId !== state.activeScanId) return;
+  if (!isCurrentScanMessage(msg, state.activeScanId)) return;
 
   if (msg.type === "scan-progress") {
     const pct = msg.total > 0 ? Math.round((msg.processed / msg.total) * 100) : 0;
@@ -1484,7 +1460,10 @@ function updateStatsLabel(extra = "") {
 }
 
 function showError(msg) {
-  $("senderList").innerHTML = `<p style="padding:1rem;color:#f38ba8">${msg}</p>`;
+  const error = document.createElement("p");
+  error.style.cssText = "padding:1rem;color:#f38ba8";
+  error.textContent = String(msg);
+  $("senderList").replaceChildren(error);
 }
 
 // ─── Domain Grouping ──────────────────────────────────────────────────────────
@@ -2875,7 +2854,7 @@ function renderTrashSafetyWarnings() {
   if (warnings.length === 0) {
     box.hidden = true;
     list.innerHTML = "";
-    ok.disabled = false;
+    updateTrashConfirmState();
     return false;
   }
 
@@ -2886,9 +2865,21 @@ function renderTrashSafetyWarnings() {
     .map(w => `<li class="${w.level === "high" ? "high" : "medium"}">${escapeHtml(w.text)}</li>`)
     .join("");
 
-  ok.disabled = hasHighWarning;
-
+  updateTrashConfirmState();
   return hasHighWarning;
+}
+
+function updateTrashConfirmState() {
+  const ok = $("confirmOk");
+  const confirm = $("trashSafetyConfirm");
+  if (!ok || !confirm) return;
+
+  const hasHighWarning = buildTrashSafetyWarnings().some(w => w.level === "high");
+  ok.disabled = !canConfirmTrash(
+    ok.dataset.previewReady === "true",
+    hasHighWarning,
+    confirm.checked
+  );
 }
 
 function bindTrashSafetyConfirm() {
@@ -2897,12 +2888,7 @@ function bindTrashSafetyConfirm() {
 
   if (!confirm || !ok) return;
 
-  confirm.addEventListener("change", () => {
-    const hasHighWarning = buildTrashSafetyWarnings().some(w => w.level === "high");
-    if (hasHighWarning) {
-      ok.disabled = !confirm.checked;
-    }
-  });
+  confirm.addEventListener("change", updateTrashConfirmState);
 }
 
 function isProtectionCandidate(sender) {
@@ -3726,25 +3712,37 @@ function syncTrashRulePresetButtons() {
   });
 }
 
-function setTrashPreviewResult(html, warning = false) {
+let trashPreviewRequestId = 0;
+
+function setTrashPreviewResult(html, warning = false, reveal = false) {
   const box = $("trashPreviewResult");
   if (!box) return;
 
   box.hidden = false;
   box.classList.toggle("warning", warning);
   box.innerHTML = html;
+  if (reveal) box.scrollIntoView({ block: "center" });
 }
 
 function clearTrashPreviewResult() {
+  trashPreviewRequestId += 1;
   const box = $("trashPreviewResult");
   if (!box) return;
 
   box.hidden = true;
   box.classList.remove("warning");
   box.innerHTML = "";
+  $("confirmOk").dataset.previewReady = "false";
+  const btn = $("trashPreviewBtn");
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = "Vorschau berechnen";
+  }
+  updateTrashConfirmState();
 }
 
 async function previewTrashAction() {
+  const requestId = ++trashPreviewRequestId;
   const messageIds = selectedMessageIds();
   if (messageIds.length === 0) return;
 
@@ -3765,6 +3763,8 @@ async function previewTrashAction() {
       options,
     });
 
+    if (!isCurrentPreviewRequest(requestId, trashPreviewRequestId)) return;
+
     if (response?.error) {
       throw new Error(response.error);
     }
@@ -3781,16 +3781,22 @@ async function previewTrashAction() {
 
     const warning = moveCount === 0;
 
+    $("confirmOk").dataset.previewReady = String(moveCount > 0);
+    updateTrashConfirmState();
+
     setTrashPreviewResult(`
       <div><strong>${moveCount}</strong> von ${totalInputCount} Mails würden verschoben.</div>
       <div><strong>${skippedCount}</strong> Mails bleiben durch Aufräum-Regeln erhalten.</div>
       <div>Geschätzte Größe: <strong>${moveSize}</strong></div>
       ${samples ? `<div style="margin-top:.5rem">Neueste Beispiele:</div><ul>${samples}</ul>` : ""}
-    `, warning);
+    `, warning, true);
   } catch (err) {
-    setTrashPreviewResult(`Vorschau fehlgeschlagen: ${escapeHtml(err.message)}`, true);
+    if (!isCurrentPreviewRequest(requestId, trashPreviewRequestId)) return;
+    $("confirmOk").dataset.previewReady = "false";
+    updateTrashConfirmState();
+    setTrashPreviewResult(`Vorschau fehlgeschlagen: ${escapeHtml(err.message)}`, true, true);
   } finally {
-    if (btn) {
+    if (btn && isCurrentPreviewRequest(requestId, trashPreviewRequestId)) {
       btn.disabled = false;
       btn.textContent = "Vorschau berechnen";
     }
@@ -4143,7 +4149,7 @@ async function openConfirmDialog(actionType) {
   const totalMailCount = selectedMessageIds().length;
 
   const isTrash = actionType === "trash";
-  const label = isTrash ? "in den Papierkorb verschieben" : "permanent löschen";
+  const label = "in den Papierkorb verschieben";
 
   let message;
   if (senderCount > 0 && individualCount > 0) {
@@ -4260,14 +4266,15 @@ async function openConfirmDialog(actionType) {
   preview?.addEventListener("click", onPreview);
   olderInput?.addEventListener("input", onRulesChanged);
   keepInput?.addEventListener("input", onRulesChanged);
+
+  if (isTrash) await previewTrashAction();
 }
 
 function actionTypeLabel(type) {
   switch (type) {
     case "trash":
       return "Papierkorb";
-    case "delete":
-      return "Permanent löschen";
+
     case "folder":
       return "In Ordner";
     case "tag":

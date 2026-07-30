@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { matchesAdvancedFilter, isTextEntryTarget } from "../tab/tab-utilities.js";
+import { matchesAdvancedFilter, isTextEntryTarget, isCurrentScanMessage, canConfirmTrash, isCurrentPreviewRequest } from "../tab/tab-utilities.js";
 
 // Minimaler DOM-Element-Stub für isTextEntryTarget.
 const el = (tagName, { type, isContentEditable = false } = {}) => ({
@@ -119,5 +119,36 @@ describe("matchesAdvancedFilter", () => {
     // Same filter, but sender is fully read -> fails the readStatus criterion.
     const allRead = { ...baseSender, readCount: 10 };
     assert.equal(matchesAdvancedFilter(allRead, filter), false);
+  });
+});
+
+describe("isCurrentScanMessage", () => {
+  it("rejects scan events when this tab has no active scan", () => {
+    assert.equal(isCurrentScanMessage({ scanId: "scan-a" }, null), false);
+  });
+
+  it("accepts only the active scan and rejects unscoped messages", () => {
+    assert.equal(isCurrentScanMessage({ scanId: "scan-a" }, "scan-a"), true);
+    assert.equal(isCurrentScanMessage({ scanId: "scan-b" }, "scan-a"), false);
+    assert.equal(isCurrentScanMessage({ type: "scan-progress" }, "scan-a"), false);
+  });
+});
+
+describe("canConfirmTrash", () => {
+  it("requires a successful preview", () => {
+    assert.equal(canConfirmTrash(false, false, false), false);
+    assert.equal(canConfirmTrash(true, false, false), true);
+  });
+
+  it("also requires acknowledgement for high warnings", () => {
+    assert.equal(canConfirmTrash(true, true, false), false);
+    assert.equal(canConfirmTrash(true, true, true), true);
+  });
+});
+
+describe("isCurrentPreviewRequest", () => {
+  it("rejects a stale asynchronous preview response", () => {
+    assert.equal(isCurrentPreviewRequest(4, 5), false);
+    assert.equal(isCurrentPreviewRequest(5, 5), true);
   });
 });

@@ -62,6 +62,18 @@ export function matchesAdvancedFilter(sender, filter) {
   return true;
 }
 
+export function isCurrentScanMessage(message, activeScanId) {
+  return Boolean(activeScanId && message?.scanId === activeScanId);
+}
+
+export function canConfirmTrash(previewReady, hasHighWarning, warningsConfirmed) {
+  return Boolean(previewReady && (!hasHighWarning || warningsConfirmed));
+}
+
+export function isCurrentPreviewRequest(requestId, activeRequestId) {
+  return requestId === activeRequestId;
+}
+
 /**
  * Prüft, ob ein Element ein echtes Texteingabe-Ziel ist — ein Feld, in dem
  * Tasten wie Entf eine native Bedeutung haben und Tastaturkürzel daher nicht

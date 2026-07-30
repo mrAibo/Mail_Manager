@@ -60,16 +60,26 @@ export function formatRelativeDate(date, now = new Date()) {
 }
 
 /**
+ * @param {unknown} value
+ * @param {boolean} neutralizeFormula
+ * @returns {string}
+ */
+function csvCell(value, neutralizeFormula = false) {
+  let text = String(value ?? "");
+  if (neutralizeFormula && /^[\s\u0000-\u001F]*[=+\-@]/.test(text)) text = "'" + text;
+  return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+/**
  * @param {SenderEntry[]} senders
  * @returns {string} CSV string
  */
 export function toCSV(senders) {
   const header = "email,displayName,count,totalSizeMB,readPercent,oldestDate,newestDate,riskScore";
   const rows = senders.map(s => {
-    const name = s.displayName.includes(",") ? `"${s.displayName}"` : s.displayName;
     const readPct = s.count > 0 ? Math.round((s.readCount / s.count) * 100) : 0;
     return [
-      s.email, name, s.count,
+      csvCell(s.email, true), csvCell(s.displayName, true), s.count,
       (s.totalSizeBytes / 1048576).toFixed(1),
       readPct,
       s.oldestDate.toISOString().slice(0, 10),

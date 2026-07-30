@@ -909,6 +909,12 @@ dialog::-webkit-scrollbar-thumb:hover {
   border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
+.action-step {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
 #selectionLabel { font-size: 0.75rem; font-weight: 600; }
 #actionButtons {
   display: flex;
@@ -1016,18 +1022,19 @@ dialog::-webkit-scrollbar-thumb:hover {
 /* Cleanup dashboard */
 #cleanupDashboard {
   display: grid;
-  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
   gap: 0.55rem;
   padding: 0.65rem 0.75rem;
-  background: rgba(255, 255, 255, 0.025);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
 }
+#cleanupDashboard[hidden] { display: none; }
 
 .dashboard-card {
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.6rem 0.65rem;
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--bg-elevated);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -1039,7 +1046,7 @@ dialog::-webkit-scrollbar-thumb:hover {
 }
 
 .dashboard-label {
-  color: #a6adc8;
+  color: var(--text-dim);
   font-size: 0.72rem;
   margin-bottom: 0.25rem;
 }
@@ -1095,7 +1102,7 @@ dialog::-webkit-scrollbar-thumb:hover {
 .assistant-select-btn { width: 100%; }
 
 #featureStatusBar {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   gap: 0.25rem;
   margin-bottom: 0.45rem;
