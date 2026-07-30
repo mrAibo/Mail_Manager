@@ -1843,6 +1843,12 @@ function renderSenders() {
   const list = $("senderList");
   const token = ++renderToken;
   const rows = getRenderableRows();
+
+  // Welcome banner: show when empty and no active scan
+  const banner = $("welcomeBanner");
+  if (banner) {
+    banner.hidden = rows.length > 0 || state.activeScanId !== null;
+  }
   const chunkSize = 250;
 
   list.innerHTML = "";

@@ -1440,3 +1440,41 @@ dialog::-webkit-scrollbar-thumb:hover {
   color: var(--text-dim);
   padding: 0.4rem 0;
 }
+
+/* Welcome Banner */
+.welcome-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  margin: 1rem 0;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--bg-sidebar), var(--bg-elevated));
+  text-align: center;
+}
+.welcome-banner[hidden] { display: none; }
+.welcome-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.welcome-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 360px;
+}
+.welcome-step {
+  font-size: 0.92rem;
+  color: var(--text);
+  text-align: left;
+}
+.welcome-num {
+  display: inline-block;
+  width: 1.6rem;
+  color: var(--accent);
+  font-weight: 700;
+}
