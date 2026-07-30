@@ -5,6 +5,6 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.mjs",
-    "build": "zip -r -X ../mailmanager.xpi . -x '*.DS_Store' 'node_modules/*' 'tests/*'"
+    "build": "node -e \"require('node:fs').rmSync('../mailmanager.xpi', { force: true })\" && zip -r -X ../mailmanager.xpi . -x '*.DS_Store' 'node_modules/*' 'tests/*' 'package.json' 'README.md'"
   }
 }

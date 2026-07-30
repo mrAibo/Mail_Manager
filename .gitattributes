@@ -1,0 +1,5 @@
+*.js whitespace=trailing-space,space-before-tab,cr-at-eol
+*.mjs whitespace=trailing-space,space-before-tab,cr-at-eol
+*.css whitespace=trailing-space,space-before-tab,cr-at-eol
+*.html whitespace=trailing-space,space-before-tab,cr-at-eol
+*.md whitespace=trailing-space,space-before-tab,cr-at-eol

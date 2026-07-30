@@ -2,6 +2,24 @@
 
 Alle bemerkenswerten Änderungen an diesem Projekt werden dokumentiert.
 
+## [Unreleased]
+
+### Sicherheit
+- Schutzlisten für Absender und Quellordner werden im Background vor Papierkorb-, Ordner- und Tag-Aktionen erneut geprüft
+- Jeder MailManager-Tab akzeptiert nur Scan-Ereignisse seines aktiven `scanId`; Undo-Einträge sind tabbezogen
+- Nicht erreichbares permanentes Löschen und die Berechtigung `messagesDelete` wurden entfernt
+- CSV-Export escaped Anführungszeichen und neutralisiert Tabellenformeln in Absenderfeldern
+- Fehlermeldungen werden als Text statt als HTML eingefügt
+
+### Änderungen
+- Oberfläche auf **Scannen → Kandidaten prüfen → Aufräumen** reduziert
+- Papierkorb-Vorschau wird automatisch berechnet und ist vor der Bestätigung verpflichtend
+- Kandidaten-Dashboard und Schnellfilter auf die wichtigsten Optionen gekürzt
+
+### Infrastruktur
+- Background-Sicherheitstests und UI-Regeltests ergänzt
+- GitHub Actions prüft Unit-Tests, Syntax und XPI-Build mit Node.js 20
+
 ## [0.1.0] — 2026-05-16
 
 ### ✨ Features
