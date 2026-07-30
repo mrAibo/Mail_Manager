@@ -10,11 +10,14 @@ MailManager ist ein Thunderbird-Add-on zum **lokalen Analysieren und Aufräumen 
 - Absender und Domains nach Mail-Anzahl, Größe, Lesequote und Aktivität vergleichen
 - Aufräum-Kandidaten mit einer lokalen Heuristik hervorheben
 - Newsletter/Bulk-Absender und `List-Unsubscribe`-Header erkennen
+- **Diakritika-insensitive Suche** (ä→a, ß→ss …) bei der Bulk-Erkennung
+- **Benutzerdefinierte RegEx-Regeln** zum Markieren eigener Muster (z. B. `amazon|ebay`)
 - einzelne Mails oder ganze Absender auswählen
-- Mails in den Papierkorb oder in einen anderen Ordner verschieben
+- Mails in den Papierkorb, in einen anderen Ordner verschieben oder **als gelesen markieren**
 - Thunderbird-Tags setzen
 - Scan-Ergebnisse als CSV oder JSON exportieren
 - Aufräum-Regeln, Schutzliste, Aktionsprotokoll und Best-Effort-Undo verwalten
+- **Scan-Cache bleibt nach Thunderbird-Neustart erhalten**
 
 Die Benutzeroberfläche ist derzeit auf Deutsch.
 
@@ -48,7 +51,7 @@ Eine `https:`-Abmelde-Adresse wird nur nach Bestätigung im Standardbrowser geö
 - Die normale Oberfläche verschiebt Mails in den Papierkorb; sie bietet aktuell keine Schaltfläche zum permanenten Löschen.
 - Vor jeder Papierkorb-Aktion wird automatisch eine Vorschau berechnet; nach Regeländerungen bleibt **Bestätigen** bis zur erneuten Vorschau gesperrt.
 - Undo ist nur zuverlässig, wenn Thunderbird nach einem Verschieben neue Message-IDs zurückmeldet.
-- Der Scan-Cache liegt in `browser.storage.session` und verschwindet beim Thunderbird-Neustart. Regeln, Schutzliste, Protokoll und UI-Einstellungen liegen in `browser.storage.local`.
+- Der Scan-Cache liegt in `browser.storage.local` und bleibt nach Thunderbird-Neustart erhalten. Regeln, Schutzliste, Protokoll und UI-Einstellungen liegen ebenfalls in `browser.storage.local`.
 - Geschützte Absender und Quellordner werden vor Papierkorb-, Ordner- und Tag-Aktionen erneut im Background geprüft.
 - Jeder MailManager-Tab akzeptiert nur Scan-Ereignisse seines aktiven `scanId`; Undo-Einträge sind tabbezogen.
 - Der CSV-Export escaped Anführungszeichen und neutralisiert Spreadsheet-Formelpräfixe in Absenderfeldern.
@@ -66,7 +69,7 @@ Eine `https:`-Abmelde-Adresse wird nur nach Bestätigung im Standardbrowser geö
 ```bash
 git clone https://github.com/mrAibo/Mail_Manager.git
 cd Mail_Manager/mailmanager
-npm test
+npm run check    # Syntax + Tests (83 Tests, 6 Dateien)
 ```
 
 Temporär in Thunderbird laden:
@@ -82,10 +85,11 @@ Nach Änderungen in der Debug-Ansicht **Neu laden** anklicken. Das temporäre Ad
 
 ```bash
 cd mailmanager
-npm run build
+npm run build          # erzeugt mailmanager.xpi im Repository-Root
+cp ../mailmanager.xpi ../dist/mailmanager.xpi   # ins dist/-Verzeichnis kopieren
 ```
 
-Das erzeugt `mailmanager.xpi` im Repository-Root. Der Build löscht den alten Archivinhalt zuerst und schließt Tests sowie `node_modules` aus.
+Das erzeugte XPI (ca. 65 KB) schließt Tests und `node_modules` aus. Im CI wird das XPI als Build-Artifact zum Download bereitgestellt. Das fertige Plugin liegt auch unter [`dist/mailmanager.xpi`](dist/mailmanager.xpi).
 
 Das erzeugte Paket ist nicht automatisch signiert. Für eine öffentliche Installation sollte es über [addons.thunderbird.net](https://addons.thunderbird.net/) signiert und als versionierter GitHub Release veröffentlicht werden. Die Signaturprüfung im normalen Thunderbird-Profil sollte dafür **nicht** abgeschaltet werden.
 
@@ -93,11 +97,9 @@ Das erzeugte Paket ist nicht automatisch signiert. Für eine öffentliche Instal
 
 ```bash
 cd mailmanager
-npm test
-node --check tab/tab.js
-node --check background/background.js
-node --check shared/utils.js
-node --check tab/tab-utilities.js
+npm run check       # Syntax-Checks (6 Dateien) + Unit-Tests (83 Tests)
+npm test            # nur Unit-Tests
+node --check tab/tab.js   # einzelne Syntax-Prüfung
 ```
 
 Die Unit-Tests decken Score-, Filter-, Export- und Vorschau-Logik sowie die
@@ -119,18 +121,24 @@ Verschiebe- und Undo-Flows benötigen zusätzlich Integrationstests im laufenden
 ## Projektstruktur
 
 ```text
-.github/workflows/ci.yml          # Unit-Tests, Syntaxprüfung und XPI-Build
+.github/workflows/ci.yml          # CI: Tests, Syntax, XPI-Build + Artifact-Upload
+.gitignore                        # schließt mailmanager.xpi und node_modules aus
 LICENSE                           # MIT-Lizenz
+dist/mailmanager.xpi              # fertiges Plugin (manuell oder per CI aktualisiert)
 mailmanager/
 ├── manifest.json
-├── background/background.js   # Thunderbird-API, Scan und Aktionen
+├── package.json                  # npm-Skripte: test, check, build
+├── background/background.js      # Thunderbird-API, Scan und Aktionen
 ├── tab/
 │   ├── tab.html
 │   ├── tab.css
-│   ├── tab.js                 # UI und Zustandsverwaltung
+│   ├── tab.js                    # UI und Zustandsverwaltung
 │   └── tab-utilities.js
-├── shared/                    # testbare Logik ohne Thunderbird-API
-└── tests/                     # Node.js-Unit-Tests
+├── shared/                       # testbare Logik ohne Thunderbird-API
+│   ├── utils.js
+│   ├── cleanup-logic.mjs         # Score, Bulk-Erkennung, Diakritika-Normalisierung
+│   └── message-preview.mjs
+└── tests/                        # Node.js-Unit-Tests
 ```
 
 Weitere technische Details stehen in [`mailmanager/README.md`](mailmanager/README.md), Änderungen in [`CHANGELOG.md`](CHANGELOG.md).
@@ -141,5 +149,6 @@ Weitere technische Details stehen in [`mailmanager/README.md`](mailmanager/READM
 
 ## Nächste sinnvolle Schritte
 
-1. Background-/UI-Integrationstests im laufenden Thunderbird ergänzen.
-2. Signierte Releases veröffentlichen.
+1. Multi-Folder-Scan: mehrere Ordner auf einmal analysieren.
+2. Profil-Export/Import: Regeln und Einstellungen als JSON exportieren (ohne Secrets).
+3. Signierte Releases auf [addons.thunderbird.net](https://addons.thunderbird.net/) veröffentlichen.
