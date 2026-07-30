@@ -1,0 +1,10 @@
+{
+  "name": "mailmanager",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.mjs",
+    "build": "zip -r -X ../mailmanager.xpi . -x '*.DS_Store' 'node_modules/*' 'tests/*'"
+  }
+}

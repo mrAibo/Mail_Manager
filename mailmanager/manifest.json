@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "MailManager",
+  "version": "0.1.0",
+  "description": "Lokale E-Mail-Organisation nach Absender — kein Server, kein Tracking",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "mailmanager@localhost",
+      "strict_min_version": "150.0"
+    }
+  },
+  "permissions": [
+    "messagesRead",
+    "messagesMove",
+    "messagesDelete",
+    "messagesUpdate",
+    "messagesTags",
+    "accountsRead",
+    "accountsFolders",
+    "compose",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["background/background.js"]
+  },
+  "action": {
+    "default_title": "MailManager öffnen",
+    "default_icon": "icons/icon.svg"
+  },
+  "icons": {
+    "32": "icons/icon.svg",
+    "48": "icons/icon.svg",
+    "128": "icons/icon.svg"
+  }
+}

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>MailManager</title>
+  <link rel="stylesheet" href="tab.css" />
+</head>
+<body>
+
+  <aside id="sidebar">
+    <div id="sidebarHeader">
+      <span id="sidebarBrand">✉ MailManager</span>
+      <button id="sidebarToggle" title="Seitenleiste einklappen" aria-label="Seitenleiste einklappen">«</button>
+    </div>
+
+    <div class="sidebar-section" id="sourceSection">
+      <div class="sidebar-section-label">Quelle</div>
+      <label class="sidebar-field" for="accountSelect">Konto
+        <select id="accountSelect"></select>
+      </label>
+      <label class="sidebar-field" for="folderSelect">Ordner
+        <select id="folderSelect"></select>
+      </label>
+      <label class="sidebar-field" for="scanProfileSelect">Scan-Profil
+        <select id="scanProfileSelect">
+          <option value="full">Vollscan</option>
+          <option value="oldYear">Nur alte Mails &gt; 1 Jahr</option>
+          <option value="bulk">Nur Newsletter/Bulk</option>
+          <option value="unread">Nur ungelesene</option>
+          <option value="cleanupCandidates">Aufräum-Kandidaten</option>
+        </select>
+      </label>
+      <button id="scanBtn">▶ Scannen</button>
+      <div id="progressContainer" hidden>
+        <progress id="progressBar" value="0" max="100"></progress>
+        <span id="progressLabel" aria-live="polite">0 / 0</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section" id="viewSection">
+      <div class="sidebar-section-label">Ansicht</div>
+      <div id="viewSwitcher">
+        <button class="view-btn active" data-view="senders">Absender</button>
+        <button class="view-btn" data-view="domains">Domains</button>
+      </div>
+    </div>
+
+    <div class="sidebar-section" id="filterSection">
+      <div class="sidebar-section-label">Schnellfilter</div>
+      <!-- #quickFilterBar wird hier von tab.js eingefügt -->
+    </div>
+
+    <div class="sidebar-section" id="cleanupSection">
+      <div class="sidebar-section-label sidebar-section-label-collapsible" id="cleanupSectionToggle">
+        <span>Aufräumen</span>
+        <span class="sidebar-collapse-icon">▾</span>
+      </div>
+      <div id="cleanupSectionBody">
+        <!-- #cleanupDashboard und #cleanupAssistant werden hier von tab.js eingefügt -->
+      </div>
+    </div>
+
+    <div id="sidebarFooter">
+      <details id="toolsMenu">
+        <summary>⚙ Werkzeuge</summary>
+        <div id="toolsMenuPanel">
+          <button id="logBtn" class="action-btn">📜 Protokoll</button>
+          <button id="ruleManagerBtn" class="action-btn">⚙ Regeln</button>
+          <button id="protectManagerBtn" class="action-btn">🛡 Schutzliste</button>
+          <button id="shortcutsBtn" class="action-btn">⌨ Tastaturkürzel</button>
+          <button id="columnBtn" class="action-btn">📊 Spalten</button>
+          <button id="diagnosticsBtn" class="action-btn">🧪 Diagnose</button>
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <main id="main">
+    <div id="mainTopbar">
+      <input id="filterInput" type="search" placeholder="🔍 Absender filtern…" />
+      <label id="sortControl" for="sortSelect">Sortieren
+        <select id="sortSelect">
+          <option value="riskScore">Aufräum-Score</option>
+          <option value="count">Anzahl</option>
+          <option value="totalSizeBytes">Größe</option>
+          <option value="oldestDate">Älteste</option>
+          <option value="newestDate">Aktivität</option>
+          <option value="email">A–Z</option>
+        </select>
+      </label>
+      <span id="statsLabel" aria-live="polite"></span>
+    </div>
+
+    <div id="tableHeader" role="row">
+      <input type="checkbox" id="selectAll" aria-label="Alle Absender auswählen" />
+      <span class="col-sender" role="columnheader" data-sort="email" title="Nach Absender sortieren">Absender</span>
+      <span class="col-count" role="columnheader" data-sort="count" title="Nach Anzahl sortieren">Mails</span>
+      <span class="col-size" role="columnheader" data-sort="totalSizeBytes" title="Nach Größe sortieren">Größe</span>
+      <span class="col-read" role="columnheader">Gelesen</span>
+      <span class="col-date" role="columnheader" data-sort="newestDate" title="Nach letzter Mail sortieren">Letzte Mail</span>
+      <span class="col-risk" role="columnheader" data-sort="riskScore" title="Nach Aufräum-Score sortieren">Aufräum-Score</span>
+      <span class="col-actions" role="columnheader">Aktionen</span>
+    </div>
+
+    <div id="senderList" role="table" aria-label="Absender und Mails"></div>
+
+    <div id="mainActionbar">
+      <span id="selectionLabel" aria-live="polite"></span>
+      <div id="actionButtons">
+        <button id="trashBtn"  class="action-btn danger" disabled>🗑 Papierkorb</button>
+        <button id="folderBtn" class="action-btn"        disabled>📁 In Ordner</button>
+        <button id="tagBtn"    class="action-btn"        disabled>🏷 Tag</button>
+        <button id="unsubBtn"  class="action-btn"        disabled>🚫 Abmelden</button>
+        <button id="exportBtn" class="action-btn">💾 Export</button>
+      </div>
+      <div id="undoToast" hidden>
+        <button id="undoBtn">↩ Rückgängig</button>
+        <span id="undoCountdown"></span>
+      </div>
+    </div>
+  </main>
+
+  <dialog id="confirmDialog">
+    <p id="confirmMessage"></p>
+  
+    <div id="trashSafetyBox" class="trash-safety-box" hidden>
+      <div class="trash-safety-title">⚠ Auswahl prüfen</div>
+      <ul id="trashSafetyList"></ul>
+      <label class="trash-safety-confirm">
+        <input id="trashSafetyConfirm" type="checkbox" />
+        Ich habe die Warnungen geprüft und möchte fortfahren.
+      </label>
+    </div>
+  
+    <div id="trashRuleBox" hidden>
+      <h3>Aufräum-Regeln</h3>
+  
+      <div class="cleanup-rule-scope">
+        <button id="applySavedCleanupRuleBtn" type="button">Gespeicherte Regel anwenden</button>
+        <button id="saveCleanupRuleBtn" type="button">Regel für Auswahl speichern</button>
+        <span id="cleanupRuleInfo"></span>
+      </div>
+  
+      <div class="trash-rule-presets">
+        <button type="button" class="trash-rule-preset" data-older="0" data-keep="0">Keine Regeln</button>
+        <button type="button" class="trash-rule-preset" data-older="90" data-keep="0">Älter als 90 Tage</button>
+        <button type="button" class="trash-rule-preset" data-older="365" data-keep="0">Älter als 1 Jahr</button>
+        <button type="button" class="trash-rule-preset" data-older="365" data-keep="5">1 Jahr + letzte 5 behalten</button>
+      </div>
+
+      <label>
+        Nur Mails älter als
+        <input id="trashOlderThanDays" type="number" min="0" step="1" value="0" />
+        Tage in den Papierkorb verschieben
+      </label>
+  
+      <label>
+        Pro Absender die neuesten
+        <input id="trashKeepNewest" type="number" min="0" step="1" value="0" />
+        Mails behalten
+      </label>
+  
+      <p class="hint">
+        0 bedeutet: Regel ist deaktiviert. Beispiel: 365 Tage + 5 behalten =
+        nur alte Mails löschen, aber die letzten 5 pro Absender schützen.
+      </p>
+
+      <div class="trash-preview-actions">
+        <button id="trashPreviewBtn" type="button">Vorschau berechnen</button>
+      </div>
+
+      <div id="trashPreviewResult" class="trash-preview-result" hidden></div>
+    </div>
+  
+    <div class="dialog-buttons">
+      <button id="confirmOk" class="danger">Bestätigen</button>
+      <button id="confirmCancel">Abbrechen</button>
+    </div>
+  </dialog>
+
+  <dialog id="folderDialog">
+    <h3>In Ordner sortieren</h3>
+    <label>Neuer Ordner-Name:
+      <input id="folderNameInput" type="text" />
+    </label>
+    <label>Übergeordneter Ordner:
+      <select id="parentFolderSelect"><option value="">Konto-Root</option></select>
+    </label>
+    <p class="dialog-or">— oder —</p>
+    <label>Bestehenden Ordner wählen:
+      <select id="existingFolderSelect"><option value="">Neuen Ordner erstellen</option></select>
+    </label>
+    <div class="dialog-buttons">
+      <button id="folderOk">Erstellen &amp; Verschieben</button>
+      <button id="folderCancel">Abbrechen</button>
+    </div>
+  </dialog>
+
+  <dialog id="tagDialog">
+    <h3>Tag zuweisen</h3>
+    <div id="tagList"></div>
+    <div class="dialog-buttons">
+      <button id="tagCancel">Schließen</button>
+    </div>
+  </dialog>
+
+  <dialog id="exportDialog">
+    <h3>Export</h3>
+    <div class="dialog-buttons">
+      <button id="exportCSV">CSV</button>
+      <button id="exportJSON">JSON</button>
+      <button id="exportCancel">Abbrechen</button>
+    </div>
+  </dialog>
+  <dialog id="actionLogDialog">
+    <h3>Aktionsprotokoll</h3>
+  
+    <div id="actionLogList" class="action-log-list"></div>
+  
+    <div class="dialog-buttons">
+      <button id="actionLogExport">Export JSON</button>
+      <button id="actionLogClear" class="danger">Leeren</button>
+      <button id="actionLogClose">Schließen</button>
+    </div>
+  </dialog>
+
+
+  <dialog id="cleanupRuleManagerDialog">
+    <h3>Gespeicherte Aufräum-Regeln</h3>
+  
+    <div id="cleanupRuleManagerList" class="cleanup-rule-manager-list"></div>
+  
+    <div class="dialog-buttons">
+      <button id="cleanupRuleImport">Import JSON</button>
+      <input id="cleanupRuleImportFile" type="file" accept="application/json,.json" hidden />
+      <button id="cleanupRuleExport">Export JSON</button>
+      <button id="cleanupRuleClear" class="danger">Alle löschen</button>
+      <button id="cleanupRuleManagerClose">Schließen</button>
+    </div>
+  </dialog>
+  
+  <dialog id="protectManagerDialog">
+    <h3>Geschützte Absender</h3>
+  
+    <input id="protectManagerFilter" type="search" placeholder="🔍 Geschützte Absender filtern…" />
+  
+    <div id="protectManagerList" class="protect-manager-list"></div>
+  
+    <div class="dialog-buttons">
+      <button id="protectImport">Import JSON</button>
+      <input id="protectImportFile" type="file" accept="application/json,.json" hidden />
+      <button id="protectExport">Export JSON</button>
+      <button id="protectClear" class="danger">Alle entsperren</button>
+      <button id="protectManagerClose">Schließen</button>
+    </div>
+  </dialog>
+
+  <dialog id="diagnosticsDialog">
+    <h3>Diagnose</h3>
+  
+    <p class="hint">
+      Diese Informationen helfen bei Fehlersuche. Es werden keine Mail-Inhalte angezeigt,
+      nur technische Zähler, Ordnernamen, IDs und lokale MailManager-Einstellungen.
+    </p>
+  
+    <pre id="diagnosticsOutput" class="diagnostics-output"></pre>
+  
+    <div class="dialog-buttons">
+      <button id="diagnosticsRefresh">Aktualisieren</button>
+      <button id="diagnosticsCopy">Kopieren</button>
+      <button id="diagnosticsClose">Schließen</button>
+    </div>
+  </dialog>
+
+  <dialog id="shortcutsDialog">
+    <h3>⌨ Tastaturkürzel</h3>
+    <table class="shortcuts-table">
+      <tr>
+        <th>Aktion</th>
+        <th>Tastaturkürzel</th>
+      </tr>
+      <tr>
+        <td>Zwischen Mail-Zeilen navigieren</td>
+        <td><kbd>↑</kbd> / <kbd>↓</kbd></td>
+      </tr>
+      <tr>
+        <td>Vorschau auf-/zuklappen</td>
+        <td><kbd>Leertaste</kbd> (wenn Mail fokussiert)</td>
+      </tr>
+      <tr>
+        <td>Neueste Mail öffnen</td>
+        <td><kbd>Enter</kbd></td>
+      </tr>
+      <tr>
+        <td>Doppelklick auf Mail</td>
+        <td>Öffnet in Thunderbird</td>
+      </tr>
+      <tr>
+        <td>Mail oder Absender ziehen</td>
+        <td>Ablage-Overlay öffnet sich — auf Zielordner fallen lassen</td>
+      </tr>
+      <tr>
+        <td>Ausgewählte in Papierkorb</td>
+        <td><kbd>Entf</kbd></td>
+      </tr>
+      <tr>
+        <td>Rechtsklick</td>
+        <td>Kontextmenü für Sender/Mail</td>
+      </tr>
+    </table>
+    <div class="dialog-buttons">
+      <button id="shortcutsClose">Schließen</button>
+    </div>
+  </dialog>
+
+  <dialog id="attachmentDialog">
+    <h3 id="attachmentDialogTitle">Anhänge</h3>
+    <div id="attachmentList" class="attachment-list"></div>
+    <div class="dialog-buttons">
+      <button id="attachmentSaveAll">Alle speichern</button>
+      <button id="attachmentClose">Schließen</button>
+    </div>
+  </dialog>
+
+  <dialog id="columnDialog">
+    <h3>Sichtbare Spalten</h3>
+    <p class="hint">Wählen Sie aus, welche Spalten in der Tabelle angezeigt werden sollen.</p>
+    <div id="columnCheckboxes" class="column-checkboxes"></div>
+    <div class="dialog-buttons">
+      <button id="columnReset">Zurücksetzen</button>
+      <button id="columnClose">Schließen</button>
+    </div>
+  </dialog>
+
+  <aside id="dropFolderOverlay" hidden>
+    <div class="drop-overlay-title">📁 In Ordner ablegen</div>
+    <div class="drop-overlay-hint">Auf einen Ordner ziehen und loslassen</div>
+    <div id="dropFolderList" class="drop-folder-list"></div>
+  </aside>
+
+  <script type="module" src="tab.js"></script>
+</body>
+</html>

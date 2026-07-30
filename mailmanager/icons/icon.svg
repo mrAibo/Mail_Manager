@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect width="128" height="128" rx="30" fill="#89b4fa"/>
+  <!-- envelope body -->
+  <rect x="22" y="44" width="84" height="58" rx="10" fill="#1e1e2e"/>
+  <!-- envelope flap -->
+  <path d="M29 53 L64 78 L99 53" fill="none" stroke="#89b4fa"
+        stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- sparkle (clean / tidy) -->
+  <path d="M99 14 Q102 35 122 38 Q102 41 99 62 Q96 41 76 38 Q96 35 99 14 Z"
+        fill="#fbfcff" stroke="#89b4fa" stroke-width="3" stroke-linejoin="round"/>
+</svg>
