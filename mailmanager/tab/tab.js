@@ -1303,6 +1303,13 @@ function populateFolderDropdown() {
   const account = state.accounts.find(a => a.id === $("accountSelect").value);
   const sel = $("folderSelect");
   sel.innerHTML = "";
+
+  // Virtual "all folders" entry
+  const allOpt = document.createElement("option");
+  allOpt.value = "__ALL__";
+  allOpt.textContent = "📂 Alle Ordner (außer System)";
+  sel.appendChild(allOpt);
+
   for (const folder of (account?.folders || [])) {
     const opt = document.createElement("option");
     opt.value = folder.id;
@@ -1458,6 +1465,11 @@ async function cancelScan() {
 
 function onBackgroundMessage(msg) {
   if (!isCurrentScanMessage(msg, state.activeScanId)) return;
+
+  if (msg.type === "scan-started") {
+    $("progressContainer").hidden = false;
+    $("progressLabel").textContent = "Scan läuft über mehrere Ordner …";
+  }
 
   if (msg.type === "scan-progress") {
     const pct = msg.total > 0 ? Math.round((msg.processed / msg.total) * 100) : 0;

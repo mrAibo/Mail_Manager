@@ -461,6 +461,15 @@ async function handleScan(accountId, folderId, scanId, tabId, options = {}) {
   const scan = { cancelled: false, tabId };
   activeScans.set(effectiveScanId, scan);
 
+  // ponytail: scan all non-system folders
+  if (folderId === "__ALL__") {
+    try {
+      return await handleMultiFolderScan(accountId, effectiveScanId, tabId, options, scan);
+    } finally {
+      activeScans.delete(effectiveScanId);
+    }
+  }
+
   try {
     const folder = await findFolder(accountId, folderId);
     if (!folder) return { error: `Ordner ${folderId} nicht gefunden` };
@@ -616,6 +625,99 @@ async function handleScan(accountId, folderId, scanId, tabId, options = {}) {
   } finally {
     activeScans.delete(effectiveScanId);
   }
+}
+
+// ponytail: scan all non-system folders, merge results
+async function handleMultiFolderScan(accountId, effectiveScanId, tabId, options, scan) {
+  const { protectedFolderIds } = await loadProtected();
+  const accounts = await browser.accounts.list(true);
+  const account = accounts.find(a => a.id === accountId);
+  if (!account?.rootFolder) return { error: "Konto nicht gefunden." };
+
+  const allFolders = collectFolders(account.rootFolder.subFolders || [], protectedFolderIds);
+  if (allFolders.length === 0) return { error: "Keine Ordner zum Scannen gefunden." };
+
+  const merged = {};
+  let grandTotal = 0;
+  let grandProcessed = 0;
+
+  sendScanMessage({ type: "scan-started", scanId: effectiveScanId });
+
+  for (const folder of allFolders) {
+    if (scan.cancelled) {
+      sendScanMessage({ type: "scan-cancelled", scanId: effectiveScanId, processed: grandProcessed, total: grandTotal });
+      return { cancelled: true };
+    }
+
+    let total = 0;
+    try {
+      const info = await browser.folders.getFolderInfo(folder.id);
+      total = info.totalMessageCount || 0;
+    } catch { total = 0; }
+    grandTotal += total;
+
+    let page = await browser.messages.list(folder.id);
+
+    while (true) {
+      if (scan.cancelled) break;
+
+      for (const msg of page.messages) {
+        if (!shouldIncludeMessageInScan(msg, options, Date.now())) continue;
+
+        const { email, displayName } = parseAuthor(msg.author);
+        if (!email) continue;
+
+        if (!merged[email]) {
+          merged[email] = {
+            email, displayName: displayName || email,
+            messageIds: [], _msgDates: [],
+            newestMessageId: msg.id, count: 0, totalSizeBytes: 0,
+            oldestDate: new Date(msg.date), newestDate: new Date(msg.date),
+            readCount: 0, riskScore: 0, sampleSubjects: [],
+          };
+        }
+        const e = merged[email];
+        e.messageIds.push(msg.id);
+        e._msgDates.push({ id: msg.id, t: new Date(msg.date).getTime() });
+        e.count++; e.totalSizeBytes += msg.size || 0;
+        if (msg.read) e.readCount++;
+        const d = new Date(msg.date);
+        if (d < e.oldestDate) e.oldestDate = d;
+        if (d > e.newestDate) { e.newestDate = d; e.newestMessageId = msg.id; }
+        if (e.sampleSubjects.length < 3 && msg.subject) e.sampleSubjects.push(msg.subject);
+        grandProcessed++;
+      }
+
+      if (!page.id) break;
+      page = await browser.messages.continueList(page.id);
+    }
+  }
+
+  if (scan.cancelled) {
+    sendScanMessage({ type: "scan-cancelled", scanId: effectiveScanId, processed: grandProcessed, total: grandTotal });
+    return { cancelled: true };
+  }
+
+  const now = new Date();
+  for (const e of Object.values(merged)) {
+    e._msgDates.sort((a, b) => b.t - a.t);
+    e.messageIds = e._msgDates.map(m => m.id);
+    delete e._msgDates;
+    e.riskScore = computeRiskScore(e, now);
+    const bulk = computeBulkScore(e.email, e.displayName, e.sampleSubjects);
+    e.bulkScore = bulk.bulkScore;
+    e.isBulkCandidate = bulk.isBulkCandidate;
+    e.bulkReasons = bulk.bulkReasons;
+  }
+
+  const resultSenders = Object.values(merged);
+
+  sendScanMessage({
+    type: "scan-complete", scanId: effectiveScanId,
+    profile: options.profile || "full", senders: resultSenders,
+  });
+
+  return { started: true, completed: true, profile: options.profile || "full", senders: resultSenders };
 }
 
 // ─── Protected storage ────────────────────────────────────────────────────────
