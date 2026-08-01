@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "MailManager",
+  "name": "__MSG_extensionName__",
   "version": "0.1.0",
-  "description": "Lokale E-Mail-Organisation nach Absender — kein Server, kein Tracking",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "de",
   "browser_specific_settings": {
     "gecko": {
       "id": "mailmanager@localhost",
@@ -23,7 +24,7 @@
     "scripts": ["background/background.js"]
   },
   "action": {
-    "default_title": "MailManager öffnen",
+    "default_title": "__MSG_actionTitle__",
     "default_icon": "icons/icon.svg"
   },
   "icons": {

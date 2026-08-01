@@ -1,0 +1,620 @@
+{
+  "extensionName": {
+    "message": "MailManager"
+  },
+  "extensionDescription": {
+    "message": "Локальная организация почты по отправителям — без сервера, без слежки"
+  },
+  "actionTitle": {
+    "message": "Открыть MailManager"
+  },
+  "sidebarBrand": {
+    "message": "✉ MailManager"
+  },
+  "sidebarToggle": {
+    "message": "Свернуть боковую панель"
+  },
+  "sourceSectionLabel": {
+    "message": "1 · Источник сканирования"
+  },
+  "accountLabel": {
+    "message": "Аккаунт"
+  },
+  "folderLabel": {
+    "message": "Папка"
+  },
+  "folderAllOption": {
+    "message": "📂 Все папки (кроме системных)"
+  },
+  "scanProfileLabel": {
+    "message": "Профиль сканирования"
+  },
+  "scanProfileFull": {
+    "message": "Полное сканирование"
+  },
+  "scanProfileOldYear": {
+    "message": "Только старые > 1 года"
+  },
+  "scanProfileBulk": {
+    "message": "Только рассылки"
+  },
+  "scanProfileUnread": {
+    "message": "Только непрочитанные"
+  },
+  "scanProfileCleanup": {
+    "message": "Кандидаты на очистку"
+  },
+  "scanBtn": {
+    "message": "▶ Сканировать"
+  },
+  "cancelScanBtn": {
+    "message": "Отмена"
+  },
+  "viewSectionLabel": {
+    "message": "Вид"
+  },
+  "viewSenders": {
+    "message": "Отправители"
+  },
+  "viewDomains": {
+    "message": "Домены"
+  },
+  "filterSectionLabel": {
+    "message": "2 · Проверка кандидатов"
+  },
+  "quickFilterAll": {
+    "message": "Все"
+  },
+  "quickFilterBulk": {
+    "message": "Рассылки"
+  },
+  "quickFilterCleanup": {
+    "message": "Очистка"
+  },
+  "quickFilterProtected": {
+    "message": "Защищённые"
+  },
+  "quickFilterHighRisk": {
+    "message": "Высокий риск"
+  },
+  "toolsMenu": {
+    "message": "⚙ Инструменты"
+  },
+  "logBtn": {
+    "message": "📜 Журнал"
+  },
+  "ruleManagerBtn": {
+    "message": "⚙ Правила"
+  },
+  "customRegexBtn": {
+    "message": "🔍 RegEx"
+  },
+  "protectManagerBtn": {
+    "message": "🛡 Защита"
+  },
+  "shortcutsBtn": {
+    "message": "⌨ Клавиши"
+  },
+  "columnBtn": {
+    "message": "📊 Столбцы"
+  },
+  "diagnosticsBtn": {
+    "message": "🧪 Диагностика"
+  },
+  "filterPlaceholder": {
+    "message": "🔍 Фильтр отправителей…"
+  },
+  "sortLabel": {
+    "message": "Сортировка"
+  },
+  "sortRiskScore": {
+    "message": "Оценка очистки"
+  },
+  "sortCount": {
+    "message": "Количество"
+  },
+  "sortSize": {
+    "message": "Размер"
+  },
+  "sortOldest": {
+    "message": "Старые"
+  },
+  "sortNewest": {
+    "message": "Активность"
+  },
+  "sortAZ": {
+    "message": "А–Я"
+  },
+  "colSender": {
+    "message": "Отправитель"
+  },
+  "colCount": {
+    "message": "Писем"
+  },
+  "colSize": {
+    "message": "Размер"
+  },
+  "colRead": {
+    "message": "Прочитано"
+  },
+  "colDate": {
+    "message": "Последнее"
+  },
+  "colRisk": {
+    "message": "Оценка"
+  },
+  "colActions": {
+    "message": "Действия"
+  },
+  "selectAllAria": {
+    "message": "Выбрать всех отправителей"
+  },
+  "senderListAria": {
+    "message": "Отправители и письма"
+  },
+  "welcomeTitle": {
+    "message": "👋 Добро пожаловать в MailManager"
+  },
+  "welcomeStep1": {
+    "message": "Выберите аккаунт и папку в боковой панели"
+  },
+  "welcomeStep2": {
+    "message": "Нажмите ▶ Сканировать"
+  },
+  "welcomeStep3": {
+    "message": "Проверьте отправителей, защитите важных и очистите"
+  },
+  "actionStep": {
+    "message": "3 · Очистка"
+  },
+  "trashBtn": {
+    "message": "🗑 Корзина"
+  },
+  "folderBtn": {
+    "message": "📁 В папку"
+  },
+  "readBtn": {
+    "message": "✓ Прочитано"
+  },
+  "tagBtn": {
+    "message": "🏷 Метка"
+  },
+  "unsubBtn": {
+    "message": "🚫 Отписка"
+  },
+  "exportBtn": {
+    "message": "💾 Экспорт"
+  },
+  "undoBtn": {
+    "message": "↩ Отменить"
+  },
+  "confirmOk": {
+    "message": "Подтвердить"
+  },
+  "confirmCancel": {
+    "message": "Отмена"
+  },
+  "trashSafetyTitle": {
+    "message": "⚠ Проверка выбора"
+  },
+  "trashSafetyConfirmLabel": {
+    "message": "Я проверил предупреждения и хочу продолжить."
+  },
+  "trashSafetySenders": {
+    "message": "Отправители"
+  },
+  "trashSafetyMails": {
+    "message": "Письма"
+  },
+  "trashSafetyProtected": {
+    "message": "Защищённые"
+  },
+  "trashSafetyDomainRule": {
+    "message": "Правило домена"
+  },
+  "trashSafetySingleMails": {
+    "message": "Отдельные письма"
+  },
+  "trashSafetyInbox": {
+    "message": "Это ваш основной входящий ящик."
+  },
+  "trashSafetyLargeSelection": {
+    "message": "Большой выбор: $COUNT$ писем за раз."
+  },
+  "cleanupRuleTitle": {
+    "message": "Правила очистки"
+  },
+  "applySavedRule": {
+    "message": "Применить сохранённое правило"
+  },
+  "saveRule": {
+    "message": "Сохранить правило для выбора"
+  },
+  "rulePresetNone": {
+    "message": "Без правил"
+  },
+  "rulePreset90Days": {
+    "message": "Старше 90 дней"
+  },
+  "rulePreset1Year": {
+    "message": "Старше 1 года"
+  },
+  "rulePreset1YearKeep5": {
+    "message": "1 год + оставить 5"
+  },
+  "ruleOlderThan": {
+    "message": "Только письма старше"
+  },
+  "ruleDaysTrash": {
+    "message": "дней — в корзину"
+  },
+  "ruleKeepNewest": {
+    "message": "Оставить последние"
+  },
+  "ruleKeepMails": {
+    "message": "писем на отправителя"
+  },
+  "ruleHint": {
+    "message": "0 означает: правило отключено. Пример: 365 дней + оставить 5 = удалить только старые письма, но сохранить 5 последних на отправителя."
+  },
+  "previewBtn": {
+    "message": "Рассчитать предпросмотр"
+  },
+  "folderDialogTitle": {
+    "message": "Переместить в папку"
+  },
+  "folderNameLabel": {
+    "message": "Новая папка:"
+  },
+  "folderParentLabel": {
+    "message": "Родительская папка:"
+  },
+  "folderExistingLabel": {
+    "message": "Выбрать существующую:"
+  },
+  "folderOk": {
+    "message": "Создать и переместить"
+  },
+  "folderOr": {
+    "message": "— или —"
+  },
+  "folderRoot": {
+    "message": "Корень аккаунта"
+  },
+  "folderNewOption": {
+    "message": "Создать новую папку"
+  },
+  "tagDialogTitle": {
+    "message": "Назначить метку"
+  },
+  "exportDialogTitle": {
+    "message": "Экспорт"
+  },
+  "actionLogTitle": {
+    "message": "Журнал действий"
+  },
+  "actionLogExportJson": {
+    "message": "Экспорт JSON"
+  },
+  "actionLogClear": {
+    "message": "Очистить"
+  },
+  "cleanupRuleManagerTitle": {
+    "message": "Сохранённые правила очистки"
+  },
+  "cleanupRuleImport": {
+    "message": "Импорт JSON"
+  },
+  "cleanupRuleExport": {
+    "message": "Экспорт JSON"
+  },
+  "cleanupRuleClearAll": {
+    "message": "Удалить все"
+  },
+  "customRegexTitle": {
+    "message": "Пользовательские RegEx-правила"
+  },
+  "customRegexPattern": {
+    "message": "RegEx-шаблон (например amazon|ebay)"
+  },
+  "customRegexTitle2": {
+    "message": "Название (например Магазины)"
+  },
+  "customRegexAdd": {
+    "message": "Добавить"
+  },
+  "customRegexEmpty": {
+    "message": "Нет пользовательских RegEx-правил."
+  },
+  "protectManagerTitle": {
+    "message": "Защищённые отправители"
+  },
+  "protectManagerFilter": {
+    "message": "🔍 Фильтр защищённых…"
+  },
+  "protectManagerImport": {
+    "message": "Импорт JSON"
+  },
+  "protectManagerExport": {
+    "message": "Экспорт JSON"
+  },
+  "protectManagerClear": {
+    "message": "Разблокировать все"
+  },
+  "diagnosticsTitle": {
+    "message": "Диагностика"
+  },
+  "diagnosticsHint": {
+    "message": "Эта информация помогает при поиске ошибок. Содержимое писем не отображается, только технические счётчики, имена папок, ID и локальные настройки MailManager."
+  },
+  "diagnosticsRefresh": {
+    "message": "Обновить"
+  },
+  "diagnosticsCopy": {
+    "message": "Копировать"
+  },
+  "shortcutsTitle": {
+    "message": "⌨ Горячие клавиши"
+  },
+  "shortcutsColAction": {
+    "message": "Действие"
+  },
+  "shortcutsColKey": {
+    "message": "Клавиши"
+  },
+  "shortcutsNavigate": {
+    "message": "Навигация между письмами"
+  },
+  "shortcutsPreview": {
+    "message": "Предпросмотр"
+  },
+  "shortcutsOpenLatest": {
+    "message": "Открыть последнее"
+  },
+  "shortcutsDoubleClick": {
+    "message": "Двойной клик"
+  },
+  "shortcutsDoubleClickDesc": {
+    "message": "Открывает в Thunderbird"
+  },
+  "shortcutsDrag": {
+    "message": "Перетащить письмо"
+  },
+  "shortcutsDragDesc": {
+    "message": "Открывается оверлей — бросьте на целевую папку"
+  },
+  "shortcutsTrash": {
+    "message": "В корзину"
+  },
+  "shortcutsContextMenu": {
+    "message": "Правый клик"
+  },
+  "shortcutsContextMenuDesc": {
+    "message": "Контекстное меню"
+  },
+  "attachmentTitle": {
+    "message": "Вложения"
+  },
+  "attachmentSaveAll": {
+    "message": "Сохранить все"
+  },
+  "columnDialogTitle": {
+    "message": "Видимые столбцы"
+  },
+  "columnDialogHint": {
+    "message": "Выберите, какие столбцы отображать в таблице."
+  },
+  "columnReset": {
+    "message": "Сброс"
+  },
+  "dropOverlayTitle": {
+    "message": "📁 Переместить в папку"
+  },
+  "dropOverlayHint": {
+    "message": "Перетащите на папку и отпустите"
+  },
+  "dropFolderEmpty": {
+    "message": "Нет других IMAP-папок."
+  },
+  "close": {
+    "message": "Закрыть"
+  },
+  "errorUnknownBackgroundAction": {
+    "message": "Неизвестное действие: $ACTION$"
+  },
+  "errorNoAccounts": {
+    "message": "Аккаунты не найдены."
+  },
+  "errorNoAccountSelected": {
+    "message": "Аккаунт не выбран."
+  },
+  "errorNoFolderSelected": {
+    "message": "Папка не выбрана."
+  },
+  "errorNoMessagesSelected": {
+    "message": "Письма не выбраны."
+  },
+  "errorNoTabId": {
+    "message": "Действие отклонено: нет действительного ID вкладки MailManager."
+  },
+  "errorProtectedSenderOrFolder": {
+    "message": "Выбор содержит защищённого отправителя или папку."
+  },
+  "errorProtectedSourceFolder": {
+    "message": "Исходная папка защищена."
+  },
+  "errorCannotVerifyFolder": {
+    "message": "Не удалось проверить как минимум одну исходную папку. Пожалуйста, пересканируйте."
+  },
+  "errorUndoNoTab": {
+    "message": "Отмена отклонена: нет действительного ID вкладки MailManager."
+  },
+  "errorNothingToUndo": {
+    "message": "Нечего отменять."
+  },
+  "errorSourceFolderNotFound": {
+    "message": "Исходная папка не найдена."
+  },
+  "errorTrashNotFound": {
+    "message": "Папка корзины не найдена."
+  },
+  "errorExistingFolderNotFound": {
+    "message": "Существующая папка не найдена."
+  },
+  "errorNoFolderName": {
+    "message": "Имя папки не указано."
+  },
+  "errorParentFolderNotFound": {
+    "message": "Родительская папка не найдена."
+  },
+  "errorNoTagKey": {
+    "message": "Ключ метки не указан."
+  },
+  "errorScanFailed": {
+    "message": "Сканирование не удалось: $ERROR$"
+  },
+  "errorCancelFailed": {
+    "message": "Отмена не удалась: $ERROR$"
+  },
+  "undoActionMoved": {
+    "message": "$COUNT$ писем восстановлено"
+  },
+  "openMessageContextLabel": {
+    "message": "↗ Открыть в Thunderbird"
+  },
+  "replyContextLabel": {
+    "message": "↩ Ответить"
+  },
+  "previewContextLabel": {
+    "message": "👁 Предпросмотр"
+  },
+  "attachmentContextLabel": {
+    "message": "📎 Вложения…"
+  },
+  "trashSingleLabel": {
+    "message": "🗑 В корзину"
+  },
+  "copySubjectLabel": {
+    "message": "📋 Копировать тему"
+  },
+  "selectSenderLabel": {
+    "message": "☑ Выбрать только этого отправителя"
+  },
+  "protectSenderLabel": {
+    "message": "🛡 Защитить"
+  },
+  "unprotectSenderLabel": {
+    "message": "🔓 Снять защиту"
+  },
+  "trashSenderLabel": {
+    "message": "🗑 Все письма в корзину"
+  },
+  "domainCleanLabel": {
+    "message": "🗑 Все письма домена в корзину"
+  },
+  "domainRuleLabel": {
+    "message": "⚙ Правило очистки для домена"
+  },
+  "scanProgressLabel": {
+    "message": "Сканирование: $PROFILE$…"
+  },
+  "scanRunningLabel": {
+    "message": "Идёт сканирование…"
+  },
+  "scanRunningMultiLabel": {
+    "message": "Сканирование нескольких папок…"
+  },
+  "scanCancelledLabel": {
+    "message": "Сканирование отменено."
+  },
+  "scanNoResponse": {
+    "message": "Нет ответа от background.js при сканировании."
+  },
+  "protectedFolderNoScan": {
+    "message": "Эта папка защищена. Сканирование запрещено."
+  },
+  "shortcutsPreviewKey": {
+    "message": "Пробел"
+  },
+  "errorScanAlreadyRunning": {
+    "message": "Сканирование уже запущено. Отмените или подождите."
+  },
+  "errorNoSendersSelected": {
+    "message": "Отправители не выбраны."
+  },
+  "errorNoNewProtectionCandidates": {
+    "message": "Новые кандидаты на защиту не найдены."
+  },
+  "errorActionFailed": {
+    "message": "Действие не удалось: $1"
+  },
+  "errorOpenMessage": {
+    "message": "Не удалось открыть письмо: $1"
+  },
+  "noCleanupCandidates": {
+    "message": "Больше кандидатов на очистку нет."
+  },
+  "noMatches": {
+    "message": "Нет совпадений."
+  },
+  "undoActionDone": {
+    "message": "$1 писем восстановлено"
+  },
+  "scanCompleteStats": {
+    "message": "$1 отправителей · $2 писем · $3"
+  },
+  "exportSuccess": {
+    "message": "$1 записей экспортировано."
+  },
+  "confirmClearActionLog": {
+    "message": "Действительно очистить журнал?"
+  },
+  "confirmDeleteRule": {
+    "message": "Действительно удалить правило для $1?"
+  },
+  "noSavedRules": {
+    "message": "Сохранённых правил очистки пока нет."
+  },
+  "confirmProtectSenders": {
+    "message": "Защитить $1 отправителей?"
+  },
+  "noLogEntries": {
+    "message": "Действий пока не записано."
+  },
+  "cacheLabel": {
+    "message": " · $1 из кэша · Пересканируйте для обновления"
+  },
+  "fromCacheMinutes": {
+    "message": "$1 мин. из кэша"
+  },
+  "fromCacheHours": {
+    "message": "$1 ч. из кэша"
+  },
+  "fromCacheJustNow": {
+    "message": "только что из кэша"
+  },
+  "fromCacheGeneric": {
+    "message": "из кэша"
+  },
+  "undoAvailability": {
+    "message": "Отмена возможна ($1с)"
+  },
+  "undoExpired": {
+    "message": "Отмена просрочена"
+  },
+  "trashFailedStale": {
+    "message": "$1 перемещено, $2 не удалось (устаревшие ID). Пересканируйте."
+  },
+  "trashPartialStats": {
+    "message": "$1 писем перемещено · $2 сохранено правилами"
+  },
+  "noAccountsFound": {
+    "message": "Аккаунты не найдены."
+  },
+  "importSuccess": {
+    "message": "$1 правил импортировано, $2 пропущено."
+  },
+  "importNone": {
+    "message": "В этом файле нет действительных правил очистки."
+  }
+}

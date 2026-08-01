@@ -10,27 +10,27 @@
   <aside id="sidebar">
     <div id="sidebarHeader">
       <span id="sidebarBrand">✉ MailManager</span>
-      <button id="sidebarToggle" title="Seitenleiste einklappen" aria-label="Seitenleiste einklappen">«</button>
+      <button id="sidebarToggle" title="__MSG_sidebarToggle__" aria-label="__MSG_sidebarToggle__">«</button>
     </div>
 
     <div class="sidebar-section" id="sourceSection">
-      <div class="sidebar-section-label">1 · Quelle scannen</div>
-      <label class="sidebar-field" for="accountSelect">Konto
+      <div class="sidebar-section-label">__MSG_sourceSectionLabel__</div>
+      <label class="sidebar-field" for="accountSelect">__MSG_accountLabel__
         <select id="accountSelect"></select>
       </label>
-      <label class="sidebar-field" for="folderSelect">Ordner
+      <label class="sidebar-field" for="folderSelect">__MSG_folderLabel__
         <select id="folderSelect"></select>
       </label>
-      <label class="sidebar-field" for="scanProfileSelect">Scan-Profil
+      <label class="sidebar-field" for="scanProfileSelect">__MSG_scanProfileLabel__
         <select id="scanProfileSelect">
-          <option value="full">Vollscan</option>
-          <option value="oldYear">Nur alte Mails &gt; 1 Jahr</option>
-          <option value="bulk">Nur Newsletter/Bulk</option>
-          <option value="unread">Nur ungelesene</option>
-          <option value="cleanupCandidates">Aufräum-Kandidaten</option>
+          <option value="full">__MSG_scanProfileFull__</option>
+          <option value="oldYear">__MSG_scanProfileOldYear__</option>
+          <option value="bulk">__MSG_scanProfileBulk__</option>
+          <option value="unread">__MSG_scanProfileUnread__</option>
+          <option value="cleanupCandidates">__MSG_scanProfileCleanup__</option>
         </select>
       </label>
-      <button id="scanBtn">▶ Scannen</button>
+      <button id="scanBtn">__MSG_scanBtn__</button>
       <div id="progressContainer" hidden>
         <progress id="progressBar" value="0" max="100"></progress>
         <span id="progressLabel" aria-live="polite">0 / 0</span>
@@ -38,30 +38,29 @@
     </div>
 
     <div class="sidebar-section" id="viewSection">
-      <div class="sidebar-section-label">Ansicht</div>
+      <div class="sidebar-section-label">__MSG_viewSectionLabel__</div>
       <div id="viewSwitcher">
-        <button class="view-btn active" data-view="senders">Absender</button>
-        <button class="view-btn" data-view="domains">Domains</button>
+        <button class="view-btn active" data-view="senders">__MSG_viewSenders__</button>
+        <button class="view-btn" data-view="domains">__MSG_viewDomains__</button>
       </div>
     </div>
 
     <div class="sidebar-section" id="filterSection">
-      <div class="sidebar-section-label">2 · Kandidaten prüfen</div>
-      <!-- #quickFilterBar wird hier von tab.js eingefügt -->
+      <div class="sidebar-section-label">__MSG_filterSectionLabel__</div>
     </div>
 
 
     <div id="sidebarFooter">
       <details id="toolsMenu">
-        <summary>⚙ Werkzeuge</summary>
+        <summary>__MSG_toolsMenu__</summary>
         <div id="toolsMenuPanel">
-          <button id="logBtn" class="action-btn">📜 Protokoll</button>
-          <button id="ruleManagerBtn" class="action-btn">⚙ Regeln</button>
-          <button id="customRegexBtn" class="action-btn">🔍 RegEx</button>
-          <button id="protectManagerBtn" class="action-btn">🛡 Schutzliste</button>
-          <button id="shortcutsBtn" class="action-btn">⌨ Tastaturkürzel</button>
-          <button id="columnBtn" class="action-btn">📊 Spalten</button>
-          <button id="diagnosticsBtn" class="action-btn">🧪 Diagnose</button>
+          <button id="logBtn" class="action-btn">__MSG_logBtn__</button>
+          <button id="ruleManagerBtn" class="action-btn">__MSG_ruleManagerBtn__</button>
+          <button id="customRegexBtn" class="action-btn">__MSG_customRegexBtn__</button>
+          <button id="protectManagerBtn" class="action-btn">__MSG_protectManagerBtn__</button>
+          <button id="shortcutsBtn" class="action-btn">__MSG_shortcutsBtn__</button>
+          <button id="columnBtn" class="action-btn">__MSG_columnBtn__</button>
+          <button id="diagnosticsBtn" class="action-btn">__MSG_diagnosticsBtn__</button>
         </div>
       </details>
     </div>
@@ -69,55 +68,55 @@
 
   <main id="main">
     <div id="mainTopbar">
-      <input id="filterInput" type="search" placeholder="🔍 Absender filtern…" />
-      <label id="sortControl" for="sortSelect">Sortieren
+      <input id="filterInput" type="search" placeholder="__MSG_filterPlaceholder__" />
+      <label id="sortControl" for="sortSelect">__MSG_sortLabel__
         <select id="sortSelect">
-          <option value="riskScore">Aufräum-Score</option>
-          <option value="count">Anzahl</option>
-          <option value="totalSizeBytes">Größe</option>
-          <option value="oldestDate">Älteste</option>
-          <option value="newestDate">Aktivität</option>
-          <option value="email">A–Z</option>
+          <option value="riskScore">__MSG_sortRiskScore__</option>
+          <option value="count">__MSG_sortCount__</option>
+          <option value="totalSizeBytes">__MSG_sortSize__</option>
+          <option value="oldestDate">__MSG_sortOldest__</option>
+          <option value="newestDate">__MSG_sortNewest__</option>
+          <option value="email">__MSG_sortAZ__</option>
         </select>
       </label>
       <span id="statsLabel" aria-live="polite"></span>
     </div>
 
     <div id="tableHeader" role="row">
-      <input type="checkbox" id="selectAll" aria-label="Alle Absender auswählen" />
-      <span class="col-sender" role="columnheader" data-sort="email" title="Nach Absender sortieren">Absender</span>
-      <span class="col-count" role="columnheader" data-sort="count" title="Nach Anzahl sortieren">Mails</span>
-      <span class="col-size" role="columnheader" data-sort="totalSizeBytes" title="Nach Größe sortieren">Größe</span>
-      <span class="col-read" role="columnheader">Gelesen</span>
-      <span class="col-date" role="columnheader" data-sort="newestDate" title="Nach letzter Mail sortieren">Letzte Mail</span>
-      <span class="col-risk" role="columnheader" data-sort="riskScore" title="Nach Aufräum-Score sortieren">Aufräum-Score</span>
-      <span class="col-actions" role="columnheader">Aktionen</span>
+      <input type="checkbox" id="selectAll" aria-label="__MSG_selectAllAria__" />
+      <span class="col-sender" role="columnheader" data-sort="email" title="__MSG_colSender__">__MSG_colSender__</span>
+      <span class="col-count" role="columnheader" data-sort="count" title="__MSG_colCount__">__MSG_colCount__</span>
+      <span class="col-size" role="columnheader" data-sort="totalSizeBytes" title="__MSG_colSize__">__MSG_colSize__</span>
+      <span class="col-read" role="columnheader">__MSG_colRead__</span>
+      <span class="col-date" role="columnheader" data-sort="newestDate" title="__MSG_colDate__">__MSG_colDate__</span>
+      <span class="col-risk" role="columnheader" data-sort="riskScore" title="__MSG_colRisk__">__MSG_colRisk__</span>
+      <span class="col-actions" role="columnheader">__MSG_colActions__</span>
     </div>
 
-    <div id="senderList" role="table" aria-label="Absender und Mails"></div>
+    <div id="senderList" role="table" aria-label="__MSG_senderListAria__"></div>
 
     <div id="welcomeBanner" class="welcome-banner">
-      <div class="welcome-title">👋 Willkommen bei MailManager</div>
+      <div class="welcome-title">__MSG_welcomeTitle__</div>
       <div class="welcome-steps">
-        <div class="welcome-step"><span class="welcome-num">①</span> Konto und Ordner in der Seitenleiste wählen</div>
-        <div class="welcome-step"><span class="welcome-num">②</span> Auf <strong>▶ Scannen</strong> klicken</div>
-        <div class="welcome-step"><span class="welcome-num">③</span> Absender prüfen, schützen und aufräumen</div>
+        <div class="welcome-step"><span class="welcome-num">①</span> __MSG_welcomeStep1__</div>
+        <div class="welcome-step"><span class="welcome-num">②</span> __MSG_welcomeStep2__</div>
+        <div class="welcome-step"><span class="welcome-num">③</span> __MSG_welcomeStep3__</div>
       </div>
     </div>
 
     <div id="mainActionbar">
-      <span class="action-step">3 · Aufräumen</span>
+      <span class="action-step">__MSG_actionStep__</span>
       <span id="selectionLabel" aria-live="polite"></span>
       <div id="actionButtons">
-        <button id="trashBtn"  class="action-btn danger" disabled>🗑 Papierkorb</button>
-        <button id="folderBtn" class="action-btn"        disabled>📁 In Ordner</button>
-        <button id="readBtn"   class="action-btn"        disabled>✓ Gelesen</button>
-        <button id="tagBtn"    class="action-btn"        disabled>🏷 Tag</button>
-        <button id="unsubBtn"  class="action-btn"        disabled>🚫 Abmelden</button>
-        <button id="exportBtn" class="action-btn">💾 Export</button>
+        <button id="trashBtn"  class="action-btn danger" disabled>__MSG_trashBtn__</button>
+        <button id="folderBtn" class="action-btn"        disabled>__MSG_folderBtn__</button>
+        <button id="readBtn"   class="action-btn"        disabled>__MSG_readBtn__</button>
+        <button id="tagBtn"    class="action-btn"        disabled>__MSG_tagBtn__</button>
+        <button id="unsubBtn"  class="action-btn"        disabled>__MSG_unsubBtn__</button>
+        <button id="exportBtn" class="action-btn">__MSG_exportBtn__</button>
       </div>
       <div id="undoToast" hidden>
-        <button id="undoBtn">↩ Rückgängig</button>
+        <button id="undoBtn">__MSG_undoBtn__</button>
         <span id="undoCountdown"></span>
       </div>
     </div>
@@ -127,230 +126,224 @@
     <p id="confirmMessage"></p>
   
     <div id="trashSafetyBox" class="trash-safety-box" hidden>
-      <div class="trash-safety-title">⚠ Auswahl prüfen</div>
+      <div class="trash-safety-title">__MSG_trashSafetyTitle__</div>
       <ul id="trashSafetyList"></ul>
       <label class="trash-safety-confirm">
         <input id="trashSafetyConfirm" type="checkbox" />
-        Ich habe die Warnungen geprüft und möchte fortfahren.
+        __MSG_trashSafetyConfirmLabel__
       </label>
     </div>
   
     <div id="trashRuleBox" hidden>
-      <h3>Aufräum-Regeln</h3>
+      <h3>__MSG_cleanupRuleTitle__</h3>
   
       <div class="cleanup-rule-scope">
-        <button id="applySavedCleanupRuleBtn" type="button">Gespeicherte Regel anwenden</button>
-        <button id="saveCleanupRuleBtn" type="button">Regel für Auswahl speichern</button>
+        <button id="applySavedCleanupRuleBtn" type="button">__MSG_applySavedRule__</button>
+        <button id="saveCleanupRuleBtn" type="button">__MSG_saveRule__</button>
         <span id="cleanupRuleInfo"></span>
       </div>
   
       <div class="trash-rule-presets">
-        <button type="button" class="trash-rule-preset" data-older="0" data-keep="0">Keine Regeln</button>
-        <button type="button" class="trash-rule-preset" data-older="90" data-keep="0">Älter als 90 Tage</button>
-        <button type="button" class="trash-rule-preset" data-older="365" data-keep="0">Älter als 1 Jahr</button>
-        <button type="button" class="trash-rule-preset" data-older="365" data-keep="5">1 Jahr + letzte 5 behalten</button>
+        <button type="button" class="trash-rule-preset" data-older="0" data-keep="0">__MSG_rulePresetNone__</button>
+        <button type="button" class="trash-rule-preset" data-older="90" data-keep="0">__MSG_rulePreset90Days__</button>
+        <button type="button" class="trash-rule-preset" data-older="365" data-keep="0">__MSG_rulePreset1Year__</button>
+        <button type="button" class="trash-rule-preset" data-older="365" data-keep="5">__MSG_rulePreset1YearKeep5__</button>
       </div>
 
       <label>
-        Nur Mails älter als
+        __MSG_ruleOlderThan__
         <input id="trashOlderThanDays" type="number" min="0" step="1" value="0" />
-        Tage in den Papierkorb verschieben
+        __MSG_ruleDaysTrash__
       </label>
   
       <label>
-        Pro Absender die neuesten
+        __MSG_ruleKeepNewest__
         <input id="trashKeepNewest" type="number" min="0" step="1" value="0" />
-        Mails behalten
+        __MSG_ruleKeepMails__
       </label>
   
-      <p class="hint">
-        0 bedeutet: Regel ist deaktiviert. Beispiel: 365 Tage + 5 behalten =
-        nur alte Mails löschen, aber die letzten 5 pro Absender schützen.
-      </p>
+      <p class="hint">__MSG_ruleHint__</p>
 
       <div class="trash-preview-actions">
-        <button id="trashPreviewBtn" type="button">Vorschau berechnen</button>
+        <button id="trashPreviewBtn" type="button">__MSG_previewBtn__</button>
       </div>
 
       <div id="trashPreviewResult" class="trash-preview-result" hidden></div>
     </div>
   
     <div class="dialog-buttons">
-      <button id="confirmOk" class="danger">Bestätigen</button>
-      <button id="confirmCancel">Abbrechen</button>
+      <button id="confirmOk" class="danger">__MSG_confirmOk__</button>
+      <button id="confirmCancel">__MSG_confirmCancel__</button>
     </div>
   </dialog>
 
   <dialog id="folderDialog">
-    <h3>In Ordner sortieren</h3>
-    <label>Neuer Ordner-Name:
+    <h3>__MSG_folderDialogTitle__</h3>
+    <label>__MSG_folderNameLabel__
       <input id="folderNameInput" type="text" />
     </label>
-    <label>Übergeordneter Ordner:
-      <select id="parentFolderSelect"><option value="">Konto-Root</option></select>
+    <label>__MSG_folderParentLabel__
+      <select id="parentFolderSelect"><option value="">__MSG_folderRoot__</option></select>
     </label>
-    <p class="dialog-or">— oder —</p>
-    <label>Bestehenden Ordner wählen:
-      <select id="existingFolderSelect"><option value="">Neuen Ordner erstellen</option></select>
+    <p class="dialog-or">__MSG_folderOr__</p>
+    <label>__MSG_folderExistingLabel__
+      <select id="existingFolderSelect"><option value="">__MSG_folderNewOption__</option></select>
     </label>
     <div class="dialog-buttons">
-      <button id="folderOk">Erstellen &amp; Verschieben</button>
-      <button id="folderCancel">Abbrechen</button>
+      <button id="folderOk">__MSG_folderOk__</button>
+      <button id="folderCancel">__MSG_confirmCancel__</button>
     </div>
   </dialog>
 
   <dialog id="tagDialog">
-    <h3>Tag zuweisen</h3>
+    <h3>__MSG_tagDialogTitle__</h3>
     <div id="tagList"></div>
     <div class="dialog-buttons">
-      <button id="tagCancel">Schließen</button>
+      <button id="tagCancel">__MSG_close__</button>
     </div>
   </dialog>
 
   <dialog id="exportDialog">
-    <h3>Export</h3>
+    <h3>__MSG_exportDialogTitle__</h3>
     <div class="dialog-buttons">
       <button id="exportCSV">CSV</button>
       <button id="exportJSON">JSON</button>
-      <button id="exportCancel">Abbrechen</button>
+      <button id="exportCancel">__MSG_confirmCancel__</button>
     </div>
   </dialog>
   <dialog id="actionLogDialog">
-    <h3>Aktionsprotokoll</h3>
+    <h3>__MSG_actionLogTitle__</h3>
   
     <div id="actionLogList" class="action-log-list"></div>
   
     <div class="dialog-buttons">
-      <button id="actionLogExport">Export JSON</button>
-      <button id="actionLogClear" class="danger">Leeren</button>
-      <button id="actionLogClose">Schließen</button>
+      <button id="actionLogExport">__MSG_actionLogExportJson__</button>
+      <button id="actionLogClear" class="danger">__MSG_actionLogClear__</button>
+      <button id="actionLogClose">__MSG_close__</button>
     </div>
   </dialog>
 
 
   <dialog id="cleanupRuleManagerDialog">
-    <h3>Gespeicherte Aufräum-Regeln</h3>
+    <h3>__MSG_cleanupRuleManagerTitle__</h3>
   
     <div id="cleanupRuleManagerList" class="cleanup-rule-manager-list"></div>
   
     <div class="dialog-buttons">
-      <button id="cleanupRuleImport">Import JSON</button>
+      <button id="cleanupRuleImport">__MSG_cleanupRuleImport__</button>
       <input id="cleanupRuleImportFile" type="file" accept="application/json,.json" hidden />
-      <button id="cleanupRuleExport">Export JSON</button>
-      <button id="cleanupRuleClear" class="danger">Alle löschen</button>
-      <button id="cleanupRuleManagerClose">Schließen</button>
+      <button id="cleanupRuleExport">__MSG_cleanupRuleExport__</button>
+      <button id="cleanupRuleClear" class="danger">__MSG_cleanupRuleClearAll__</button>
+      <button id="cleanupRuleManagerClose">__MSG_close__</button>
     </div>
   </dialog>
 
   <dialog id="customRegexDialog">
-    <h3>Benutzerdefinierte RegEx-Regeln</h3>
+    <h3>__MSG_customRegexTitle__</h3>
     <div class="custom-regex-list" id="customRegexList"></div>
     <div class="custom-regex-add">
-      <input type="text" id="customRegexPattern" placeholder="RegEx-Muster (z. B. amazon|ebay)" />
-      <input type="text" id="customRegexTitle" placeholder="Titel (z. B. Shopping)" />
-      <button id="customRegexAddBtn">Hinzufügen</button>
+      <input type="text" id="customRegexPattern" placeholder="__MSG_customRegexPattern__" />
+      <input type="text" id="customRegexTitle" placeholder="__MSG_customRegexTitle2__" />
+      <button id="customRegexAddBtn">__MSG_customRegexAdd__</button>
     </div>
     <div class="dialog-buttons">
-      <button id="customRegexClose">Schließen</button>
+      <button id="customRegexClose">__MSG_close__</button>
     </div>
   </dialog>
   
   <dialog id="protectManagerDialog">
-    <h3>Geschützte Absender</h3>
+    <h3>__MSG_protectManagerTitle__</h3>
   
-    <input id="protectManagerFilter" type="search" placeholder="🔍 Geschützte Absender filtern…" />
+    <input id="protectManagerFilter" type="search" placeholder="__MSG_protectManagerFilter__" />
   
     <div id="protectManagerList" class="protect-manager-list"></div>
   
     <div class="dialog-buttons">
-      <button id="protectImport">Import JSON</button>
+      <button id="protectImport">__MSG_protectManagerImport__</button>
       <input id="protectImportFile" type="file" accept="application/json,.json" hidden />
-      <button id="protectExport">Export JSON</button>
-      <button id="protectClear" class="danger">Alle entsperren</button>
-      <button id="protectManagerClose">Schließen</button>
+      <button id="protectExport">__MSG_protectManagerExport__</button>
+      <button id="protectClear" class="danger">__MSG_protectManagerClear__</button>
+      <button id="protectManagerClose">__MSG_close__</button>
     </div>
   </dialog>
 
   <dialog id="diagnosticsDialog">
-    <h3>Diagnose</h3>
+    <h3>__MSG_diagnosticsTitle__</h3>
   
-    <p class="hint">
-      Diese Informationen helfen bei Fehlersuche. Es werden keine Mail-Inhalte angezeigt,
-      nur technische Zähler, Ordnernamen, IDs und lokale MailManager-Einstellungen.
-    </p>
+    <p class="hint">__MSG_diagnosticsHint__</p>
   
     <pre id="diagnosticsOutput" class="diagnostics-output"></pre>
   
     <div class="dialog-buttons">
-      <button id="diagnosticsRefresh">Aktualisieren</button>
-      <button id="diagnosticsCopy">Kopieren</button>
-      <button id="diagnosticsClose">Schließen</button>
+      <button id="diagnosticsRefresh">__MSG_diagnosticsRefresh__</button>
+      <button id="diagnosticsCopy">__MSG_diagnosticsCopy__</button>
+      <button id="diagnosticsClose">__MSG_close__</button>
     </div>
   </dialog>
 
   <dialog id="shortcutsDialog">
-    <h3>⌨ Tastaturkürzel</h3>
+    <h3>__MSG_shortcutsTitle__</h3>
     <table class="shortcuts-table">
       <tr>
-        <th>Aktion</th>
-        <th>Tastaturkürzel</th>
+        <th>__MSG_shortcutsColAction__</th>
+        <th>__MSG_shortcutsColKey__</th>
       </tr>
       <tr>
-        <td>Zwischen Mail-Zeilen navigieren</td>
+        <td>__MSG_shortcutsNavigate__</td>
         <td><kbd>↑</kbd> / <kbd>↓</kbd></td>
       </tr>
       <tr>
-        <td>Vorschau auf-/zuklappen</td>
-        <td><kbd>Leertaste</kbd> (wenn Mail fokussiert)</td>
+        <td>__MSG_shortcutsPreview__</td>
+        <td><kbd>__MSG_shortcutsPreviewKey__</kbd></td>
       </tr>
       <tr>
-        <td>Neueste Mail öffnen</td>
+        <td>__MSG_shortcutsOpenLatest__</td>
         <td><kbd>Enter</kbd></td>
       </tr>
       <tr>
-        <td>Doppelklick auf Mail</td>
-        <td>Öffnet in Thunderbird</td>
+        <td>__MSG_shortcutsDoubleClick__</td>
+        <td>__MSG_shortcutsDoubleClickDesc__</td>
       </tr>
       <tr>
-        <td>Mail oder Absender ziehen</td>
-        <td>Ablage-Overlay öffnet sich — auf Zielordner fallen lassen</td>
+        <td>__MSG_shortcutsDrag__</td>
+        <td>__MSG_shortcutsDragDesc__</td>
       </tr>
       <tr>
-        <td>Ausgewählte in Papierkorb</td>
+        <td>__MSG_shortcutsTrash__</td>
         <td><kbd>Entf</kbd></td>
       </tr>
       <tr>
-        <td>Rechtsklick</td>
-        <td>Kontextmenü für Sender/Mail</td>
+        <td>__MSG_shortcutsContextMenu__</td>
+        <td>__MSG_shortcutsContextMenuDesc__</td>
       </tr>
     </table>
     <div class="dialog-buttons">
-      <button id="shortcutsClose">Schließen</button>
+      <button id="shortcutsClose">__MSG_close__</button>
     </div>
   </dialog>
 
   <dialog id="attachmentDialog">
-    <h3 id="attachmentDialogTitle">Anhänge</h3>
+    <h3 id="attachmentDialogTitle">__MSG_attachmentTitle__</h3>
     <div id="attachmentList" class="attachment-list"></div>
     <div class="dialog-buttons">
-      <button id="attachmentSaveAll">Alle speichern</button>
-      <button id="attachmentClose">Schließen</button>
+      <button id="attachmentSaveAll">__MSG_attachmentSaveAll__</button>
+      <button id="attachmentClose">__MSG_close__</button>
     </div>
   </dialog>
 
   <dialog id="columnDialog">
-    <h3>Sichtbare Spalten</h3>
-    <p class="hint">Wählen Sie aus, welche Spalten in der Tabelle angezeigt werden sollen.</p>
+    <h3>__MSG_columnDialogTitle__</h3>
+    <p class="hint">__MSG_columnDialogHint__</p>
     <div id="columnCheckboxes" class="column-checkboxes"></div>
     <div class="dialog-buttons">
-      <button id="columnReset">Zurücksetzen</button>
-      <button id="columnClose">Schließen</button>
+      <button id="columnReset">__MSG_columnReset__</button>
+      <button id="columnClose">__MSG_close__</button>
     </div>
   </dialog>
 
   <aside id="dropFolderOverlay" hidden>
-    <div class="drop-overlay-title">📁 In Ordner ablegen</div>
-    <div class="drop-overlay-hint">Auf einen Ordner ziehen und loslassen</div>
+    <div class="drop-overlay-title">__MSG_dropOverlayTitle__</div>
+    <div class="drop-overlay-hint">__MSG_dropOverlayHint__</div>
     <div id="dropFolderList" class="drop-folder-list"></div>
   </aside>
 

@@ -1,0 +1,620 @@
+{
+  "extensionName": {
+    "message": "MailManager"
+  },
+  "extensionDescription": {
+    "message": "Lokale E-Mail-Organisation nach Absender — kein Server, kein Tracking"
+  },
+  "actionTitle": {
+    "message": "MailManager öffnen"
+  },
+  "sidebarBrand": {
+    "message": "✉ MailManager"
+  },
+  "sidebarToggle": {
+    "message": "Seitenleiste einklappen"
+  },
+  "sourceSectionLabel": {
+    "message": "1 · Quelle scannen"
+  },
+  "accountLabel": {
+    "message": "Konto"
+  },
+  "folderLabel": {
+    "message": "Ordner"
+  },
+  "folderAllOption": {
+    "message": "📂 Alle Ordner (außer System)"
+  },
+  "scanProfileLabel": {
+    "message": "Scan-Profil"
+  },
+  "scanProfileFull": {
+    "message": "Vollscan"
+  },
+  "scanProfileOldYear": {
+    "message": "Nur alte Mails > 1 Jahr"
+  },
+  "scanProfileBulk": {
+    "message": "Nur Newsletter/Bulk"
+  },
+  "scanProfileUnread": {
+    "message": "Nur ungelesene"
+  },
+  "scanProfileCleanup": {
+    "message": "Aufräum-Kandidaten"
+  },
+  "scanBtn": {
+    "message": "▶ Scannen"
+  },
+  "cancelScanBtn": {
+    "message": "Abbrechen"
+  },
+  "viewSectionLabel": {
+    "message": "Ansicht"
+  },
+  "viewSenders": {
+    "message": "Absender"
+  },
+  "viewDomains": {
+    "message": "Domains"
+  },
+  "filterSectionLabel": {
+    "message": "2 · Kandidaten prüfen"
+  },
+  "quickFilterAll": {
+    "message": "Alle"
+  },
+  "quickFilterBulk": {
+    "message": "Newsletter"
+  },
+  "quickFilterCleanup": {
+    "message": "Aufräumen"
+  },
+  "quickFilterProtected": {
+    "message": "Geschützt"
+  },
+  "quickFilterHighRisk": {
+    "message": "Risiko"
+  },
+  "toolsMenu": {
+    "message": "⚙ Werkzeuge"
+  },
+  "logBtn": {
+    "message": "📜 Protokoll"
+  },
+  "ruleManagerBtn": {
+    "message": "⚙ Regeln"
+  },
+  "customRegexBtn": {
+    "message": "🔍 RegEx"
+  },
+  "protectManagerBtn": {
+    "message": "🛡 Schutzliste"
+  },
+  "shortcutsBtn": {
+    "message": "⌨ Tastaturkürzel"
+  },
+  "columnBtn": {
+    "message": "📊 Spalten"
+  },
+  "diagnosticsBtn": {
+    "message": "🧪 Diagnose"
+  },
+  "filterPlaceholder": {
+    "message": "🔍 Absender filtern…"
+  },
+  "sortLabel": {
+    "message": "Sortieren"
+  },
+  "sortRiskScore": {
+    "message": "Aufräum-Score"
+  },
+  "sortCount": {
+    "message": "Anzahl"
+  },
+  "sortSize": {
+    "message": "Größe"
+  },
+  "sortOldest": {
+    "message": "Älteste"
+  },
+  "sortNewest": {
+    "message": "Aktivität"
+  },
+  "sortAZ": {
+    "message": "A–Z"
+  },
+  "colSender": {
+    "message": "Absender"
+  },
+  "colCount": {
+    "message": "Mails"
+  },
+  "colSize": {
+    "message": "Größe"
+  },
+  "colRead": {
+    "message": "Gelesen"
+  },
+  "colDate": {
+    "message": "Letzte Mail"
+  },
+  "colRisk": {
+    "message": "Aufräum-Score"
+  },
+  "colActions": {
+    "message": "Aktionen"
+  },
+  "selectAllAria": {
+    "message": "Alle Absender auswählen"
+  },
+  "senderListAria": {
+    "message": "Absender und Mails"
+  },
+  "welcomeTitle": {
+    "message": "👋 Willkommen bei MailManager"
+  },
+  "welcomeStep1": {
+    "message": "Konto und Ordner in der Seitenleiste wählen"
+  },
+  "welcomeStep2": {
+    "message": "Auf ▶ Scannen klicken"
+  },
+  "welcomeStep3": {
+    "message": "Absender prüfen, schützen und aufräumen"
+  },
+  "actionStep": {
+    "message": "3 · Aufräumen"
+  },
+  "trashBtn": {
+    "message": "🗑 Papierkorb"
+  },
+  "folderBtn": {
+    "message": "📁 In Ordner"
+  },
+  "readBtn": {
+    "message": "✓ Gelesen"
+  },
+  "tagBtn": {
+    "message": "🏷 Tag"
+  },
+  "unsubBtn": {
+    "message": "🚫 Abmelden"
+  },
+  "exportBtn": {
+    "message": "💾 Export"
+  },
+  "undoBtn": {
+    "message": "↩ Rückgängig"
+  },
+  "confirmOk": {
+    "message": "Bestätigen"
+  },
+  "confirmCancel": {
+    "message": "Abbrechen"
+  },
+  "trashSafetyTitle": {
+    "message": "⚠ Auswahl prüfen"
+  },
+  "trashSafetyConfirmLabel": {
+    "message": "Ich habe die Warnungen geprüft und möchte fortfahren."
+  },
+  "trashSafetySenders": {
+    "message": "Absender"
+  },
+  "trashSafetyMails": {
+    "message": "Mails"
+  },
+  "trashSafetyProtected": {
+    "message": "Geschützt"
+  },
+  "trashSafetyDomainRule": {
+    "message": "Domain-Regel"
+  },
+  "trashSafetySingleMails": {
+    "message": "Einzelne Mails"
+  },
+  "trashSafetyInbox": {
+    "message": "Das ist Ihr Haupt-Posteingang."
+  },
+  "trashSafetyLargeSelection": {
+    "message": "Große Auswahl: $COUNT$ Mails auf einmal."
+  },
+  "cleanupRuleTitle": {
+    "message": "Aufräum-Regeln"
+  },
+  "applySavedRule": {
+    "message": "Gespeicherte Regel anwenden"
+  },
+  "saveRule": {
+    "message": "Regel für Auswahl speichern"
+  },
+  "rulePresetNone": {
+    "message": "Keine Regeln"
+  },
+  "rulePreset90Days": {
+    "message": "Älter als 90 Tage"
+  },
+  "rulePreset1Year": {
+    "message": "Älter als 1 Jahr"
+  },
+  "rulePreset1YearKeep5": {
+    "message": "1 Jahr + letzte 5 behalten"
+  },
+  "ruleOlderThan": {
+    "message": "Nur Mails älter als"
+  },
+  "ruleDaysTrash": {
+    "message": "Tage in den Papierkorb verschieben"
+  },
+  "ruleKeepNewest": {
+    "message": "Pro Absender die neuesten"
+  },
+  "ruleKeepMails": {
+    "message": "Mails behalten"
+  },
+  "ruleHint": {
+    "message": "0 bedeutet: Regel ist deaktiviert. Beispiel: 365 Tage + 5 behalten = nur alte Mails löschen, aber die letzten 5 pro Absender schützen."
+  },
+  "previewBtn": {
+    "message": "Vorschau berechnen"
+  },
+  "folderDialogTitle": {
+    "message": "In Ordner sortieren"
+  },
+  "folderNameLabel": {
+    "message": "Neuer Ordner-Name:"
+  },
+  "folderParentLabel": {
+    "message": "Übergeordneter Ordner:"
+  },
+  "folderExistingLabel": {
+    "message": "Bestehenden Ordner wählen:"
+  },
+  "folderOk": {
+    "message": "Erstellen & Verschieben"
+  },
+  "folderOr": {
+    "message": "— oder —"
+  },
+  "folderRoot": {
+    "message": "Konto-Root"
+  },
+  "folderNewOption": {
+    "message": "Neuen Ordner erstellen"
+  },
+  "tagDialogTitle": {
+    "message": "Tag zuweisen"
+  },
+  "exportDialogTitle": {
+    "message": "Export"
+  },
+  "actionLogTitle": {
+    "message": "Aktionsprotokoll"
+  },
+  "actionLogExportJson": {
+    "message": "Export JSON"
+  },
+  "actionLogClear": {
+    "message": "Leeren"
+  },
+  "cleanupRuleManagerTitle": {
+    "message": "Gespeicherte Aufräum-Regeln"
+  },
+  "cleanupRuleImport": {
+    "message": "Import JSON"
+  },
+  "cleanupRuleExport": {
+    "message": "Export JSON"
+  },
+  "cleanupRuleClearAll": {
+    "message": "Alle löschen"
+  },
+  "customRegexTitle": {
+    "message": "Benutzerdefinierte RegEx-Regeln"
+  },
+  "customRegexPattern": {
+    "message": "RegEx-Muster (z. B. amazon|ebay)"
+  },
+  "customRegexTitle2": {
+    "message": "Titel (z. B. Shopping)"
+  },
+  "customRegexAdd": {
+    "message": "Hinzufügen"
+  },
+  "customRegexEmpty": {
+    "message": "Keine benutzerdefinierten RegEx-Regeln."
+  },
+  "protectManagerTitle": {
+    "message": "Geschützte Absender"
+  },
+  "protectManagerFilter": {
+    "message": "🔍 Geschützte Absender filtern…"
+  },
+  "protectManagerImport": {
+    "message": "Import JSON"
+  },
+  "protectManagerExport": {
+    "message": "Export JSON"
+  },
+  "protectManagerClear": {
+    "message": "Alle entsperren"
+  },
+  "diagnosticsTitle": {
+    "message": "Diagnose"
+  },
+  "diagnosticsHint": {
+    "message": "Diese Informationen helfen bei Fehlersuche. Es werden keine Mail-Inhalte angezeigt, nur technische Zähler, Ordnernamen, IDs und lokale MailManager-Einstellungen."
+  },
+  "diagnosticsRefresh": {
+    "message": "Aktualisieren"
+  },
+  "diagnosticsCopy": {
+    "message": "Kopieren"
+  },
+  "shortcutsTitle": {
+    "message": "⌨ Tastaturkürzel"
+  },
+  "shortcutsColAction": {
+    "message": "Aktion"
+  },
+  "shortcutsColKey": {
+    "message": "Tastaturkürzel"
+  },
+  "shortcutsNavigate": {
+    "message": "Zwischen Mail-Zeilen navigieren"
+  },
+  "shortcutsPreview": {
+    "message": "Vorschau auf-/zuklappen"
+  },
+  "shortcutsOpenLatest": {
+    "message": "Neueste Mail öffnen"
+  },
+  "shortcutsDoubleClick": {
+    "message": "Doppelklick auf Mail"
+  },
+  "shortcutsDoubleClickDesc": {
+    "message": "Öffnet in Thunderbird"
+  },
+  "shortcutsDrag": {
+    "message": "Mail oder Absender ziehen"
+  },
+  "shortcutsDragDesc": {
+    "message": "Ablage-Overlay öffnet sich — auf Zielordner fallen lassen"
+  },
+  "shortcutsTrash": {
+    "message": "Ausgewählte in Papierkorb"
+  },
+  "shortcutsContextMenu": {
+    "message": "Rechtsklick"
+  },
+  "shortcutsContextMenuDesc": {
+    "message": "Kontextmenü für Sender/Mail"
+  },
+  "attachmentTitle": {
+    "message": "Anhänge"
+  },
+  "attachmentSaveAll": {
+    "message": "Alle speichern"
+  },
+  "columnDialogTitle": {
+    "message": "Sichtbare Spalten"
+  },
+  "columnDialogHint": {
+    "message": "Wählen Sie aus, welche Spalten in der Tabelle angezeigt werden sollen."
+  },
+  "columnReset": {
+    "message": "Zurücksetzen"
+  },
+  "dropOverlayTitle": {
+    "message": "📁 In Ordner ablegen"
+  },
+  "dropOverlayHint": {
+    "message": "Auf einen Ordner ziehen und loslassen"
+  },
+  "dropFolderEmpty": {
+    "message": "Keine weiteren IMAP-Ordner verfügbar."
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "errorUnknownBackgroundAction": {
+    "message": "Unknown action: $ACTION$"
+  },
+  "errorNoAccounts": {
+    "message": "Keine Konten gefunden."
+  },
+  "errorNoAccountSelected": {
+    "message": "Kein Konto ausgewählt."
+  },
+  "errorNoFolderSelected": {
+    "message": "Kein Ordner ausgewählt."
+  },
+  "errorNoMessagesSelected": {
+    "message": "Keine Nachrichten ausgewählt."
+  },
+  "errorNoTabId": {
+    "message": "Aktion ohne gültige MailManager-Tab-ID abgelehnt."
+  },
+  "errorProtectedSenderOrFolder": {
+    "message": "Die Auswahl enthält einen geschützten Absender oder Ordner."
+  },
+  "errorProtectedSourceFolder": {
+    "message": "Der Quell-Ordner ist geschützt."
+  },
+  "errorCannotVerifyFolder": {
+    "message": "Mindestens ein Quell-Ordner konnte nicht sicher geprüft werden. Bitte neu scannen."
+  },
+  "errorUndoNoTab": {
+    "message": "Rückgängig ohne gültige MailManager-Tab-ID abgelehnt."
+  },
+  "errorNothingToUndo": {
+    "message": "Nichts zum Rückgängigmachen."
+  },
+  "errorSourceFolderNotFound": {
+    "message": "Quell-Ordner nicht gefunden."
+  },
+  "errorTrashNotFound": {
+    "message": "Papierkorb-Ordner nicht gefunden."
+  },
+  "errorExistingFolderNotFound": {
+    "message": "Bestehender Ordner nicht gefunden."
+  },
+  "errorNoFolderName": {
+    "message": "Kein Ordner-Name angegeben."
+  },
+  "errorParentFolderNotFound": {
+    "message": "Übergeordneter Ordner nicht gefunden."
+  },
+  "errorNoTagKey": {
+    "message": "Kein tagKey angegeben."
+  },
+  "errorScanFailed": {
+    "message": "Scan fehlgeschlagen: $ERROR$"
+  },
+  "errorCancelFailed": {
+    "message": "Abbrechen fehlgeschlagen: $ERROR$"
+  },
+  "undoActionMoved": {
+    "message": "$COUNT$ Mails zurückgeholt"
+  },
+  "openMessageContextLabel": {
+    "message": "↗ In Thunderbird öffnen"
+  },
+  "replyContextLabel": {
+    "message": "↩ Antworten"
+  },
+  "previewContextLabel": {
+    "message": "👁 Vorschau ein-/ausklappen"
+  },
+  "attachmentContextLabel": {
+    "message": "📎 Anhänge …"
+  },
+  "trashSingleLabel": {
+    "message": "🗑 Diese Mail in den Papierkorb"
+  },
+  "copySubjectLabel": {
+    "message": "📋 Betreff kopieren"
+  },
+  "selectSenderLabel": {
+    "message": "☑ Nur diesen Absender auswählen"
+  },
+  "protectSenderLabel": {
+    "message": "🛡 Absender schützen"
+  },
+  "unprotectSenderLabel": {
+    "message": "🔓 Schutz aufheben"
+  },
+  "trashSenderLabel": {
+    "message": "🗑 Alle Mails in Papierkorb"
+  },
+  "domainCleanLabel": {
+    "message": "🗑 Alle Mails dieser Domain in den Papierkorb"
+  },
+  "domainRuleLabel": {
+    "message": "⚙ Aufräum-Regel für Domain"
+  },
+  "scanProgressLabel": {
+    "message": "Scan startet: $PROFILE$ …"
+  },
+  "scanRunningLabel": {
+    "message": "Scan läuft …"
+  },
+  "scanRunningMultiLabel": {
+    "message": "Scan läuft über mehrere Ordner …"
+  },
+  "scanCancelledLabel": {
+    "message": "Scan abgebrochen."
+  },
+  "scanNoResponse": {
+    "message": "Keine Antwort von background.js beim Scan."
+  },
+  "protectedFolderNoScan": {
+    "message": "Dieser Ordner ist geschützt. Scannen nicht erlaubt."
+  },
+  "shortcutsPreviewKey": {
+    "message": "Leertaste"
+  },
+  "errorScanAlreadyRunning": {
+    "message": "Es läuft bereits ein Scan. Bitte abbrechen oder warten."
+  },
+  "errorNoSendersSelected": {
+    "message": "Keine Absender ausgewählt."
+  },
+  "errorNoNewProtectionCandidates": {
+    "message": "Keine neuen Schutz-Kandidaten gefunden."
+  },
+  "errorActionFailed": {
+    "message": "Aktion fehlgeschlagen: $1"
+  },
+  "errorOpenMessage": {
+    "message": "Mail konnte nicht geöffnet werden: $1"
+  },
+  "noCleanupCandidates": {
+    "message": "Keine weiteren Aufräum-Kandidaten."
+  },
+  "noMatches": {
+    "message": "Keine Treffer."
+  },
+  "undoActionDone": {
+    "message": "$1 Mails zurückgeholt"
+  },
+  "scanCompleteStats": {
+    "message": "$1 Absender · $2 Mails · $3"
+  },
+  "exportSuccess": {
+    "message": "$1 Einträge exportiert."
+  },
+  "confirmClearActionLog": {
+    "message": "Aktionsprotokoll wirklich leeren?"
+  },
+  "confirmDeleteRule": {
+    "message": "Regel für $1 wirklich löschen?"
+  },
+  "noSavedRules": {
+    "message": "Noch keine gespeicherten Aufräum-Regeln."
+  },
+  "confirmProtectSenders": {
+    "message": "$1 Absender schützen?"
+  },
+  "noLogEntries": {
+    "message": "Noch keine Aktionen protokolliert."
+  },
+  "cacheLabel": {
+    "message": " · $1 aus Cache · Neu scannen zum Aktualisieren"
+  },
+  "fromCacheMinutes": {
+    "message": "vor $1 Min. aus Cache"
+  },
+  "fromCacheHours": {
+    "message": "vor $1 Std. aus Cache"
+  },
+  "fromCacheJustNow": {
+    "message": "gerade eben aus Cache"
+  },
+  "fromCacheGeneric": {
+    "message": "aus Cache"
+  },
+  "undoAvailability": {
+    "message": "Rückgängig möglich ($1s)"
+  },
+  "undoExpired": {
+    "message": "Rückgängig abgelaufen"
+  },
+  "trashFailedStale": {
+    "message": "$1 Mail(s) verschoben, $2 konnten nicht verschoben werden (veraltete Nachrichten-IDs). Ein erneuter Scan aktualisiert die Liste."
+  },
+  "trashPartialStats": {
+    "message": "$1 Mails verschoben · $2 durch Aufräum-Regeln behalten"
+  },
+  "noAccountsFound": {
+    "message": "Keine Konten gefunden."
+  },
+  "importSuccess": {
+    "message": "$1 Regeln importiert, $2 übersprungen."
+  },
+  "importNone": {
+    "message": "Keine gültigen Aufräum-Regeln in dieser Datei gefunden."
+  }
+}

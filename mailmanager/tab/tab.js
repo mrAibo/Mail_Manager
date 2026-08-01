@@ -1,4 +1,5 @@
 // MailManager — Tab UI (source of truth for sender data)
+const _ = (key, subs) => browser.i18n.getMessage(key, subs) || key;
 import { formatSize, formatRelativeDate, toCSV, toJSON } from "../shared/utils.js";
 import { extractPreviewText } from "../shared/message-preview.mjs";
 import { escapeHtml, daysSince, cleanupScoreTooltip, matchesAdvancedFilter, isTextEntryTarget, isCurrentScanMessage, canConfirmTrash, isCurrentPreviewRequest } from "./tab-utilities.js";
@@ -873,7 +874,7 @@ async function protectMatchingSenders(predicate) {
     .map(sender => sender.email);
 
   if (emails.length === 0) {
-    showError("Keine neuen Schutz-Kandidaten gefunden.");
+    showError(_("errorNoNewProtectionCandidates"));
     return;
   }
 
@@ -888,7 +889,7 @@ async function protectMatchingSenders(predicate) {
       protect: true,
     });
   } catch (err) {
-    showError("Schutz-Aktion fehlgeschlagen: " + (err.message || "Verbindungsfehler"));
+    showError(_("errorActionFailed", [err.message || "Verbindungsfehler"]));
     return;
   }
 
@@ -1307,7 +1308,7 @@ function populateFolderDropdown() {
   // Virtual "all folders" entry
   const allOpt = document.createElement("option");
   allOpt.value = "__ALL__";
-  allOpt.textContent = "📂 Alle Ordner (außer System)";
+  allOpt.textContent = _("folderAllOption");
   sel.appendChild(allOpt);
 
   for (const folder of (account?.folders || [])) {
@@ -1331,17 +1332,17 @@ async function startScan() {
   const scanOptions = scanOptionsForProfile(scanProfile);
 
   if (state.activeScanId) {
-    showError("Es läuft bereits ein Scan. Bitte abbrechen oder warten.");
+    showError(_("errorScanAlreadyRunning"));
     return;
   }
 
   if (!accountId) {
-    showError("Kein Konto ausgewählt.");
+    showError(_("errorNoAccountSelected"));
     return;
   }
 
   if (!folderId) {
-    showError("Kein Ordner ausgewählt.");
+    showError(_("errorNoFolderSelected"));
     return;
   }
 
@@ -4623,7 +4624,7 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
       options,
     });
   } catch (err) {
-    showError("Aktion fehlgeschlagen: " + (err.message || "Verbindungsfehler"));
+    showError(_("errorActionFailed", [err.message || "Verbindungsfehler"]));
     return;
   }
 

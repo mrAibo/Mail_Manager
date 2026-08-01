@@ -1,0 +1,620 @@
+{
+  "extensionName": {
+    "message": "MailManager"
+  },
+  "extensionDescription": {
+    "message": "Local email organization by sender — no server, no tracking"
+  },
+  "actionTitle": {
+    "message": "Open MailManager"
+  },
+  "sidebarBrand": {
+    "message": "✉ MailManager"
+  },
+  "sidebarToggle": {
+    "message": "Collapse sidebar"
+  },
+  "sourceSectionLabel": {
+    "message": "1 · Scan source"
+  },
+  "accountLabel": {
+    "message": "Account"
+  },
+  "folderLabel": {
+    "message": "Folder"
+  },
+  "folderAllOption": {
+    "message": "📂 All folders (except system)"
+  },
+  "scanProfileLabel": {
+    "message": "Scan profile"
+  },
+  "scanProfileFull": {
+    "message": "Full scan"
+  },
+  "scanProfileOldYear": {
+    "message": "Old emails > 1 year only"
+  },
+  "scanProfileBulk": {
+    "message": "Newsletter/bulk only"
+  },
+  "scanProfileUnread": {
+    "message": "Unread only"
+  },
+  "scanProfileCleanup": {
+    "message": "Cleanup candidates"
+  },
+  "scanBtn": {
+    "message": "▶ Scan"
+  },
+  "cancelScanBtn": {
+    "message": "Cancel"
+  },
+  "viewSectionLabel": {
+    "message": "View"
+  },
+  "viewSenders": {
+    "message": "Senders"
+  },
+  "viewDomains": {
+    "message": "Domains"
+  },
+  "filterSectionLabel": {
+    "message": "2 · Review candidates"
+  },
+  "quickFilterAll": {
+    "message": "All"
+  },
+  "quickFilterBulk": {
+    "message": "Newsletter"
+  },
+  "quickFilterCleanup": {
+    "message": "Cleanup"
+  },
+  "quickFilterProtected": {
+    "message": "Protected"
+  },
+  "quickFilterHighRisk": {
+    "message": "High risk"
+  },
+  "toolsMenu": {
+    "message": "⚙ Tools"
+  },
+  "logBtn": {
+    "message": "📜 Log"
+  },
+  "ruleManagerBtn": {
+    "message": "⚙ Rules"
+  },
+  "customRegexBtn": {
+    "message": "🔍 Regex"
+  },
+  "protectManagerBtn": {
+    "message": "🛡 Protected"
+  },
+  "shortcutsBtn": {
+    "message": "⌨ Shortcuts"
+  },
+  "columnBtn": {
+    "message": "📊 Columns"
+  },
+  "diagnosticsBtn": {
+    "message": "🧪 Diagnostics"
+  },
+  "filterPlaceholder": {
+    "message": "🔍 Filter senders…"
+  },
+  "sortLabel": {
+    "message": "Sort"
+  },
+  "sortRiskScore": {
+    "message": "Cleanup Score"
+  },
+  "sortCount": {
+    "message": "Count"
+  },
+  "sortSize": {
+    "message": "Size"
+  },
+  "sortOldest": {
+    "message": "Oldest"
+  },
+  "sortNewest": {
+    "message": "Activity"
+  },
+  "sortAZ": {
+    "message": "A–Z"
+  },
+  "colSender": {
+    "message": "Sender"
+  },
+  "colCount": {
+    "message": "Emails"
+  },
+  "colSize": {
+    "message": "Size"
+  },
+  "colRead": {
+    "message": "Read"
+  },
+  "colDate": {
+    "message": "Last Email"
+  },
+  "colRisk": {
+    "message": "Cleanup Score"
+  },
+  "colActions": {
+    "message": "Actions"
+  },
+  "selectAllAria": {
+    "message": "Select all senders"
+  },
+  "senderListAria": {
+    "message": "Senders and emails"
+  },
+  "welcomeTitle": {
+    "message": "👋 Welcome to MailManager"
+  },
+  "welcomeStep1": {
+    "message": "Choose account and folder in the sidebar"
+  },
+  "welcomeStep2": {
+    "message": "Click ▶ Scan"
+  },
+  "welcomeStep3": {
+    "message": "Review senders, protect important ones, and clean up"
+  },
+  "actionStep": {
+    "message": "3 · Cleanup"
+  },
+  "trashBtn": {
+    "message": "🗑 Trash"
+  },
+  "folderBtn": {
+    "message": "📁 Move to folder"
+  },
+  "readBtn": {
+    "message": "✓ Mark read"
+  },
+  "tagBtn": {
+    "message": "🏷 Tag"
+  },
+  "unsubBtn": {
+    "message": "🚫 Unsubscribe"
+  },
+  "exportBtn": {
+    "message": "💾 Export"
+  },
+  "undoBtn": {
+    "message": "↩ Undo"
+  },
+  "confirmOk": {
+    "message": "Confirm"
+  },
+  "confirmCancel": {
+    "message": "Cancel"
+  },
+  "trashSafetyTitle": {
+    "message": "⚠ Review selection"
+  },
+  "trashSafetyConfirmLabel": {
+    "message": "I have reviewed the warnings and want to continue."
+  },
+  "trashSafetySenders": {
+    "message": "Senders"
+  },
+  "trashSafetyMails": {
+    "message": "Emails"
+  },
+  "trashSafetyProtected": {
+    "message": "Protected"
+  },
+  "trashSafetyDomainRule": {
+    "message": "Domain rule"
+  },
+  "trashSafetySingleMails": {
+    "message": "Individual emails"
+  },
+  "trashSafetyInbox": {
+    "message": "This is your main inbox."
+  },
+  "trashSafetyLargeSelection": {
+    "message": "Large selection: $COUNT$ emails at once."
+  },
+  "cleanupRuleTitle": {
+    "message": "Cleanup Rules"
+  },
+  "applySavedRule": {
+    "message": "Apply saved rule"
+  },
+  "saveRule": {
+    "message": "Save rule for selection"
+  },
+  "rulePresetNone": {
+    "message": "No rules"
+  },
+  "rulePreset90Days": {
+    "message": "Older than 90 days"
+  },
+  "rulePreset1Year": {
+    "message": "Older than 1 year"
+  },
+  "rulePreset1YearKeep5": {
+    "message": "1 year + keep last 5"
+  },
+  "ruleOlderThan": {
+    "message": "Only emails older than"
+  },
+  "ruleDaysTrash": {
+    "message": "days moving to trash"
+  },
+  "ruleKeepNewest": {
+    "message": "Keep the newest"
+  },
+  "ruleKeepMails": {
+    "message": "emails per sender"
+  },
+  "ruleHint": {
+    "message": "0 means: rule is disabled. Example: 365 days + keep 5 = only delete old emails, but keep the last 5 per sender."
+  },
+  "previewBtn": {
+    "message": "Calculate preview"
+  },
+  "folderDialogTitle": {
+    "message": "Move to folder"
+  },
+  "folderNameLabel": {
+    "message": "New folder name:"
+  },
+  "folderParentLabel": {
+    "message": "Parent folder:"
+  },
+  "folderExistingLabel": {
+    "message": "Choose existing folder:"
+  },
+  "folderOk": {
+    "message": "Create & Move"
+  },
+  "folderOr": {
+    "message": "— or —"
+  },
+  "folderRoot": {
+    "message": "Account root"
+  },
+  "folderNewOption": {
+    "message": "Create new folder"
+  },
+  "tagDialogTitle": {
+    "message": "Assign tag"
+  },
+  "exportDialogTitle": {
+    "message": "Export"
+  },
+  "actionLogTitle": {
+    "message": "Action Log"
+  },
+  "actionLogExportJson": {
+    "message": "Export JSON"
+  },
+  "actionLogClear": {
+    "message": "Clear"
+  },
+  "cleanupRuleManagerTitle": {
+    "message": "Saved Cleanup Rules"
+  },
+  "cleanupRuleImport": {
+    "message": "Import JSON"
+  },
+  "cleanupRuleExport": {
+    "message": "Export JSON"
+  },
+  "cleanupRuleClearAll": {
+    "message": "Delete all"
+  },
+  "customRegexTitle": {
+    "message": "Custom Regex Rules"
+  },
+  "customRegexPattern": {
+    "message": "Regex pattern (e.g. amazon|ebay)"
+  },
+  "customRegexTitle2": {
+    "message": "Title (e.g. Shopping)"
+  },
+  "customRegexAdd": {
+    "message": "Add"
+  },
+  "customRegexEmpty": {
+    "message": "No custom regex rules."
+  },
+  "protectManagerTitle": {
+    "message": "Protected Senders"
+  },
+  "protectManagerFilter": {
+    "message": "🔍 Filter protected senders…"
+  },
+  "protectManagerImport": {
+    "message": "Import JSON"
+  },
+  "protectManagerExport": {
+    "message": "Export JSON"
+  },
+  "protectManagerClear": {
+    "message": "Unlock all"
+  },
+  "diagnosticsTitle": {
+    "message": "Diagnostics"
+  },
+  "diagnosticsHint": {
+    "message": "This information helps with troubleshooting. No email content is displayed, only technical counters, folder names, IDs, and local MailManager settings."
+  },
+  "diagnosticsRefresh": {
+    "message": "Refresh"
+  },
+  "diagnosticsCopy": {
+    "message": "Copy"
+  },
+  "shortcutsTitle": {
+    "message": "⌨ Keyboard Shortcuts"
+  },
+  "shortcutsColAction": {
+    "message": "Action"
+  },
+  "shortcutsColKey": {
+    "message": "Shortcut"
+  },
+  "shortcutsNavigate": {
+    "message": "Navigate between email rows"
+  },
+  "shortcutsPreview": {
+    "message": "Toggle preview"
+  },
+  "shortcutsOpenLatest": {
+    "message": "Open latest email"
+  },
+  "shortcutsDoubleClick": {
+    "message": "Double-click email"
+  },
+  "shortcutsDoubleClickDesc": {
+    "message": "Opens in Thunderbird"
+  },
+  "shortcutsDrag": {
+    "message": "Drag email or sender"
+  },
+  "shortcutsDragDesc": {
+    "message": "Drop overlay opens — drop onto target folder"
+  },
+  "shortcutsTrash": {
+    "message": "Move selected to Trash"
+  },
+  "shortcutsContextMenu": {
+    "message": "Right-click"
+  },
+  "shortcutsContextMenuDesc": {
+    "message": "Context menu for sender/email"
+  },
+  "attachmentTitle": {
+    "message": "Attachments"
+  },
+  "attachmentSaveAll": {
+    "message": "Save all"
+  },
+  "columnDialogTitle": {
+    "message": "Visible Columns"
+  },
+  "columnDialogHint": {
+    "message": "Choose which columns to display in the table."
+  },
+  "columnReset": {
+    "message": "Reset"
+  },
+  "dropOverlayTitle": {
+    "message": "📁 Drop into folder"
+  },
+  "dropOverlayHint": {
+    "message": "Drag onto a folder and release"
+  },
+  "dropFolderEmpty": {
+    "message": "No other IMAP folders available."
+  },
+  "close": {
+    "message": "Close"
+  },
+  "errorUnknownBackgroundAction": {
+    "message": "Unknown action: $ACTION$"
+  },
+  "errorNoAccounts": {
+    "message": "No accounts found."
+  },
+  "errorNoAccountSelected": {
+    "message": "No account selected."
+  },
+  "errorNoFolderSelected": {
+    "message": "No folder selected."
+  },
+  "errorNoMessagesSelected": {
+    "message": "No messages selected."
+  },
+  "errorNoTabId": {
+    "message": "Action rejected: no valid MailManager tab ID."
+  },
+  "errorProtectedSenderOrFolder": {
+    "message": "Selection contains a protected sender or folder."
+  },
+  "errorProtectedSourceFolder": {
+    "message": "Source folder is protected."
+  },
+  "errorCannotVerifyFolder": {
+    "message": "At least one source folder could not be verified. Please re-scan."
+  },
+  "errorUndoNoTab": {
+    "message": "Undo rejected: no valid MailManager tab ID."
+  },
+  "errorNothingToUndo": {
+    "message": "Nothing to undo."
+  },
+  "errorSourceFolderNotFound": {
+    "message": "Source folder not found."
+  },
+  "errorTrashNotFound": {
+    "message": "Trash folder not found."
+  },
+  "errorExistingFolderNotFound": {
+    "message": "Existing folder not found."
+  },
+  "errorNoFolderName": {
+    "message": "No folder name provided."
+  },
+  "errorParentFolderNotFound": {
+    "message": "Parent folder not found."
+  },
+  "errorNoTagKey": {
+    "message": "No tag key provided."
+  },
+  "errorScanFailed": {
+    "message": "Scan failed: $ERROR$"
+  },
+  "errorCancelFailed": {
+    "message": "Cancel failed: $ERROR$"
+  },
+  "undoActionMoved": {
+    "message": "$COUNT$ emails recovered"
+  },
+  "openMessageContextLabel": {
+    "message": "↗ Open in Thunderbird"
+  },
+  "replyContextLabel": {
+    "message": "↩ Reply"
+  },
+  "previewContextLabel": {
+    "message": "👁 Toggle preview"
+  },
+  "attachmentContextLabel": {
+    "message": "📎 Attachments…"
+  },
+  "trashSingleLabel": {
+    "message": "🗑 Move to Trash"
+  },
+  "copySubjectLabel": {
+    "message": "📋 Copy subject"
+  },
+  "selectSenderLabel": {
+    "message": "☑ Select this sender only"
+  },
+  "protectSenderLabel": {
+    "message": "🛡 Protect sender"
+  },
+  "unprotectSenderLabel": {
+    "message": "🔓 Unprotect"
+  },
+  "trashSenderLabel": {
+    "message": "🗑 Trash all emails"
+  },
+  "domainCleanLabel": {
+    "message": "🗑 Trash all emails from this domain"
+  },
+  "domainRuleLabel": {
+    "message": "⚙ Cleanup rule for domain"
+  },
+  "scanProgressLabel": {
+    "message": "Scan starting: $PROFILE$…"
+  },
+  "scanRunningLabel": {
+    "message": "Scan running…"
+  },
+  "scanRunningMultiLabel": {
+    "message": "Scanning multiple folders…"
+  },
+  "scanCancelledLabel": {
+    "message": "Scan cancelled."
+  },
+  "scanNoResponse": {
+    "message": "No response from background.js during scan."
+  },
+  "protectedFolderNoScan": {
+    "message": "This folder is protected. Scanning not allowed."
+  },
+  "shortcutsPreviewKey": {
+    "message": "Space"
+  },
+  "errorScanAlreadyRunning": {
+    "message": "A scan is already running. Please cancel or wait."
+  },
+  "errorNoSendersSelected": {
+    "message": "No senders selected."
+  },
+  "errorNoNewProtectionCandidates": {
+    "message": "No new protection candidates found."
+  },
+  "errorActionFailed": {
+    "message": "Action failed: $1"
+  },
+  "errorOpenMessage": {
+    "message": "Could not open email: $1"
+  },
+  "noCleanupCandidates": {
+    "message": "No more cleanup candidates."
+  },
+  "noMatches": {
+    "message": "No matches."
+  },
+  "undoActionDone": {
+    "message": "$1 emails recovered"
+  },
+  "scanCompleteStats": {
+    "message": "$1 senders · $2 emails · $3"
+  },
+  "exportSuccess": {
+    "message": "$1 entries exported."
+  },
+  "confirmClearActionLog": {
+    "message": "Really clear the action log?"
+  },
+  "confirmDeleteRule": {
+    "message": "Really delete rule for $1?"
+  },
+  "noSavedRules": {
+    "message": "No saved cleanup rules yet."
+  },
+  "confirmProtectSenders": {
+    "message": "Protect $1 senders?"
+  },
+  "noLogEntries": {
+    "message": "No actions logged yet."
+  },
+  "cacheLabel": {
+    "message": " · $1 from cache · Re-scan to update"
+  },
+  "fromCacheMinutes": {
+    "message": "$1 min from cache"
+  },
+  "fromCacheHours": {
+    "message": "$1 hrs from cache"
+  },
+  "fromCacheJustNow": {
+    "message": "just now from cache"
+  },
+  "fromCacheGeneric": {
+    "message": "from cache"
+  },
+  "undoAvailability": {
+    "message": "Undo available ($1s)"
+  },
+  "undoExpired": {
+    "message": "Undo expired"
+  },
+  "trashFailedStale": {
+    "message": "$1 email(s) moved, $2 could not be moved (stale message IDs). Re-scan to refresh."
+  },
+  "trashPartialStats": {
+    "message": "$1 emails moved · $2 kept by cleanup rules"
+  },
+  "noAccountsFound": {
+    "message": "No accounts found."
+  },
+  "importSuccess": {
+    "message": "$1 rules imported, $2 skipped."
+  },
+  "importNone": {
+    "message": "No valid cleanup rules found in this file."
+  }
+}
