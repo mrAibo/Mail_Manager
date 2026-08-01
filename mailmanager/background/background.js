@@ -385,6 +385,8 @@ function moveAndTrackIds(messageIds, destination) {
     const finish = () => {
       if (settled) return;
       settled = true;
+      // ponytail: Messages whose onMoved events never arrived are also failures
+      failedCount += wanted.size;
       browser.messages.onMoved.removeListener(listener);
       clearTimeout(timer);
       resolve({ newIds, failedCount, movedCount: messageIds.length - failedCount });
@@ -394,9 +396,9 @@ function moveAndTrackIds(messageIds, destination) {
       const orig = originalMessages.messages;
       const moved = movedMessages.messages;
       for (let i = 0; i < orig.length; i++) {
-        if (wanted.has(orig[i].id)) {
+        if (wanted.has(orig[i].id) && moved[i]) {
           wanted.delete(orig[i].id);
-          if (moved[i]) newIds.push(moved[i].id);
+          newIds.push(moved[i].id);
         }
       }
       if (wanted.size === 0) finish();
