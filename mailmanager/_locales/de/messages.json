@@ -616,5 +616,206 @@
   },
   "importNone": {
     "message": "Keine gültigen Aufräum-Regeln in dieser Datei gefunden."
+  },
+  "senderContext_openLatest": {
+    "message": "↗ Neueste Mail öffnen"
+  },
+  "senderContext_toggleMessages": {
+    "message": "🔍 Mails auf-/zuklappen"
+  },
+  "senderContext_addSelection": {
+    "message": "✅ Zur Auswahl hinzufügen"
+  },
+  "senderContext_trashAll": {
+    "message": "🗑 Alle Mails in Papierkorb"
+  },
+  "senderContext_moveToFolder": {
+    "message": "📁 In Ordner verschieben"
+  },
+  "senderContext_assignTag": {
+    "message": "🏷 Tag zuweisen"
+  },
+  "senderContext_unsubscribe": {
+    "message": "🚫 Abmelden"
+  },
+  "senderContext_applyRule": {
+    "message": "⚙ Aufräum-Regel anwenden"
+  },
+  "senderContext_removeProtection": {
+    "message": "🔓 Schutz aufheben"
+  },
+  "senderContext_protectSender": {
+    "message": "🛡️ Absender schützen"
+  },
+  "senderContext_copyAddress": {
+    "message": "📋 Adresse kopieren"
+  },
+  "messageContext_openInThunderbird": {
+    "message": "↗ In Thunderbird öffnen"
+  },
+  "messageContext_reply": {
+    "message": "↩ Antworten"
+  },
+  "messageContext_togglePreview": {
+    "message": "👁 Vorschau ein-/ausklappen"
+  },
+  "messageContext_attachments": {
+    "message": "📎 Anhänge …"
+  },
+  "messageContext_trash": {
+    "message": "🗑 Diese Mail in den Papierkorb"
+  },
+  "messageContext_copySubject": {
+    "message": "📋 Betreff kopieren"
+  },
+  "selection_mixed": {
+    "message": "$SENDERS$ Absender + $MESSAGES$ Mail(s) ausgewählt"
+  },
+  "selection_senders": {
+    "message": "$SENDERS$ Absender · $MAILS$ Mails · $SIZE$"
+  },
+  "selection_messages": {
+    "message": "$MESSAGES$ Mail(s) ausgewählt"
+  },
+  "confirmTrash_senders": {
+    "message": "$MAILS$ Mails von $SENDERS$ Absender(n) in den Papierkorb verschieben? Gesamtgröße: $SIZE$."
+  },
+  "confirmTrash_messages": {
+    "message": "$MESSAGES$ einzeln ausgewählte Mail(s) in den Papierkorb verschieben?"
+  },
+  "confirmTrash_mixed": {
+    "message": "$MAILS$ Mails ($SENDERS$ Absender + $IND$ einzeln) in den Papierkorb?"
+  },
+  "trashWarning_recent": {
+    "message": "$COUNT$ Absender haben Mails aus den letzten 30 Tagen."
+  },
+  "trashWarning_fewMails": {
+    "message": "$COUNT$ Absender haben nur 1–3 Mails."
+  },
+  "trashWarning_personal": {
+    "message": "$COUNT$ Absender sehen nach persönlicher Kommunikation aus."
+  },
+  "trashWarning_read": {
+    "message": "$COUNT$ Absender haben überwiegend gelesene Mails."
+  },
+  "trashWarning_nonBulk": {
+    "message": "Keiner der Absender ist als Newsletter/Bulk markiert."
+  },
+  "trashWarning_manyMails": {
+    "message": "$COUNT$ Mails sind ausgewählt. Vor dem Bestätigen Vorschau berechnen."
+  },
+  "messageDefaultSubject": {
+    "message": "(kein Betreff)"
+  },
+  "messageRead_read": {
+    "message": "gelesen"
+  },
+  "messageRead_unread": {
+    "message": "ungelesen"
+  },
+  "messageLoading": {
+    "message": "Mails werden geladen …"
+  },
+  "loadMoreMessages": {
+    "message": "Weitere $COUNT$ Mails laden"
+  },
+  "messagePreview_noContent": {
+    "message": "(kein Textinhalt)"
+  },
+  "messagePreview_loadFailed": {
+    "message": "(Vorschau konnte nicht geladen werden)"
+  },
+  "messagePreview_loading": {
+    "message": "Vorschau wird geladen …"
+  },
+  "attachmentOpen": {
+    "message": "Öffnen"
+  },
+  "attachmentSave": {
+    "message": "Speichern"
+  },
+  "attachmentLoading": {
+    "message": "Anhänge werden geladen …"
+  },
+  "attachmentEmpty": {
+    "message": "Keine Anhänge."
+  },
+  "bulkBadge_title": {
+    "message": "Newsletter/Bulk-Kandidat: $REASONS$"
+  },
+  "unsubscribeBadge_title": {
+    "message": "Abmeldung möglich (List-Unsubscribe-Header)"
+  },
+  "regexBadge_title": {
+    "message": "RegEx-Treffer: $TITLE$"
+  },
+  "domainBulk": {
+    "message": "Bulk"
+  },
+  "domainUnsubscribe": {
+    "message": "Abmeldbar"
+  },
+  "domainCheckbox_aria": {
+    "message": "Domain $DOMAIN$ ($COUNT$ Absender) auswählen"
+  },
+  "featureStatus_view": {
+    "message": "Ansicht: –"
+  },
+  "featureStatus_profile": {
+    "message": "Profil: –"
+  },
+  "featureStatus_cache": {
+    "message": "Cache: –"
+  },
+  "featureStatus_rules": {
+    "message": "Regeln: –"
+  },
+  "featureStatus_protected": {
+    "message": "Geschützt: –"
+  },
+  "featureStatus_log": {
+    "message": "Protokoll: –"
+  },
+  "featureStatus_selection": {
+    "message": "Auswahl: –"
+  },
+  "quickFilter_all": {
+    "message": "Alle"
+  },
+  "quickFilter_bulk": {
+    "message": "Newsletter/Bulk"
+  },
+  "quickFilter_unsubscribe": {
+    "message": "Abmeldbar"
+  },
+  "quickFilter_selected": {
+    "message": "Ausgewählt"
+  },
+  "cleanupAssistant_title": {
+    "message": "Aufräum-Assistent"
+  },
+  "cleanupAssistant_empty": {
+    "message": "Noch keine Analyse. Ordner scannen, dann erscheinen Aufräum-Vorschläge."
+  },
+  "actionLog_empty": {
+    "message": "Noch keine Aktionen protokolliert."
+  },
+  "actionLog_senders": {
+    "message": "Absender: $SENDERS$"
+  },
+  "unsubscribe_noLink": {
+    "message": "Kein Abmelde-Link in diesen Mails gefunden."
+  },
+  "error_replyWindowOpenFailed": {
+    "message": "Antwort-Fenster konnte nicht geöffnet werden."
+  },
+  "error_mailMoveFailed": {
+    "message": "Mail konnte nicht verschoben werden: $ERROR$"
+  },
+  "error_mailOpenFailed": {
+    "message": "Mail konnte nicht geöffnet werden: $ERROR$"
+  },
+  "stats_summary": {
+    "message": "$MAILS$ Mails · $SENDERS$ Absender · $SIZE$"
   }
 }

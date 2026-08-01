@@ -2275,7 +2275,7 @@ function senderContextItems(entry) {
         renderSenders(); updateSelectionLabel(); updateActionButtons();
         syncSelectAll(); updateCleanupAssistant(); scheduleFeatureStatusUpdate();
       } },
-    { label: "🗑 Alle Mails in Papierkorb", danger: true, action: () => {
+    { label: _("trashSenderLabel"), danger: true, action: () => {
         selectOnlySender(entry.email);
         openConfirmDialog("trash");
       } },
@@ -2305,22 +2305,22 @@ function senderContextItems(entry) {
 /** Menüeinträge für eine einzelne Mail-Zeile. */
 function messageContextItems(meta) {
   const items = [
-    { label: "↗ In Thunderbird öffnen", action: () => {
+    { label: _("messageContext_openInThunderbird"), action: () => {
         browser.runtime.sendMessage({ action: "openMessage", messageId: meta.id })
           .catch(() => {}); // background event page may not be ready
       } },
-    { label: "↩ Antworten", action: () => {
+    { label: _("messageContext_reply"), action: () => {
         browser.compose.beginReply(meta.id)
           .catch(() => showError("Antwort-Fenster konnte nicht geöffnet werden."));
       } },
-    { label: "👁 Vorschau ein-/ausklappen", action: () => toggleMessagePreview(meta) },
+    { label: _("messageContext_togglePreview"), action: () => toggleMessagePreview(meta) },
   ];
   if (meta.hasAttachments) {
-    items.push({ label: "📎 Anhänge …", action: () => openAttachmentDialog(meta) });
+    items.push({ label: _("messageContext_attachments"), action: () => openAttachmentDialog(meta) });
   }
   items.push("separator");
-  items.push({ label: "🗑 Diese Mail in den Papierkorb", danger: true, action: () => trashSingleMessage(meta) });
-  items.push({ label: "📋 Betreff kopieren", action: () => navigator.clipboard.writeText(meta.subject) });
+  items.push({ label: _("messageContext_trash"), danger: true, action: () => trashSingleMessage(meta) });
+  items.push({ label: _("messageContext_copySubject"), action: () => navigator.clipboard.writeText(meta.subject) });
   return items;
 }
 

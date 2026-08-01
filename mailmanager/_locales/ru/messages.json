@@ -616,5 +616,206 @@
   },
   "importNone": {
     "message": "В этом файле нет действительных правил очистки."
+  },
+  "senderContext_openLatest": {
+    "message": "↗ Открыть последнее"
+  },
+  "senderContext_toggleMessages": {
+    "message": "🔍 Развернуть письма"
+  },
+  "senderContext_addSelection": {
+    "message": "✅ Добавить в выбор"
+  },
+  "senderContext_trashAll": {
+    "message": "🗑 Все письма в корзину"
+  },
+  "senderContext_moveToFolder": {
+    "message": "📁 Переместить в папку"
+  },
+  "senderContext_assignTag": {
+    "message": "🏷 Назначить метку"
+  },
+  "senderContext_unsubscribe": {
+    "message": "🚫 Отписаться"
+  },
+  "senderContext_applyRule": {
+    "message": "⚙ Применить правило"
+  },
+  "senderContext_removeProtection": {
+    "message": "🔓 Снять защиту"
+  },
+  "senderContext_protectSender": {
+    "message": "🛡️ Защитить"
+  },
+  "senderContext_copyAddress": {
+    "message": "📋 Копировать адрес"
+  },
+  "messageContext_openInThunderbird": {
+    "message": "↗ Открыть в Thunderbird"
+  },
+  "messageContext_reply": {
+    "message": "↩ Ответить"
+  },
+  "messageContext_togglePreview": {
+    "message": "👁 Предпросмотр"
+  },
+  "messageContext_attachments": {
+    "message": "📎 Вложения…"
+  },
+  "messageContext_trash": {
+    "message": "🗑 В корзину"
+  },
+  "messageContext_copySubject": {
+    "message": "📋 Копировать тему"
+  },
+  "selection_mixed": {
+    "message": "$SENDERS$ отпр. + $MESSAGES$ писем выбрано"
+  },
+  "selection_senders": {
+    "message": "$SENDERS$ отпр. · $MAILS$ писем · $SIZE$"
+  },
+  "selection_messages": {
+    "message": "$MESSAGES$ писем выбрано"
+  },
+  "confirmTrash_senders": {
+    "message": "Переместить $MAILS$ писем от $SENDERS$ отпр. в корзину? Размер: $SIZE$."
+  },
+  "confirmTrash_messages": {
+    "message": "Переместить $MESSAGES$ выбранных писем в корзину?"
+  },
+  "confirmTrash_mixed": {
+    "message": "$MAILS$ писем ($SENDERS$ отпр. + $IND$ отд.) в корзину?"
+  },
+  "trashWarning_recent": {
+    "message": "$COUNT$ отпр. имеют письма за последние 30 дней."
+  },
+  "trashWarning_fewMails": {
+    "message": "$COUNT$ отпр. имеют только 1–3 письма."
+  },
+  "trashWarning_personal": {
+    "message": "$COUNT$ отпр. похожи на личную переписку."
+  },
+  "trashWarning_read": {
+    "message": "$COUNT$ отпр. имеют в основном прочитанные письма."
+  },
+  "trashWarning_nonBulk": {
+    "message": "Ни один отправитель не помечен как рассылка."
+  },
+  "trashWarning_manyMails": {
+    "message": "Выбрано $COUNT$ писем. Рассчитайте предпросмотр."
+  },
+  "messageDefaultSubject": {
+    "message": "(без темы)"
+  },
+  "messageRead_read": {
+    "message": "прочитано"
+  },
+  "messageRead_unread": {
+    "message": "не прочитано"
+  },
+  "messageLoading": {
+    "message": "Загрузка писем…"
+  },
+  "loadMoreMessages": {
+    "message": "Загрузить ещё $COUNT$"
+  },
+  "messagePreview_noContent": {
+    "message": "(нет текста)"
+  },
+  "messagePreview_loadFailed": {
+    "message": "(не удалось загрузить)"
+  },
+  "messagePreview_loading": {
+    "message": "Загрузка предпросмотра…"
+  },
+  "attachmentOpen": {
+    "message": "Открыть"
+  },
+  "attachmentSave": {
+    "message": "Сохранить"
+  },
+  "attachmentLoading": {
+    "message": "Загрузка вложений…"
+  },
+  "attachmentEmpty": {
+    "message": "Нет вложений."
+  },
+  "bulkBadge_title": {
+    "message": "Кандидат в рассылки: $REASONS$"
+  },
+  "unsubscribeBadge_title": {
+    "message": "Отписка возможна (List-Unsubscribe)"
+  },
+  "regexBadge_title": {
+    "message": "RegEx совпадение: $TITLE$"
+  },
+  "domainBulk": {
+    "message": "Рассылка"
+  },
+  "domainUnsubscribe": {
+    "message": "Отписываемый"
+  },
+  "domainCheckbox_aria": {
+    "message": "Выбрать домен $DOMAIN$ ($COUNT$ отпр.)"
+  },
+  "featureStatus_view": {
+    "message": "Вид: –"
+  },
+  "featureStatus_profile": {
+    "message": "Профиль: –"
+  },
+  "featureStatus_cache": {
+    "message": "Кэш: –"
+  },
+  "featureStatus_rules": {
+    "message": "Правила: –"
+  },
+  "featureStatus_protected": {
+    "message": "Защита: –"
+  },
+  "featureStatus_log": {
+    "message": "Журнал: –"
+  },
+  "featureStatus_selection": {
+    "message": "Выбор: –"
+  },
+  "quickFilter_all": {
+    "message": "Все"
+  },
+  "quickFilter_bulk": {
+    "message": "Рассылки"
+  },
+  "quickFilter_unsubscribe": {
+    "message": "Отписываемые"
+  },
+  "quickFilter_selected": {
+    "message": "Выбранные"
+  },
+  "cleanupAssistant_title": {
+    "message": "Ассистент очистки"
+  },
+  "cleanupAssistant_empty": {
+    "message": "Анализ не выполнен. Просканируйте папку."
+  },
+  "actionLog_empty": {
+    "message": "Действий пока не записано."
+  },
+  "actionLog_senders": {
+    "message": "Отправители: $SENDERS$"
+  },
+  "unsubscribe_noLink": {
+    "message": "Ссылка для отписки не найдена."
+  },
+  "error_replyWindowOpenFailed": {
+    "message": "Не удалось открыть окно ответа."
+  },
+  "error_mailMoveFailed": {
+    "message": "Не удалось переместить: $ERROR$"
+  },
+  "error_mailOpenFailed": {
+    "message": "Не удалось открыть: $ERROR$"
+  },
+  "stats_summary": {
+    "message": "$MAILS$ писем · $SENDERS$ отпр. · $SIZE$"
   }
 }

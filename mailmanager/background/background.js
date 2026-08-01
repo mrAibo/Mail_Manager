@@ -1,4 +1,5 @@
 // MailManager — Background Event Page (non-persistent — holds NO long-lived state)
+const _ = (key, subs) => browser.i18n.getMessage(key, subs) || key;
 
 // ─── Toolbar button opens the tab ────────────────────────────────────────────
 browser.action.onClicked.addListener(() => {

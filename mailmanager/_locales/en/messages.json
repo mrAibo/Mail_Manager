@@ -616,5 +616,206 @@
   },
   "importNone": {
     "message": "No valid cleanup rules found in this file."
+  },
+  "senderContext_openLatest": {
+    "message": "↗ Open latest email"
+  },
+  "senderContext_toggleMessages": {
+    "message": "🔍 Toggle emails"
+  },
+  "senderContext_addSelection": {
+    "message": "✅ Add to selection"
+  },
+  "senderContext_trashAll": {
+    "message": "🗑 Trash all emails"
+  },
+  "senderContext_moveToFolder": {
+    "message": "📁 Move to folder"
+  },
+  "senderContext_assignTag": {
+    "message": "🏷 Assign tag"
+  },
+  "senderContext_unsubscribe": {
+    "message": "🚫 Unsubscribe"
+  },
+  "senderContext_applyRule": {
+    "message": "⚙ Apply cleanup rule"
+  },
+  "senderContext_removeProtection": {
+    "message": "🔓 Remove protection"
+  },
+  "senderContext_protectSender": {
+    "message": "🛡️ Protect sender"
+  },
+  "senderContext_copyAddress": {
+    "message": "📋 Copy address"
+  },
+  "messageContext_openInThunderbird": {
+    "message": "↗ Open in Thunderbird"
+  },
+  "messageContext_reply": {
+    "message": "↩ Reply"
+  },
+  "messageContext_togglePreview": {
+    "message": "👁 Toggle preview"
+  },
+  "messageContext_attachments": {
+    "message": "📎 Attachments…"
+  },
+  "messageContext_trash": {
+    "message": "🗑 Move to Trash"
+  },
+  "messageContext_copySubject": {
+    "message": "📋 Copy subject"
+  },
+  "selection_mixed": {
+    "message": "$SENDERS$ senders + $MESSAGES$ email(s) selected"
+  },
+  "selection_senders": {
+    "message": "$SENDERS$ senders · $MAILS$ emails · $SIZE$"
+  },
+  "selection_messages": {
+    "message": "$MESSAGES$ email(s) selected"
+  },
+  "confirmTrash_senders": {
+    "message": "Move $MAILS$ emails from $SENDERS$ sender(s) to Trash? Total size: $SIZE$."
+  },
+  "confirmTrash_messages": {
+    "message": "Move $MESSAGES$ individually selected email(s) to Trash?"
+  },
+  "confirmTrash_mixed": {
+    "message": "$MAILS$ emails ($SENDERS$ senders + $IND$ individual) to Trash?"
+  },
+  "trashWarning_recent": {
+    "message": "$COUNT$ senders have emails from the last 30 days."
+  },
+  "trashWarning_fewMails": {
+    "message": "$COUNT$ senders have only 1–3 emails."
+  },
+  "trashWarning_personal": {
+    "message": "$COUNT$ senders look like personal communication."
+  },
+  "trashWarning_read": {
+    "message": "$COUNT$ senders have mostly read emails."
+  },
+  "trashWarning_nonBulk": {
+    "message": "None of the senders are marked as newsletter/bulk."
+  },
+  "trashWarning_manyMails": {
+    "message": "$COUNT$ emails selected. Calculate preview before confirming."
+  },
+  "messageDefaultSubject": {
+    "message": "(no subject)"
+  },
+  "messageRead_read": {
+    "message": "read"
+  },
+  "messageRead_unread": {
+    "message": "unread"
+  },
+  "messageLoading": {
+    "message": "Loading emails…"
+  },
+  "loadMoreMessages": {
+    "message": "Load $COUNT$ more emails"
+  },
+  "messagePreview_noContent": {
+    "message": "(no text content)"
+  },
+  "messagePreview_loadFailed": {
+    "message": "(preview could not be loaded)"
+  },
+  "messagePreview_loading": {
+    "message": "Loading preview…"
+  },
+  "attachmentOpen": {
+    "message": "Open"
+  },
+  "attachmentSave": {
+    "message": "Save"
+  },
+  "attachmentLoading": {
+    "message": "Loading attachments…"
+  },
+  "attachmentEmpty": {
+    "message": "No attachments."
+  },
+  "bulkBadge_title": {
+    "message": "Newsletter/bulk candidate: $REASONS$"
+  },
+  "unsubscribeBadge_title": {
+    "message": "Unsubscribe available (List-Unsubscribe header)"
+  },
+  "regexBadge_title": {
+    "message": "Regex match: $TITLE$"
+  },
+  "domainBulk": {
+    "message": "Bulk"
+  },
+  "domainUnsubscribe": {
+    "message": "Unsubscribable"
+  },
+  "domainCheckbox_aria": {
+    "message": "Select domain $DOMAIN$ ($COUNT$ senders)"
+  },
+  "featureStatus_view": {
+    "message": "View: –"
+  },
+  "featureStatus_profile": {
+    "message": "Profile: –"
+  },
+  "featureStatus_cache": {
+    "message": "Cache: –"
+  },
+  "featureStatus_rules": {
+    "message": "Rules: –"
+  },
+  "featureStatus_protected": {
+    "message": "Protected: –"
+  },
+  "featureStatus_log": {
+    "message": "Log: –"
+  },
+  "featureStatus_selection": {
+    "message": "Selection: –"
+  },
+  "quickFilter_all": {
+    "message": "All"
+  },
+  "quickFilter_bulk": {
+    "message": "Newsletter/Bulk"
+  },
+  "quickFilter_unsubscribe": {
+    "message": "Unsubscribable"
+  },
+  "quickFilter_selected": {
+    "message": "Selected"
+  },
+  "cleanupAssistant_title": {
+    "message": "Cleanup Assistant"
+  },
+  "cleanupAssistant_empty": {
+    "message": "No analysis yet. Scan a folder to see cleanup suggestions."
+  },
+  "actionLog_empty": {
+    "message": "No actions logged yet."
+  },
+  "actionLog_senders": {
+    "message": "Senders: $SENDERS$"
+  },
+  "unsubscribe_noLink": {
+    "message": "No unsubscribe link found."
+  },
+  "error_replyWindowOpenFailed": {
+    "message": "Could not open reply window."
+  },
+  "error_mailMoveFailed": {
+    "message": "Could not move email: $ERROR$"
+  },
+  "error_mailOpenFailed": {
+    "message": "Could not open email: $ERROR$"
+  },
+  "stats_summary": {
+    "message": "$MAILS$ emails · $SENDERS$ senders · $SIZE$"
   }
 }
