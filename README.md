@@ -6,7 +6,7 @@ MailManager ist ein Thunderbird-Add-on zum **lokalen Analysieren und Aufräumen 
 
 ## Was MailManager kann
 
-- ein Konto und einen Ordner in Thunderbird scannen
+- ein Konto und einen oder **alle Ordner** (außer System-Ordner) in Thunderbird scannen
 - Absender und Domains nach Mail-Anzahl, Größe, Lesequote und Aktivität vergleichen
 - Aufräum-Kandidaten mit einer lokalen Heuristik hervorheben
 - Newsletter/Bulk-Absender und `List-Unsubscribe`-Header erkennen
@@ -23,7 +23,7 @@ Die Benutzeroberfläche ist derzeit auf Deutsch.
 
 ## Empfohlener Ablauf
 
-1. **Konto**, **Ordner** und ein Scan-Profil wählen.
+1. **Konto** und **Ordner** (oder „📂 Alle Ordner") in der Seitenleiste wählen.
 2. **Scannen** starten.
 3. Kandidaten über Suche, Sortierung oder einen Schnellfilter eingrenzen.
 4. Wichtige Absender schützen und verdächtige Mails stichprobenartig öffnen.
