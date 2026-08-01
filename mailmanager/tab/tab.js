@@ -1136,6 +1136,7 @@ async function init() {
   document.addEventListener("keydown", handleKeyboardShortcuts);
   $("folderBtn").addEventListener("click", openFolderDialog);
   $("readBtn").addEventListener("click", () => dispatchAction("markAsRead"));
+  $("archiveBtn").addEventListener("click", () => dispatchAction("archive"));
   $("tagBtn").addEventListener("click", openTagDialog);
   $("unsubBtn").addEventListener("click", handleUnsubscribe);
   $("exportBtn").addEventListener("click", () => $("exportDialog").showModal());
@@ -1195,6 +1196,10 @@ async function init() {
   $("diagnosticsRefresh")?.addEventListener("click", refreshDiagnosticsDialog);
   $("diagnosticsCopy")?.addEventListener("click", copyDiagnosticsToClipboard);
   $("diagnosticsClose")?.addEventListener("click", () => $("diagnosticsDialog").close());
+
+  // Quick actions
+  $("quickEmptyTrashBtn")?.addEventListener("click", () => quickEmptyFolder("trash"));
+  $("quickEmptySpamBtn")?.addEventListener("click", () => quickEmptyFolder("junk"));
 
   $("senderList").addEventListener("contextmenu", e => {
     const messageRow = e.target.closest(".message-row");
@@ -2694,7 +2699,7 @@ function updateSelectionLabel() {
 
 function updateActionButtons() {
   const has = state.selected.size > 0 || state.selectedMessages.size > 0;
-  ["trashBtn", "folderBtn", "readBtn", "tagBtn", "unsubBtn"].forEach(id => $(id).disabled = !has);
+  ["trashBtn", "folderBtn", "readBtn", "archiveBtn", "tagBtn", "unsubBtn"].forEach(id => $(id).disabled = !has);
 }
 
 // ─── Message selection helpers ─────────────────────────────────────────────────
@@ -4935,6 +4940,14 @@ async function handleUnsubscribe() {
 }
 
 // ─── Undo toast ───────────────────────────────────────────────────────────────
+// ponytail: simple toast for non-undo notifications
+function showToast(message) {
+  const toast = $("undoToast"), countdown = $("undoCountdown");
+  toast.hidden = false;
+  countdown.textContent = message;
+  setTimeout(() => { toast.hidden = true; }, 3000);
+}
+
 function showUndoToast() {
   if (state.undoTimer) clearInterval(state.undoTimer);
   let seconds = 10;
@@ -5478,6 +5491,37 @@ function renderCustomRegexList() {
   list.querySelectorAll(".custom-regex-toggle").forEach(el => {
     el.addEventListener("click", () => toggleCustomRegexRule(Number(el.dataset.regexIdx)));
   });
+}
+
+// ─── Quick actions ─────────────────────────────────────────────────────────────
+
+async function quickEmptyFolder(folderType) {
+  const accountId = $("accountSelect").value;
+  if (!accountId) { showError(_("errorNoAccountSelected")); return; }
+
+  const confirmKey = folderType === "trash" ? "quickEmptyConfirmTrash" : "quickEmptyConfirmSpam";
+  const successKey = folderType === "trash" ? "quickEmptySuccessTrash" : "quickEmptySuccessSpam";
+
+  if (!confirm(_(confirmKey))) return;
+
+  try {
+    const btn = folderType === "trash" ? $("quickEmptyTrashBtn") : $("quickEmptySpamBtn");
+    if (btn) { btn.disabled = true; btn.textContent = _("quickEmptyCalculating"); }
+
+    const resp = await browser.runtime.sendMessage({
+      action: "quickEmpty",
+      accountId,
+      folderType,
+    });
+
+    if (resp?.error) { showError(resp.error); return; }
+    showToast(_(successKey) + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
+  } catch (err) {
+    showError(_("quickEmptyFailed", [err.message]));
+  } finally {
+    const btn = folderType === "trash" ? $("quickEmptyTrashBtn") : $("quickEmptySpamBtn");
+    if (btn) { btn.disabled = false; btn.textContent = (folderType === "trash" ? "🗑 " : "🚫 ") + _(folderType === "trash" ? "quickEmptyTrash" : "quickEmptySpam"); }
+  }
 }
 
 // ponytail: check sender against all enabled custom regex rules

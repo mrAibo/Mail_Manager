@@ -817,5 +817,38 @@
   },
   "stats_summary": {
     "message": "$MAILS$ emails · $SENDERS$ senders · $SIZE$"
+  },
+  "quickEmptyTrash": {
+    "message": "Empty Trash"
+  },
+  "quickEmptySpam": {
+    "message": "Empty Spam"
+  },
+  "archiveBtn": {
+    "message": "Archive"
+  },
+  "errorArchiveNotFound": {
+    "message": "Archive folder not found."
+  },
+  "errorArchiveFailed": {
+    "message": "Could not archive any of the $1 emails to '$2'."
+  },
+  "quickEmptyConfirmTrash": {
+    "message": "Really empty the entire Trash? This cannot be undone."
+  },
+  "quickEmptyConfirmSpam": {
+    "message": "Really empty the entire Spam folder?"
+  },
+  "quickEmptySuccessTrash": {
+    "message": "Trash emptied."
+  },
+  "quickEmptySuccessSpam": {
+    "message": "Spam folder emptied."
+  },
+  "quickEmptyFailed": {
+    "message": "Empty failed: $1"
+  },
+  "quickEmptyCalculating": {
+    "message": "Calculating…"
   }
 }

@@ -817,5 +817,38 @@
   },
   "stats_summary": {
     "message": "$MAILS$ писем · $SENDERS$ отпр. · $SIZE$"
+  },
+  "quickEmptyTrash": {
+    "message": "Очистить корзину"
+  },
+  "quickEmptySpam": {
+    "message": "Очистить спам"
+  },
+  "archiveBtn": {
+    "message": "Архивировать"
+  },
+  "errorArchiveNotFound": {
+    "message": "Папка архива не найдена."
+  },
+  "errorArchiveFailed": {
+    "message": "Не удалось архивировать $1 писем в '$2'."
+  },
+  "quickEmptyConfirmTrash": {
+    "message": "Действительно очистить корзину? Это необратимо."
+  },
+  "quickEmptyConfirmSpam": {
+    "message": "Действительно очистить спам?"
+  },
+  "quickEmptySuccessTrash": {
+    "message": "Корзина очищена."
+  },
+  "quickEmptySuccessSpam": {
+    "message": "Спам очищен."
+  },
+  "quickEmptyFailed": {
+    "message": "Очистка не удалась: $1"
+  },
+  "quickEmptyCalculating": {
+    "message": "Расчёт…"
   }
 }

@@ -817,5 +817,38 @@
   },
   "stats_summary": {
     "message": "$MAILS$ Mails · $SENDERS$ Absender · $SIZE$"
+  },
+  "quickEmptyTrash": {
+    "message": "Papierkorb leeren"
+  },
+  "quickEmptySpam": {
+    "message": "Spam leeren"
+  },
+  "archiveBtn": {
+    "message": "Archivieren"
+  },
+  "errorArchiveNotFound": {
+    "message": "Archiv-Ordner nicht gefunden."
+  },
+  "errorArchiveFailed": {
+    "message": "Keine der $1 Mails konnte nach '$2' archiviert werden."
+  },
+  "quickEmptyConfirmTrash": {
+    "message": "Wirklich den gesamten Papierkorb leeren? Dies kann nicht rückgängig gemacht werden."
+  },
+  "quickEmptyConfirmSpam": {
+    "message": "Wirklich den gesamten Spam-Ordner leeren?"
+  },
+  "quickEmptySuccessTrash": {
+    "message": "Papierkorb wurde geleert."
+  },
+  "quickEmptySuccessSpam": {
+    "message": "Spam-Ordner wurde geleert."
+  },
+  "quickEmptyFailed": {
+    "message": "Leeren fehlgeschlagen: $1"
+  },
+  "quickEmptyCalculating": {
+    "message": "Berechne…"
   }
 }

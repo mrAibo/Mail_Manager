@@ -33,6 +33,7 @@ async function handleMessage(message, tabId) {
     case "checkUnsubscribeForSenders": return handleCheckUnsubscribeForSenders(message.senderGroups || [], message.limitPerSender || 3);
     case "doCompose":          return handleDoCompose(message.to, message.subject);
     case "openMessage":         return handleOpenMessage(message.messageId);
+    case "quickEmpty":         return handleQuickEmpty(message.accountId, message.folderType);
     default:                   return { error: "Unknown action: " + message.action };
   }
 }
@@ -47,6 +48,38 @@ async function handleOpenMessage(messageId) {
   });
 
   return { success: true };
+}
+
+// ─── Quick empty ──────────────────────────────────────────────────────────────
+async function handleQuickEmpty(accountId, folderType) {
+  const folder = await findFolderByType(accountId, folderType);
+  if (!folder) return { error: _("errorFolderNotFound", [folderType]) };
+
+  let messageIds = [];
+  let page = await browser.messages.list(folder.id);
+  while (true) {
+    for (const msg of page.messages) {
+      messageIds.push(msg.id);
+    }
+    if (!page.id) break;
+    page = await browser.messages.continueList(page.id);
+  }
+
+  if (messageIds.length === 0) return { success: true, count: 0 };
+
+  // Permanent delete for trash, move to trash for spam
+  if (folderType === "trash") {
+    await browser.messages.delete(messageIds, false);
+  } else {
+    const trash = await findFolderByType(accountId, "trash");
+    if (trash) {
+      await browser.messages.move(messageIds, trash.id, { isUserAction: true });
+    } else {
+      await browser.messages.delete(messageIds, false);
+    }
+  }
+
+  return { success: true, count: messageIds.length };
 }
 
 // ─── Inline utilities (identical logic to shared/utils.js) ───────────────────
@@ -1084,6 +1117,19 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       return { success: true, undoable: true, markedCount: count };
     }
 
+    case "archive": {
+      const archive = await findFolderByType(accountId, "archives");
+      if (!archive) return { error: _("errorArchiveNotFound") };
+      const { newIds, failedCount, movedCount } = await moveAndTrackIds(messageIds, archive);
+      if (movedCount === 0) {
+        return { error: _("errorArchiveFailed", [String(messageIds.length), archive.name]) };
+      }
+      await browser.storage.session.set({
+        [undoKey]: { type: "archive", messageIds: newIds, sourceFolderId: folderId, accountId },
+      });
+      return { success: true, undoable: newIds.length > 0, movedCount, failedCount };
+    }
+
     case "folder": {
       const { folderName, parentFolderId, existingFolderId } = options;
       let targetFolder;
@@ -1139,7 +1185,7 @@ async function handleUndo(tabId) {
   const undoEntry = data[key];
   if (!undoEntry) return { error: "Nichts zum Rückgängigmachen." };
 
-  if (undoEntry.type === "trash" || undoEntry.type === "folder") {
+  if (undoEntry.type === "trash" || undoEntry.type === "folder" || undoEntry.type === "archive") {
     const source = await findFolder(undoEntry.accountId, undoEntry.sourceFolderId);
     if (!source) return { error: "Quell-Ordner nicht gefunden." };
     await browser.messages.move(undoEntry.messageIds, source.id, { isUserAction: true });

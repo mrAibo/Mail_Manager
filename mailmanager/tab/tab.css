@@ -19,6 +19,28 @@
   --neutral-badge: #e7e9ed;
 }
 
+/* ponytail: dark mode via prefers-color-scheme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #0d1117;
+    --bg-sidebar:    #161b22;
+    --bg-elevated:   #21262d;
+    --bg-hover:      #1c2129;
+    --bg-selected:   #1a2744;
+    --border:        #30363d;
+    --border-strong: #484f58;
+    --text:          #e6edf3;
+    --text-dim:      #8b949e;
+    --accent:        #58a6ff;
+    --accent-hover:  #79c0ff;
+    --danger:        #f85149;
+    --danger-bg:     #3d1616;
+    --warn:          #e3b341;
+    --success:       #56d364;
+    --neutral-badge: #21262d;
+  }
+}
+
 body {
   font-family: system-ui, sans-serif;
   font-size: 13px;
