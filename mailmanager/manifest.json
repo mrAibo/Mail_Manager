@@ -3,10 +3,11 @@
   "name": "__MSG_extensionName__",
   "version": "0.2.0",
   "description": "__MSG_extensionDescription__",
+  "author": "Aleksej Voronin",
   "default_locale": "de",
   "browser_specific_settings": {
     "gecko": {
-      "id": "mailmanager@localhost",
+      "id": "{e4aa2097-8ee9-49a4-9ec7-c633b1e8dfda}",
       "strict_min_version": "150.0"
     }
   },
@@ -30,6 +31,8 @@
   "icons": {
     "32": "icons/icon.svg",
     "48": "icons/icon.svg",
+    "64": "icons/icon-64.png",
+    "96": "icons/icon-96.png",
     "128": "icons/icon.svg"
   }
 }
