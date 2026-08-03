@@ -83,6 +83,10 @@ async function handleQuickEmpty(accountId, folderType) {
 }
 
 // ─── Inline utilities (identical logic to shared/utils.js) ───────────────────
+// Keep this in sync with shared/cleanup-logic.mjs: background scripts are not modules.
+const DIACRITIC_MAP = { à:"a", á:"a", â:"a", ã:"a", ä:"a", å:"a", æ:"ae", ç:"c", è:"e", é:"e", ê:"e", ë:"e", ì:"i", í:"i", î:"i", ï:"i", ñ:"n", ò:"o", ó:"o", ô:"o", õ:"o", ö:"o", ø:"o", ù:"u", ú:"u", û:"u", ü:"u", ý:"y", ÿ:"y", ß:"ss", À:"A", Á:"A", Â:"A", Ã:"A", Ä:"A", Å:"A", Æ:"AE", Ç:"C", È:"E", É:"E", Ê:"E", Ë:"E", Ì:"I", Í:"I", Î:"I", Ï:"I", Ñ:"N", Ò:"O", Ó:"O", Ô:"O", Õ:"O", Ö:"O", Ø:"O", Ù:"U", Ú:"U", Û:"U", Ü:"U", Ý:"Y"};
+function diacriticLess(s) { return String(s || "").replace(/[^\x00-\x7F]/g, c => DIACRITIC_MAP[c] || c); }
+
 function parseAuthor(author) {
   if (!author) return { email: "", displayName: "" };
   const match = author.match(/^"?([^"<]*?)"?\s*<([^>]+)>$/);
@@ -101,11 +105,11 @@ function computeRiskScore(entry, now = new Date()) {
 }
 
 function computeBulkScore(email, displayName, sampleSubjects) {
-  const text = [
+  const text = diacriticLess([
     email || "",
     displayName || "",
     ...(sampleSubjects || []),
-  ].join(" ").toLowerCase();
+  ].join(" ").toLowerCase());
 
   let score = 0;
   const reasons = [];
@@ -139,7 +143,7 @@ function computeBulkScore(email, displayName, sampleSubjects) {
     }
   }
 
-  if (/@.*(mail|newsletter|news|marketing|promo|shop|store)/i.test(email || "")) {
+  if (/@.*(mail|newsletter|news|marketing|promo|shop|store)/i.test(diacriticLess(email || ""))) {
     score += 20;
     reasons.push("domain-pattern");
   }
@@ -1095,31 +1099,49 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
     case "tag": {
       const { tagKey } = options;
       if (!tagKey) return { error: "Kein tagKey angegeben." };
-      const newlyTagged = [];
-      for (const id of messageIds) {
-        const msg = await browser.messages.get(id);
-        if (!(msg.tags || []).includes(tagKey)) newlyTagged.push(id);
-        await browser.messages.update(id, { tags: [...new Set([...(msg.tags || []), tagKey])] });
-      }
+      const messages = [];
+      for (const id of messageIds) messages.push(await browser.messages.get(id));
+      const newlyTagged = messages
+        .filter(msg => !(msg.tags || []).includes(tagKey))
+        .map(msg => msg.id);
       await browser.storage.session.set({
         [undoKey]: { type: "tag", messageIds: newlyTagged, tagKey, accountId },
       });
-      break;
+
+      let taggedCount = 0;
+      let failedCount = 0;
+      for (const msg of messages) {
+        try {
+          await browser.messages.update(msg.id, { tags: [...new Set([...(msg.tags || []), tagKey])] });
+          taggedCount++;
+        } catch {
+          failedCount++;
+        }
+      }
+      return { success: true, undoable: true, taggedCount, failedCount };
     }
 
     case "markAsRead": {
-      let count = 0;
       const previousReadState = [];
       for (const id of messageIds) {
         const msg = await browser.messages.get(id);
         previousReadState.push({ id: msg.id, read: msg.read });
-        await browser.messages.update(id, { read: true });
-        count++;
       }
       await browser.storage.session.set({
         [undoKey]: { type: "markAsRead", previousReadState, accountId },
       });
-      return { success: true, undoable: true, markedCount: count };
+
+      let markedCount = 0;
+      let failedCount = 0;
+      for (const { id } of previousReadState) {
+        try {
+          await browser.messages.update(id, { read: true });
+          markedCount++;
+        } catch {
+          failedCount++;
+        }
+      }
+      return { success: true, undoable: true, markedCount, failedCount };
     }
 
     case "archive": {

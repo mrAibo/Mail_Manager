@@ -4846,9 +4846,10 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
   // Teil-Fehlschlag (einzelne veraltete IDs) sichtbar melden — sonst bliebe
   // unklar, warum nach der Aktion noch Mails übrig sind.
   if (response?.failedCount > 0) {
-    const moved = response.movedCount ?? 0;
+    const affected = response.movedCount ?? response.taggedCount ?? response.markedCount ?? 0;
+    const actionLabel = type === "tag" ? "markiert" : type === "markAsRead" ? "als gelesen markiert" : "verschoben";
     alert(
-      `${moved} Mail(s) verschoben, ${response.failedCount} konnten nicht verschoben ` +
+      `${affected} Mail(s) ${actionLabel}, ${response.failedCount} konnten nicht ${actionLabel} ` +
       "werden (veraltete Nachrichten-IDs). Ein erneuter Scan aktualisiert die Liste.",
     );
   }

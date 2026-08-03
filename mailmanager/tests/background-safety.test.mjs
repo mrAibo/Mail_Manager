@@ -22,8 +22,9 @@ function storageArea(initial = {}) {
   };
 }
 
-function loadBackground({ protectedEmails = [], protectedFolderIds = [] } = {}) {
+function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpdateIds = [] } = {}) {
   const calls = { moves: [], updates: [], deletes: [] };
+  const failedUpdateIds = new Set(failUpdateIds);
   const movedListeners = new Set();
   const messages = new Map([
     [1, { id: 1, author: "Protected <protected@example.test>", folder: { id: "inbox" }, tags: [] }],
@@ -81,6 +82,7 @@ function loadBackground({ protectedEmails = [], protectedFolderIds = [] } = {}) 
       },
       async update(id, changes) {
         calls.updates.push({ id, changes });
+        if (failedUpdateIds.has(id)) throw new Error("update failed");
         const message = messages.get(id);
         messages.set(id, { ...message, ...changes });
       },
@@ -196,6 +198,35 @@ describe("background action safety", () => {
     assert.equal(messages.get(2).read, false);
   });
 
+  it("keeps tag and read undo state when a later update fails", async () => {
+    const tag = loadBackground({ failUpdateIds: [2] });
+    const tagResult = await tag.context.handlePerformAction(
+      "tag", [1, 2], "account-1", "inbox", { tagKey: "tag-a" }, 11
+    );
+
+    assert.deepEqual([...tag.session.store.get("undoEntry:11").messageIds], [1, 2]);
+    assert.equal(tagResult.taggedCount, 1);
+    assert.equal(tagResult.failedCount, 1);
+    assert.equal(tag.messages.get(1).tags.includes("tag-a"), true);
+    assert.equal(tag.messages.get(2).tags.includes("tag-a"), false);
+
+    const read = loadBackground({ failUpdateIds: [2] });
+    read.messages.get(1).read = true;
+    read.messages.get(2).read = false;
+    const readResult = await read.context.handlePerformAction(
+      "markAsRead", [1, 2], "account-1", "inbox", {}, 11
+    );
+
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(read.session.store.get("undoEntry:11").previousReadState)),
+      [{ id: 1, read: true }, { id: 2, read: false }]
+    );
+    assert.equal(readResult.markedCount, 1);
+    assert.equal(readResult.failedCount, 1);
+    assert.equal(read.messages.get(1).read, true);
+    assert.equal(read.messages.get(2).read, false);
+  });
+
   it("fails closed when the sender has no tab id", async () => {
     const { context, calls, session } = loadBackground();
 
@@ -226,4 +257,12 @@ it("does not request permanent-delete permission", async () => {
   assert.equal(manifest.permissions.includes("messagesDelete"), false);
   assert.equal(context.parseListUnsubscribeHeader("<http://example.test/unsub>").kind, "none");
   assert.equal(context.parseListUnsubscribeHeader("<https://example.test/unsub>").kind, "https");
+});
+
+it("matches shared bulk scoring for diacritic-insensitive subjects", () => {
+  const { context } = loadBackground();
+  const result = context.computeBulkScore("info@example.test", "", ["Neue Angebote"]);
+
+  assert.equal(result.isBulkCandidate, true);
+  assert.ok(result.bulkReasons.includes("angebot"));
 });
