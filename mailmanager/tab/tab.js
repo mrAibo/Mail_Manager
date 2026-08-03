@@ -60,28 +60,10 @@ function debounce(fn, ms) {
 
 const CLEANUP_SCORE_HELP = _("cleanupScoreHelp");
 
-function replaceExactText(root, from, to) {
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    if (node.nodeValue.trim() === from) nodes.push(node);
-  }
-
-  for (const node of nodes) {
-    node.nodeValue = node.nodeValue.replace(from, to);
-  }
-}
-
 function applyCleanupScoreLabels() {
-  replaceExactText(document.body, "Risiko", "Aufräum-Score");
-
-  for (const el of document.querySelectorAll("*")) {
-    if (el.childElementCount === 0 && el.textContent.trim() === "Aufräum-Score") {
-      el.title = CLEANUP_SCORE_HELP;
-    }
-  }
+  document.querySelectorAll(".col-risk, [data-sort='riskScore']").forEach(el => {
+    el.title = CLEANUP_SCORE_HELP;
+  });
 }
 
 const SCAN_CACHE_PREFIX = "mailmanager.scanCache.v2:";
@@ -322,13 +304,13 @@ function ensureFeatureStatusBar() {
   const bar = document.createElement("div");
   bar.id = "featureStatusBar";
   bar.innerHTML = `
-    <span class="feature-status-chip" id="statusView">Ansicht: –</span>
-    <span class="feature-status-chip" id="statusProfile">Profil: –</span>
-    <span class="feature-status-chip" id="statusCache">Cache: –</span>
-    <span class="feature-status-chip" id="statusRules">Regeln: –</span>
-    <span class="feature-status-chip" id="statusProtected">Geschützt: –</span>
-    <span class="feature-status-chip" id="statusLog">Protokoll: –</span>
-    <span class="feature-status-chip" id="statusSelection">Auswahl: –</span>
+    <span class="feature-status-chip" id="statusView">${_("featureStatus_view")}</span>
+    <span class="feature-status-chip" id="statusProfile">${_("featureStatus_profile")}</span>
+    <span class="feature-status-chip" id="statusCache">${_("featureStatus_cache")}</span>
+    <span class="feature-status-chip" id="statusRules">${_("featureStatus_rules")}</span>
+    <span class="feature-status-chip" id="statusProtected">${_("featureStatus_protected")}</span>
+    <span class="feature-status-chip" id="statusLog">${_("featureStatus_log")}</span>
+    <span class="feature-status-chip" id="statusSelection">${_("featureStatus_selection")}</span>
   `;
 
   footer.insertBefore(bar, footer.firstChild);
@@ -365,34 +347,34 @@ async function countActionLogForStatus() {
 }
 
 async function scanCacheStatusForCurrentSelection() {
-  if (typeof loadScanCache !== "function") return _("statusUnknown");
+  if (typeof loadScanCache !== "function") return { text: _("statusUnknown"), state: "unknown" };
 
   const accountId = $("accountSelect")?.value || "";
   const folderId = $("folderSelect")?.value || "";
 
-  if (!accountId || !folderId) return _("statusNoFolder");
+  if (!accountId || !folderId) return { text: _("statusNoFolder"), state: "empty" };
 
   try {
     const cached = await loadScanCache(accountId, folderId);
-    if (!cached) return _("statusEmpty");
+    if (!cached) return { text: _("statusEmpty"), state: "empty" };
 
     if (typeof formatCacheAge === "function") {
-      return formatCacheAge(cached.savedAt);
+      return { text: formatCacheAge(cached.savedAt), state: "available" };
     }
 
-    return _("statusAvailable");
+    return { text: _("statusAvailable"), state: "available" };
   } catch {
-    return _("statusError");
+    return { text: _("statusError"), state: "error" };
   }
 }
 
 function currentViewLabelForStatus() {
   switch (state.viewMode) {
     case "domains":
-      return "Domains";
+      return _("viewDomains");
     case "senders":
     default:
-      return "Absender";
+      return _("viewSenders");
   }
 }
 
@@ -405,7 +387,7 @@ function currentScanProfileLabelForStatus() {
     return scanProfileLabel(profile);
   }
 
-  return profile || "Vollscan";
+  return profile || _("scanProfileFull");
 }
 
 async function updateFeatureStatusBar() {
@@ -432,8 +414,8 @@ async function updateFeatureStatusBar() {
   );
 
   setFeatureStatusText("statusCache",
-    _("featureStatus_cacheValue", [cacheStatus]),
-    cacheStatus === "leer" ? "muted" : "ok"
+    _("featureStatus_cacheValue", [cacheStatus.text]),
+    cacheStatus.state === "empty" ? "muted" : "ok"
   );
 
   setFeatureStatusText("statusRules",
@@ -700,7 +682,7 @@ function ensureCleanupAssistant() {
   const box = document.createElement("div");
   box.id = "cleanupAssistant";
   box.innerHTML = `
-    <div class="assistant-title">Aufräum-Assistent</div>
+    <div class="assistant-title">${_("cleanupAssistant_title")}</div>
     <div id="assistantCards" class="assistant-cards"></div>
   `;
 
@@ -723,21 +705,21 @@ function ensureCleanupDashboard() {
   dashboard.innerHTML = `
     <div class="cleanup-dashboard-title">${_("dashboard_title")}</div>
     <div class="dashboard-card" data-dashboard-filter="bulk">
-      <div class="dashboard-label">Newsletter/Bulk</div>
+      <div class="dashboard-label">${_("cleanupAssistantBulkTitle")}</div>
       <div class="dashboard-value" id="dashBulk">0</div>
       <button type="button" class="dashboard-action" data-dashboard-action="bulk">${_("dashboard_view")}</button>
       <button type="button" class="dashboard-select" data-dashboard-select="bulk">${_("dashboard_select_all")}</button>
     </div>
 
     <div class="dashboard-card" data-dashboard-filter="largeSize">
-      <div class="dashboard-label">Speicherfresser</div>
+      <div class="dashboard-label">${_("cleanupAssistantStorageTitle")}</div>
       <div class="dashboard-value" id="dashLarge">0</div>
       <button type="button" class="dashboard-action" data-dashboard-action="largeSize">${_("dashboard_view")}</button>
       <button type="button" class="dashboard-select" data-dashboard-select="largeSize">${_("dashboard_select_all")}</button>
     </div>
 
     <div class="dashboard-card" data-dashboard-filter="inactiveTwoYears">
-      <div class="dashboard-label">Inaktiv &gt; 2 Jahre</div>
+      <div class="dashboard-label">${_("dashboardInactiveTwoYears")}</div>
       <div class="dashboard-value" id="dashInactive">0</div>
       <button type="button" class="dashboard-action" data-dashboard-action="inactiveTwoYears">${_("dashboard_view")}</button>
       <button type="button" class="dashboard-select" data-dashboard-select="inactiveTwoYears">${_("dashboard_select_all")}</button>
@@ -854,9 +836,9 @@ function updateCleanupDashboard() {
   const large    = dashboardStatsFor(sender => (sender.totalSizeBytes || 0) >= 100 * 1024 * 1024);
   const inactive = dashboardStatsFor(sender => isInactiveForDays(sender.newestDate, 730));
 
-  setDashboardValue("dashBulk",     `${bulk.senderCount} · ${bulk.mailCount} Mails`);
+  setDashboardValue("dashBulk",     _("senderMailCount", [bulk.senderCount, bulk.mailCount]));
   setDashboardValue("dashLarge",    `${large.senderCount} · ${formatSize(large.bytes)}`);
-  setDashboardValue("dashInactive", `${inactive.senderCount} · ${inactive.mailCount} Mails`);
+  setDashboardValue("dashInactive", _("senderMailCount", [inactive.senderCount, inactive.mailCount]));
 }
 
 function senderStatsFor(predicate) {
@@ -954,7 +936,7 @@ function cleanupAssistantCard({ key, title, description, stats, actionLabel, pre
     <div class="assistant-card">
       <div class="assistant-card-title">${escapeHtml(title)}</div>
       <div class="assistant-card-main">
-        ${stats.senderCount} Absender · ${stats.mailCount} Mails · ${formatSize(stats.bytes)}
+        ${_("assistantStats", [stats.senderCount, stats.mailCount, formatSize(stats.bytes)])}
       </div>
       <div class="assistant-card-desc">${escapeHtml(description)}</div>
 
@@ -964,7 +946,7 @@ function cleanupAssistantCard({ key, title, description, stats, actionLabel, pre
         </button>
 
         <button class="assistant-prepare-btn" data-assistant-key="${escapeHtml(key)}" ${disabled}>
-          ${escapeHtml(prepareLabel || "Aktion vorbereiten")}
+          ${escapeHtml(prepareLabel || _("cleanupAssistantPrepare"))}
         </button>
       </div>
     </div>
@@ -978,7 +960,7 @@ function updateCleanupAssistant() {
   if (!state.allSenders.length) {
     cards.innerHTML = `
       <div class="assistant-empty">
-        Noch keine Analyse. Ordner scannen, dann erscheinen Aufräum-Vorschläge.
+${_("cleanupAssistant_empty")}
       </div>
     `;
     return;
@@ -996,9 +978,9 @@ function updateCleanupAssistant() {
     {
       key: "protectCandidates",
       title: _("cleanupAssistantProtectTitle"),
-      description: "Persönlich wirkende, neue oder häufig gelesene Absender vor Aufräumaktionen schützen.",
+      description: _("cleanupAssistantProtectDescription"),
       stats: protectCandidates,
-      actionLabel: "Anzeigen",
+      actionLabel: _("dashboard_view"),
       prepareLabel: _("cleanupAssistantProtectAction"),
       predicate: s => isProtectionCandidate(s),
       prepareAction: protectMatchingSenders,
@@ -1006,55 +988,55 @@ function updateCleanupAssistant() {
     {
       key: "highScore",
       title: _("cleanupAssistantHighScoreTitle"),
-      description: "Gute Kandidaten für Löschen, Sortieren oder Abmelden.",
+      description: _("cleanupAssistantHighScoreDescription"),
       stats: highScore,
       actionLabel: _("cleanupAssistantSelect"),
-      prepareLabel: "Aufräumen vorbereiten",
+      prepareLabel: _("cleanupAssistantPrepare"),
       predicate: s => s.riskScore >= 70,
     },
     {
       key: "unsubscribe",
-      title: "Abmeldbar",
-      description: "Absender mit geprüftem List-Unsubscribe-Header.",
+      title: _("domainUnsubscribe"),
+      description: _("cleanupAssistantUnsubscribeDescription"),
       stats: unsubscribe,
       actionLabel: _("cleanupAssistantSelect"),
-      prepareLabel: "Abmeldbare aufräumen",
+      prepareLabel: _("cleanupAssistantUnsubscribePrepare"),
       predicate: s => s.hasUnsubscribe === true,
     },
     {
       key: "bulk",
-      title: "Newsletter/Bulk",
-      description: "Typische Newsletter, Benachrichtigungen, Shops oder Marketing-Absender.",
+      title: _("cleanupAssistantBulkTitle"),
+      description: _("cleanupAssistantBulkDescription"),
       stats: bulk,
       actionLabel: _("cleanupAssistantSelect"),
-      prepareLabel: "Newsletter aufräumen",
+      prepareLabel: _("cleanupAssistantBulkPrepare"),
       predicate: s => s.isBulkCandidate,
     },
     {
       key: "largeSize",
       title: _("cleanupAssistantStorageTitle"),
-      description: "Absender mit besonders viel belegtem Speicher.",
+      description: _("cleanupAssistantStorageDescription"),
       stats: largeSize,
       actionLabel: _("cleanupAssistantSelect"),
-      prepareLabel: "Speicher aufräumen",
+      prepareLabel: _("cleanupAssistantStoragePrepare"),
       predicate: s => s.totalSizeBytes >= 100 * 1024 * 1024,
     },
     {
       key: "inactive",
       title: _("cleanupAssistantInactiveTitle"),
-      description: "Lange keine neue Mail erhalten.",
+      description: _("cleanupAssistantInactiveDescription"),
       stats: inactive,
       actionLabel: _("cleanupAssistantSelect"),
-      prepareLabel: "Alte Mails prüfen",
+      prepareLabel: _("cleanupAssistantInactivePrepare"),
       predicate: s => isInactiveForDays(s.newestDate, 365),
     },
     {
       key: "unreadHigh",
       title: _("cleanupAssistantUnreadTitle"),
-      description: "Mindestens 10 Mails und mehr als 50% ungelesen.",
+      description: _("cleanupAssistantUnreadDescription"),
       stats: unreadHigh,
       actionLabel: _("cleanupAssistantSelect"),
-      prepareLabel: "Ungelesene aufräumen",
+      prepareLabel: _("cleanupAssistantUnreadPrepare"),
       predicate: s => unreadRate(s) >= 0.5 && s.count >= 10,
     },
   ];
@@ -1322,7 +1304,7 @@ async function init() {
     const response = await browser.runtime.sendMessage({ action: "getAccounts" });
 
     if (!response) {
-      throw new Error("Keine Antwort von background.js bei getAccounts.");
+      throw new Error(_("accountsNoResponse"));
     }
 
     if (response.error) {
@@ -1341,7 +1323,7 @@ async function init() {
 
     await showCachedScanForCurrentSelection();
   } catch (err) {
-    showError("Initialisierung fehlgeschlagen: " + err.message);
+    showError(_("initializationFailed", [err.message]));
   }
 }
 
@@ -1436,7 +1418,7 @@ async function startScan() {
 
   $("progressContainer").hidden = false;
   $("progressBar").value = 0;
-  $("progressLabel").textContent = `Scan startet: ${scanProfileLabel(scanProfile)} …`;
+  $("progressLabel").textContent = _("scanProgressLabel", [scanProfileLabel(scanProfile)]);
   setScanUiRunning(true);
 
   try {
@@ -1449,7 +1431,7 @@ async function startScan() {
     });
 
     if (!resp) {
-      throw new Error("Keine Antwort von background.js beim Scan.");
+      throw new Error(_("scanNoResponse"));
     }
 
     if (resp.error) {
@@ -1497,7 +1479,7 @@ function finishScanFromSenders(senders) {
   clearActiveScan();
 
   applyFilter();
-  updateStatsLabel(` · frisch gescannt · ${scanProfileLabel(currentScanProfile())}`);
+  updateStatsLabel(_("scanFreshWithProfile", [scanProfileLabel(currentScanProfile())]));
   updateCleanupAssistant();
   updateCleanupDashboard();
   scheduleFeatureStatusUpdate();
@@ -1510,7 +1492,7 @@ async function cancelScan() {
   state.scanCancelRequested = true;
   const cancelBtn = $("cancelScanBtn");
   if (cancelBtn) cancelBtn.disabled = true;
-  $("progressLabel").textContent += " — Abbruch angefordert …";
+  $("progressLabel").textContent += ` — ${_("scanCancelRequested")}`;
 
   try {
     const resp = await browser.runtime.sendMessage({
@@ -1521,13 +1503,13 @@ async function cancelScan() {
     if (resp?.error) throw new Error(resp.error);
 
     if (resp?.cancelled === false && state.activeScanId === scanId) {
-      $("progressLabel").textContent = "Scan konnte nicht mehr abgebrochen werden.";
+      $("progressLabel").textContent = _("scanCancelUnavailable");
     }
   } catch (err) {
     if (state.activeScanId === scanId) {
       state.scanCancelRequested = false;
       setScanUiRunning(true);
-      showError("Abbrechen fehlgeschlagen: " + err.message);
+      showError(_("scanCancelFailed", [err.message]));
     }
   }
 }
@@ -2065,7 +2047,7 @@ async function loadMessagePage(bucket) {
       const h = await browser.messages.get(id);
       return {
         id,
-        subject: h.subject || "(kein Betreff)",
+        subject: h.subject || _("noSubject"),
         date: h.date instanceof Date ? h.date : new Date(h.date),
         read: !!h.read,
         sizeBytes: h.size || 0,
@@ -2145,14 +2127,14 @@ function createMessageRow(meta, senderEmail) {
   row.setAttribute("aria-selected", selected ? "true" : "false");
 
   const attach = meta.hasAttachments
-    ? `<span class="message-attach" title="Anhänge anzeigen">📎</span>`
+    ? `<span class="message-attach" title="${_("attachmentsShow")}">📎</span>`
     : "";
 
-  const checkboxLabel = `Mail „${escapeHtml(meta.subject || "ohne Betreff")}" auswählen`;
+  const checkboxLabel = _("messageSelectAria", [meta.subject || _("noSubject")]);
 
   row.innerHTML = `
-    <input type="checkbox" class="message-checkbox" value="${meta.id}" data-message-id="${meta.id}" title="Diese Mail auswählen" aria-label="${checkboxLabel}" ${selected ? "checked" : ""} />
-    <span class="message-read ${meta.read ? "" : "unread"}" title="${meta.read ? "gelesen" : "ungelesen"}">${meta.read ? "○" : "●"}</span>
+    <input type="checkbox" class="message-checkbox" value="${meta.id}" data-message-id="${meta.id}" title="${_("messageSelect")}" aria-label="${checkboxLabel}" ${selected ? "checked" : ""} />
+    <span class="message-read ${meta.read ? "" : "unread"}" title="${meta.read ? _("messageRead") : _("messageUnread")}">${meta.read ? "○" : "●"}</span>
     <span class="message-subject" title="${escapeHtml(meta.subject)}">${escapeHtml(meta.subject)}</span>
     <span class="message-date">${formatRelativeDate(meta.date)}</span>
     <span class="message-size">${formatSize(meta.sizeBytes)}</span>
@@ -2187,7 +2169,7 @@ function createMessageInfoRow(text) {
 function createLoadMoreRow(senderEmail, remaining) {
   const row = document.createElement("div");
   row.className = "message-loadmore-row";
-  row.innerHTML = `<button type="button">Weitere ${remaining} Mails laden</button>`;
+  row.innerHTML = `<button type="button">${_("messageLoadMore", [remaining])}</button>`;
   row.querySelector("button").addEventListener("click", e => {
     e.stopPropagation();
     e.currentTarget.disabled = true;
@@ -2240,7 +2222,7 @@ function downloadFile(file, name) {
   const url = URL.createObjectURL(file);
   const a = document.createElement("a");
   a.href = url;
-  a.download = name || file.name || "anhang";
+  a.download = name || file.name || _("attachmentFallbackName");
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -2258,8 +2240,8 @@ function openFileInTab(file) {
 async function openAttachmentDialog(meta) {
   const dialog = $("attachmentDialog");
   const list = $("attachmentList");
-  $("attachmentDialogTitle").textContent = `Anhänge — ${meta.subject}`;
-  list.innerHTML = `<div class="attachment-empty">Anhänge werden geladen …</div>`;
+  $("attachmentDialogTitle").textContent = _("attachmentDialogTitleDynamic", [meta.subject]);
+  list.innerHTML = `<div class="attachment-empty">${_("attachmentLoading")}</div>`;
   dialog.showModal();
   state.attachmentDialogMeta = meta;
 
@@ -2269,7 +2251,7 @@ async function openAttachmentDialog(meta) {
       const raw = await browser.messages.listAttachments(meta.id);
       attachments = (raw || []).map(a => ({
         partName: a.partName,
-        name: a.name || "anhang",
+        name: a.name || _("attachmentFallbackName"),
         size: a.size || 0,
         contentType: a.contentType || "",
       }));
@@ -2280,7 +2262,7 @@ async function openAttachmentDialog(meta) {
   }
 
   if (attachments.length === 0) {
-    list.innerHTML = `<div class="attachment-empty">Keine Anhänge.</div>`;
+    list.innerHTML = `<div class="attachment-empty">${_("attachmentEmpty")}</div>`;
     return;
   }
 
@@ -2376,10 +2358,10 @@ function selectOnlySender(email) {
 function senderContextItems(entry) {
   const isProtected = state.protectedEmails.has(entry.email);
   return [
-    { label: "↗ Neueste Mail öffnen", action: () => openSenderMessage(entry) },
-    { label: "🔍 Mails auf-/zuklappen", action: () => toggleSenderExpand(entry.email) },
+    { label: _("senderContext_openLatest"), action: () => openSenderMessage(entry) },
+    { label: _("senderContext_toggleMessages"), action: () => toggleSenderExpand(entry.email) },
     "separator",
-    { label: "✅ Zur Auswahl hinzufügen", action: () => {
+    { label: _("senderContext_addSelection"), action: () => {
         state.selected.add(entry.email);
         renderSenders(); updateSelectionLabel(); updateActionButtons();
         syncSelectAll(); updateCleanupAssistant(); scheduleFeatureStatusUpdate();
@@ -2388,26 +2370,26 @@ function senderContextItems(entry) {
         selectOnlySender(entry.email);
         openConfirmDialog("trash");
       } },
-    { label: "📁 In Ordner verschieben", action: () => {
+    { label: _("senderContext_moveToFolder"), action: () => {
         selectOnlySender(entry.email);
         openFolderDialog();
       } },
-    { label: "🏷 Tag zuweisen", action: () => {
+    { label: _("senderContext_assignTag"), action: () => {
         selectOnlySender(entry.email);
         openTagDialog();
       } },
-    { label: "🚫 Abmelden", action: () => {
+    { label: _("senderContext_unsubscribe"), action: () => {
         selectOnlySender(entry.email);
         handleUnsubscribe();
       } },
-    { label: "⚙ Aufräum-Regel anwenden", action: () => {
+    { label: _("senderContext_applyRule"), action: () => {
         selectOnlySender(entry.email);
         applyCleanupRuleForCurrentSelection();
       } },
     "separator",
-    { label: isProtected ? "🔓 Schutz aufheben" : "🛡️ Absender schützen",
+    { label: isProtected ? _("senderContext_removeProtection") : _("senderContext_protectSender"),
       action: () => toggleProtect(entry.email) },
-    { label: "📋 Adresse kopieren", action: () => navigator.clipboard.writeText(entry.email) },
+    { label: _("senderContext_copyAddress"), action: () => navigator.clipboard.writeText(entry.email) },
   ];
 }
 
@@ -2420,7 +2402,7 @@ function messageContextItems(meta) {
       } },
     { label: _("messageContext_reply"), action: () => {
         browser.compose.beginReply(meta.id)
-          .catch(() => showError("Antwort-Fenster konnte nicht geöffnet werden."));
+          .catch(() => showError(_("replyOpenFailed")));
       } },
     { label: _("messageContext_togglePreview"), action: () => toggleMessagePreview(meta) },
   ];
@@ -2618,11 +2600,11 @@ function createDomainRow(entry) {
   row.setAttribute("aria-selected", allSelected ? "true" : "false");
 
   const bulkBadge = entry.isBulkCandidate
-    ? `<span class="bulk-badge">Bulk</span>`
+    ? `<span class="bulk-badge">${_("domainBulk")}</span>`
     : "";
 
   const unsubscribeBadge = entry.hasUnsubscribe
-    ? `<span class="unsub-badge">Abmeldbar</span>`
+    ? `<span class="unsub-badge">${_("domainUnsubscribe")}</span>`
     : "";
 
   const domainCheckboxLabel = `Domain ${escapeHtml(entry.domain)} (${senders.length} Absender) auswählen`;
@@ -2940,8 +2922,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "high",
       text:
-        `${recentSenders.length} ausgewählte Absender haben Mails aus den letzten 30 Tagen. ` +
-        "Aktuelle Kommunikation könnte betroffen sein.",
+        _("trashWarningRecentDetailed", [recentSenders.length]),
     });
   }
 
@@ -2949,8 +2930,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "medium",
       text:
-        `${tinySenders.length} ausgewählte Absender haben nur 1–3 Mails. ` +
-        "Das sieht eher nach Einzelkommunikation als nach Massenmail aus.",
+        _("trashWarningFewDetailed", [tinySenders.length]),
     });
   }
 
@@ -2958,8 +2938,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "high",
       text:
-        `${personalSenders.length} ausgewählte Absender sehen nicht nach Newsletter/Bulk aus. ` +
-        "Bitte prüfen, ob persönliche oder wichtige Kommunikation dabei ist.",
+        _("trashWarningPersonalDetailed", [personalSenders.length]),
     });
   }
 
@@ -2967,8 +2946,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "medium",
       text:
-        `${mostlyReadSenders.length} ausgewählte Absender haben überwiegend gelesene Mails. ` +
-        "Das kann bedeuten, dass diese Mails bewusst genutzt wurden.",
+        _("trashWarningReadDetailed", [mostlyReadSenders.length]),
     });
   }
 
@@ -2976,7 +2954,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "medium",
       text:
-        "Keiner der ausgewählten Absender ist als Newsletter/Bulk oder abmeldbar markiert.",
+        _("trashWarningNonBulkDetailed"),
     });
   }
 
@@ -2984,8 +2962,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "medium",
       text:
-        `Die Auswahl betrifft ${domains.size} verschiedene Domains. ` +
-        "Bei sehr gemischten Aktionen ist eine Vorschau besonders sinnvoll.",
+        _("trashWarningDomainsDetailed", [domains.size]),
     });
   }
 
@@ -2993,8 +2970,7 @@ function buildTrashSafetyWarnings() {
     warnings.push({
       level: "high",
       text:
-        `${mailCount} Mails sind ausgewählt. ` +
-        "Vor dem Bestätigen unbedingt Vorschau berechnen.",
+        _("trashWarningManyDetailed", [mailCount]),
     });
   }
 
@@ -3073,12 +3049,12 @@ function protectionCandidateReason(sender) {
 
   const age = senderNewestAgeDays(sender);
 
-  if (age !== null && age <= 30) reasons.push("neue Mails");
-  if ((sender.count || 0) <= 3) reasons.push("wenige Mails");
-  if ((sender.count || 0) >= 5 && senderReadRate(sender) >= 0.75) reasons.push("überwiegend gelesen");
-  if (looksLikePersonalSender(sender)) reasons.push("wirkt persönlich");
+  if (age !== null && age <= 30) reasons.push(_("protectionReasonNew"));
+  if ((sender.count || 0) <= 3) reasons.push(_("protectionReasonFew"));
+  if ((sender.count || 0) >= 5 && senderReadRate(sender) >= 0.75) reasons.push(_("protectionReasonRead"));
+  if (looksLikePersonalSender(sender)) reasons.push(_("protectionReasonPersonal"));
 
-  return reasons.join(" · ") || "Schutz empfohlen";
+  return reasons.join(" · ") || _("protectionReasonRecommended");
 }
 
 function prioritizedMessageIdsForSender(sender, limit = 3) {
@@ -3541,7 +3517,7 @@ function parseCleanupRuleStorageKey(storageKey) {
 function cleanupRuleTypeLabel(type) {
   switch (type) {
     case "sender":
-      return "Absender";
+      return _("viewSenders");
     case "domain":
       return "Domain";
     case "selection":
@@ -3558,7 +3534,7 @@ function formatCleanupRuleUpdatedAt(value) {
     return _("statusUnknown");
   }
 
-  return date.toLocaleString("de-DE", {
+  return date.toLocaleString(browser.i18n.getUILanguage(), {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -3619,7 +3595,7 @@ async function renderCleanupRuleManager() {
   if (keys.length === 0) {
     list.innerHTML = `
       <div class="cleanup-rule-empty">
-        Noch keine gespeicherten Aufräum-Regeln.
+${_("cleanupRuleManagerEmpty")}
       </div>
     `;
     return;
@@ -3652,7 +3628,7 @@ async function deleteCleanupRuleByKey(storageKey) {
 
   const parsed = parseCleanupRuleStorageKey(storageKey);
 
-  if (!confirm(`Regel für ${parsed.label} wirklich löschen?`)) {
+  if (!confirm(_("cleanupRuleDeleteConfirm", [parsed.label]))) {
     return;
   }
 
@@ -3685,7 +3661,7 @@ async function applyCleanupRuleByKey(storageKey) {
   const info = $("cleanupRuleInfo");
   if (info) {
     info.textContent =
-      `Regel angewendet: ${cleanupRuleTypeLabel(parsed.type)} ${parsed.label}: ${formatCleanupRule(rule)}.`;
+      _("cleanupRuleApplied", [cleanupRuleTypeLabel(parsed.type), parsed.label, formatCleanupRule(rule)]);
   }
 }
 
@@ -3698,7 +3674,7 @@ async function clearCleanupRulesWithConfirm() {
     return;
   }
 
-  if (!confirm(`${count} gespeicherte Aufräum-Regel(n) wirklich löschen?`)) {
+  if (!confirm(_("cleanupRuleClearConfirm", [count]))) {
     return;
   }
 
@@ -3707,7 +3683,7 @@ async function clearCleanupRulesWithConfirm() {
 
   const info = $("cleanupRuleInfo");
   if (info) {
-    info.textContent = "Alle gespeicherten Aufräum-Regeln wurden gelöscht.";
+    info.textContent = _("cleanupRuleClearSuccess");
   }
 }
 
@@ -4510,18 +4486,18 @@ async function openConfirmDialog(actionType) {
 function actionTypeLabel(type) {
   switch (type) {
     case "trash":
-      return "Papierkorb";
+      return _("action_trash");
 
     case "folder":
-      return "In Ordner";
+      return _("actionFolder");
     case "tag":
       return "Tag";
     case "unsubscribe":
-      return "Abmelden";
+      return _("actionUnsubscribe");
     case "undo":
-      return "Rückgängig";
+      return _("actionUndo");
     case "rules-import":
-      return "Regel-Import";
+      return _("actionRulesImport");
     default:
       return type || "Aktion";
   }
@@ -4676,7 +4652,7 @@ function formatActionLogDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return _("statusUnknown");
 
-  return date.toLocaleString("de-DE", {
+  return date.toLocaleString(browser.i18n.getUILanguage(), {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -4734,9 +4710,9 @@ function renderActionLogEntry(entry) {
         Ordner: ${escapeHtml(entry.folderName || "")}
       </div>
 
-      ${rules.length ? `<div class="action-log-entry-rules">Regeln: ${escapeHtml(rules.join(" · "))}</div>` : ""}
-      ${senderPreview ? `<div class="action-log-entry-senders">Absender: ${senderPreview}${more}</div>` : ""}
-      ${entry.undoable ? `<div class="action-log-entry-undo">Undo war möglich</div>` : ""}
+      ${rules.length ? `<div class="action-log-entry-rules">${_("actionLogRules", [escapeHtml(rules.join(" · "))])}</div>` : ""}
+      ${senderPreview ? `<div class="action-log-entry-senders">${_("actionLog_senders", [senderPreview + more])}</div>` : ""}
+      ${entry.undoable ? `<div class="action-log-entry-undo">${_("actionLogUndoAvailable")}</div>` : ""}
     </div>
   `;
 }
@@ -4748,7 +4724,7 @@ async function renderActionLog() {
   const entries = await loadActionLog();
 
   if (entries.length === 0) {
-    list.innerHTML = `<div class="action-log-empty">Noch keine Aktionen protokolliert.</div>`;
+    list.innerHTML = `<div class="action-log-empty">${_("actionLog_empty")}</div>`;
     return;
   }
 
@@ -5207,7 +5183,7 @@ function renderProtectManagerEntry(email) {
 
   const details = sender
     ? `${sender.count} Mails · ${formatSize(sender.totalSizeBytes)} · letzte Mail ${formatRelativeDate(sender.newestDate)}`
-    : "Nicht in aktueller Analyse";
+    : _("protectNotInCurrentAnalysis");
 
   return `
     <div class="protect-manager-entry">
@@ -5216,7 +5192,7 @@ function renderProtectManagerEntry(email) {
         <div class="protect-manager-details">${escapeHtml(details)}</div>
       </div>
       <button class="protect-manager-remove danger" data-email="${escapeHtml(email)}">
-        Entsperren
+        ${_("protectManagerUnlock")}
       </button>
     </div>
   `;
@@ -5231,7 +5207,7 @@ function renderProtectManager() {
   if (emails.length === 0) {
     list.innerHTML = `
       <div class="protect-manager-empty">
-        Keine geschützten Absender gefunden.
+${_("protectManagerEmpty")}
       </div>
     `;
     return;
@@ -5305,7 +5281,7 @@ async function clearProtectedEmailsWithConfirm() {
     return;
   }
 
-  if (!confirm(`${count} geschützte Absender wirklich entsperren?`)) {
+  if (!confirm(_("protectManagerClearConfirm", [count]))) {
     return;
   }
 
@@ -5542,7 +5518,7 @@ async function refreshDiagnosticsDialog() {
   const output = $("diagnosticsOutput");
   if (!output) return;
 
-  output.textContent = "Diagnose wird geladen …";
+  output.textContent = _("diagnosticsLoading");
 
   try {
     const payload = await buildDiagnosticsPayload();
@@ -5568,7 +5544,7 @@ async function copyDiagnosticsToClipboard() {
 
   try {
     await navigator.clipboard.writeText(text);
-    $("statsLabel").textContent = "Diagnose in Zwischenablage kopiert.";
+    $("statsLabel").textContent = _("diagnosticsCopied");
   } catch {
     const textarea = document.createElement("textarea");
     textarea.value = text;
@@ -5581,7 +5557,7 @@ async function copyDiagnosticsToClipboard() {
 
     try {
       document.execCommand("copy");
-      $("statsLabel").textContent = "Diagnose in Zwischenablage kopiert.";
+      $("statsLabel").textContent = _("diagnosticsCopied");
     } finally {
       textarea.remove();
     }
@@ -5648,14 +5624,14 @@ async function toggleCustomRegexRule(index) {
 
 function formatCustomRegexList() {
   if (state.customRegexRules.length === 0) {
-    return '<div class="custom-regex-empty">Keine benutzerdefinierten RegEx-Regeln.</div>';
+    return `<div class="custom-regex-empty">${_("customRegexEmpty")}</div>`;
   }
   return state.customRegexRules.map((r, i) => `
     <div class="custom-regex-entry ${r.enabled ? "" : "disabled"}">
       <span class="custom-regex-toggle" data-regex-idx="${i}">${r.enabled ? "🟢" : "⚪"}</span>
       <span class="custom-regex-title">${escapeHtml(r.title)}</span>
       <code class="custom-regex-pattern">${escapeHtml(r.pattern)}</code>
-      <button class="custom-regex-delete" data-regex-idx="${i}" title="Löschen">✕</button>
+      <button class="custom-regex-delete" data-regex-idx="${i}" title="${_("cleanupRuleDelete")}">✕</button>
     </div>
   `).join("");
 }

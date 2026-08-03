@@ -1268,4 +1268,150 @@
   "cleanupScoreTooltipLastDays": {
     "message": "Letzte Mail vor: $1 Tag(en)"
   }
+,
+  "accountsNoResponse": {
+    "message": "Keine Antwort von background.js bei getAccounts."
+  },
+  "initializationFailed": {
+    "message": "Initialisierung fehlgeschlagen: $1"
+  },
+  "scanFreshWithProfile": {
+    "message": " · frisch gescannt · $1"
+  },
+  "scanCancelUnavailable": {
+    "message": "Scan konnte nicht mehr abgebrochen werden."
+  },
+  "scanCancelFailed": {
+    "message": "Abbrechen fehlgeschlagen: $1"
+  },
+  "noSubject": {
+    "message": "(kein Betreff)"
+  },
+  "attachmentsShow": {
+    "message": "Anhänge anzeigen"
+  },
+  "messageSelectAria": {
+    "message": "Mail „$1“ auswählen"
+  },
+  "messageSelect": {
+    "message": "Diese Mail auswählen"
+  },
+  "messageRead": {
+    "message": "gelesen"
+  },
+  "messageUnread": {
+    "message": "ungelesen"
+  },
+  "messageLoadMore": {
+    "message": "Weitere $1 Mails laden"
+  },
+  "attachmentFallbackName": {
+    "message": "anhang"
+  },
+  "senderMailCount": {
+    "message": "$1 Absender · $2 Mails"
+  },
+  "assistantStats": {
+    "message": "$1 Absender · $2 Mails · $3"
+  },
+  "cleanupAssistantPrepare": {
+    "message": "Aufräumen vorbereiten"
+  },
+  "cleanupAssistantProtectDescription": {
+    "message": "Persönlich wirkende, neue oder häufig gelesene Absender vor Aufräumaktionen schützen."
+  },
+  "cleanupAssistantHighScoreDescription": {
+    "message": "Gute Kandidaten für Löschen, Sortieren oder Abmelden."
+  },
+  "cleanupAssistantBulkTitle": {
+    "message": "Newsletter/Bulk"
+  },
+  "cleanupAssistantUnsubscribeDescription": {
+    "message": "Absender mit geprüftem List-Unsubscribe-Header."
+  },
+  "cleanupAssistantUnsubscribePrepare": {
+    "message": "Abmeldbare aufräumen"
+  },
+  "cleanupAssistantBulkDescription": {
+    "message": "Typische Newsletter, Benachrichtigungen, Shops oder Marketing-Absender."
+  },
+  "cleanupAssistantBulkPrepare": {
+    "message": "Newsletter aufräumen"
+  },
+  "cleanupAssistantStorageDescription": {
+    "message": "Absender mit besonders viel belegtem Speicher."
+  },
+  "cleanupAssistantStoragePrepare": {
+    "message": "Speicher aufräumen"
+  },
+  "cleanupAssistantInactiveDescription": {
+    "message": "Lange keine neue Mail erhalten."
+  },
+  "cleanupAssistantInactivePrepare": {
+    "message": "Alte Mails prüfen"
+  },
+  "cleanupAssistantUnreadDescription": {
+    "message": "Mindestens 10 Mails und mehr als 50% ungelesen."
+  },
+  "cleanupAssistantUnreadPrepare": {
+    "message": "Ungelesene aufräumen"
+  },
+  "dashboardInactiveTwoYears": {
+    "message": "Inaktiv > 2 Jahre"
+  },
+  "trashWarningRecentDetailed": {
+    "message": "$1 ausgewählte Absender haben Mails aus den letzten 30 Tagen. Aktuelle Kommunikation könnte betroffen sein."
+  },
+  "trashWarningFewDetailed": {
+    "message": "$1 ausgewählte Absender haben nur 1–3 Mails. Das sieht eher nach Einzelkommunikation als nach Massenmail aus."
+  },
+  "trashWarningPersonalDetailed": {
+    "message": "$1 ausgewählte Absender sehen nicht nach Newsletter/Bulk aus. Bitte prüfen, ob persönliche oder wichtige Kommunikation dabei ist."
+  },
+  "trashWarningReadDetailed": {
+    "message": "$1 ausgewählte Absender haben überwiegend gelesene Mails. Das kann bedeuten, dass diese Mails bewusst genutzt wurden."
+  },
+  "trashWarningNonBulkDetailed": {
+    "message": "Keiner der ausgewählten Absender ist als Newsletter/Bulk oder abmeldbar markiert."
+  },
+  "trashWarningDomainsDetailed": {
+    "message": "Die Auswahl betrifft $1 verschiedene Domains. Bei sehr gemischten Aktionen ist eine Vorschau besonders sinnvoll."
+  },
+  "trashWarningManyDetailed": {
+    "message": "$1 Mails sind ausgewählt. Vor dem Bestätigen unbedingt Vorschau berechnen."
+  },
+  "protectionReasonNew": {
+    "message": "neue Mails"
+  },
+  "protectionReasonFew": {
+    "message": "wenige Mails"
+  },
+  "protectionReasonRead": {
+    "message": "überwiegend gelesen"
+  },
+  "protectionReasonPersonal": {
+    "message": "wirkt persönlich"
+  },
+  "protectionReasonRecommended": {
+    "message": "Schutz empfohlen"
+  }
+,
+  "actionFolder": {"message": "To folder"},
+  "actionLogRules": {"message": "Rules: $1"},
+  "actionLogUndoAvailable": {"message": "Undo was available"},
+  "actionRulesImport": {"message": "Rule import"},
+  "actionUndo": {"message": "Undo"},
+  "actionUnsubscribe": {"message": "Unsubscribe"},
+  "cleanupRuleApplied": {"message": "Rule applied: $1 $2: $3."},
+  "cleanupRuleClearConfirm": {"message": "Delete $1 saved cleanup rule(s)?"},
+  "cleanupRuleClearSuccess": {"message": "All saved cleanup rules were deleted."},
+  "cleanupRuleDeleteConfirm": {"message": "Delete rule for $1?"},
+  "cleanupRuleManagerEmpty": {"message": "No saved cleanup rules."},
+  "diagnosticsCopied": {"message": "Diagnostics copied to clipboard."},
+  "diagnosticsLoading": {"message": "Loading diagnostics \u2026"},
+  "protectManagerClearConfirm": {"message": "Unlock $1 protected senders?"},
+  "protectManagerEmpty": {"message": "No protected senders found."},
+  "protectManagerUnlock": {"message": "Unlock"},
+  "protectNotInCurrentAnalysis": {"message": "Not in current analysis"},
+  "replyOpenFailed": {"message": "Could not open reply window."}
 }
