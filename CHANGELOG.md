@@ -2,6 +2,20 @@
 
 Alle bemerkenswerten Änderungen an diesem Projekt werden dokumentiert.
 
+## [1.0.0] — 2026-08-03
+
+### Erstveröffentlichung
+- Drei-Spalten-Arbeitsbereich: Sidebar-Filter | Absenderliste | Detail-Panel
+- Smart-Cleanup-Dashboard mit Aufräumvorschlägen (Newsletter, Speicher, Inaktiv)
+- Sammelabmeldung für HTTPS- und mailto-basierte List-Unsubscribe-Header
+- Strukturierte Quick-Filter-Sidebar mit ANSICHT/EMPFOHLEN/KRITERIEN/ABMELDUNG
+- Undo für Papierkorb, Verschieben, Archiv, Tag und „Als gelesen" mit exakter Wiederherstellung
+- Multi-Folder-Undo für Scans über alle Ordner
+- Partial-Failure-Behandlung in Move- und Undo-Pfaden
+- Vollständige i18n: Deutsch, Englisch, Russisch (506 Keys)
+- SVG-Icons, Dark/Light-Theme, Thunderbird 153+
+- Kein `messagesDelete` — permanentes Löschen absichtlich nicht unterstützt
+
 ## [Unreleased]
 
 ### Sicherheit

@@ -4,9 +4,9 @@
 
 MailManager is a local Thunderbird add-on for reviewing and cleaning up large mailboxes. It scans selected folders, groups messages by sender or domain, and lets you inspect the selection before anything happens. The add-on stays inside your Thunderbird profile: no separate server, no cloud sync, no tracking, and no telemetry.
 
-> **Status: version 0.3.0.** Safety features are not a substitute for backups. Back up important mail first, then try the workflow in a non-critical folder. Real Thunderbird integration tests are still outstanding.
+> **Status: version 1.0.0.** Safety features are not a substitute for backups. Back up important mail first, then try the workflow in a non-critical folder.
 
-Version 0.3.0 adds the three-column workspace, Smart Cleanup cards, bulk unsubscribe, German/English/Russian localization, and SVG interface icons. It requires Thunderbird 153 or later, keeps undo scoped to each MailManager tab, and still avoids the `messagesDelete` permission.
+MailManager 1.0 adds the three-column workspace, Smart Cleanup cards, bulk unsubscribe, German/English/Russian localization, and SVG interface icons. It requires Thunderbird 153 or later, keeps undo scoped to each MailManager tab, and still avoids the `messagesDelete` permission.
 
 ## Contents
 
