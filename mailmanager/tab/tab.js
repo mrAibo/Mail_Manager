@@ -474,9 +474,9 @@ function scheduleFeatureStatusUpdate() {
 const QUICK_FILTER_SECTIONS = [
   { label: "filter_section_view", filters: [{ key: "all", label: "filter_all" }, { key: "selected", label: "filter_selected" }] },
   { label: "filter_section_recommended", filters: [{ key: "highScore", label: "filter_high_score" }] },
-  { label: "filter_section_filter", filters: [{ key: "bulk", label: "filter_bulk" }, { key: "largeSize", label: ">100 MB" }] },
-  { label: "filter_section_inactive", filters: [{ key: "inactiveYear", label: "Inaktiv >1 Jahr" }, { key: "inactiveTwoYears", label: "Inaktiv >2 Jahre" }] },
-  { label: "filter_section_unsubscribe", filters: [{ key: "unsubscribe", label: "Abmeldbar" }] },
+  { label: "filter_section_filter", filters: [{ key: "bulk", label: "filter_bulk" }, { key: "largeSize", label: "filter_large" }] },
+  { label: "filter_section_filter", filters: [{ key: "inactiveYear", label: "filter_inactive_1y" }, { key: "inactiveTwoYears", label: "filter_inactive_2y" }] },
+  { label: "filter_section_unsubscribe", filters: [{ key: "unsubscribe", label: "filter_unsubscribable" }] },
 ];
 
 function ensureQuickFilterBar() {
@@ -516,7 +516,7 @@ function ensureQuickFilterBar() {
   checkBtn.id = "checkUnsubBtn";
   checkBtn.type = "button";
   checkBtn.className = "filter-action-btn check-unsub-btn";
-  checkBtn.textContent = `🔎 ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
+  checkBtn.innerHTML = `<svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg> ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
   checkBtn.title =
     "Prüft List-Unsubscribe-Header nur für ausgewählte oder sichtbare Kandidaten. " +
     "Der normale Scan bleibt dadurch schnell.";
@@ -3189,10 +3189,17 @@ async function handleCheckUnsubscribeCandidates() {
   }
 }
 
+// ponytail: single source of truth for unsubscribe-eligible senders.
+// Respects filter context: uses selected senders if any, otherwise currently filtered/visible.
+function unsubscribeActionSenders() {
+  const source = state.selected.size > 0
+    ? state.allSenders.filter(s => state.selected.has(s.email))
+    : state.filteredSenders || state.allSenders;
+  return source.filter(s => s.hasUnsubscribe);
+}
+
 async function handleBulkUnsubscribe() {
-  const unsubSenders = state.allSenders.filter(
-    s => s.hasUnsubscribe && (state.selected.size === 0 || state.selected.has(s.email))
-  );
+  const unsubSenders = unsubscribeActionSenders();
 
   if (unsubSenders.length === 0) {
     alert("No senders with unsubscribe links found. Run 'Check Unsubscribe Links' first.");
@@ -3246,9 +3253,7 @@ async function handleBulkUnsubscribe() {
 function updateBulkUnsubBtn() {
   const btn = $("bulkUnsubBtn");
   if (!btn) return;
-  const count = state.allSenders.filter(
-    s => s.hasUnsubscribe && (state.selected.size === 0 || state.selected.has(s.email))
-  ).length;
+  const count = unsubscribeActionSenders().length;
   btn.style.display = count > 0 ? "" : "none";
   btn.textContent = _("unsubscribe_bulk_count", String(count));
 }

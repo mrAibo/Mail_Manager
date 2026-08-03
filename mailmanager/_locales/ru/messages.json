@@ -792,10 +792,7 @@
     "message": "РЕКОМЕНДОВАНО"
   },
   "filter_section_filter": {
-    "message": "ФИЛЬТР"
-  },
-  "filter_section_inactive": {
-    "message": "НЕАКТИВНЫЕ"
+    "message": "КРИТЕРИИ"
   },
   "filter_section_unsubscribe": {
     "message": "ОТПИСКА"
@@ -813,7 +810,7 @@
     "message": "Рассылки"
   },
   "unsubscribe_bulk_count": {
-    "message": "Отписаться от $1 рассылок"
+    "message": "Отписаться от $1 отправителей"
   },
   "quickFilter_all": {
     "message": "Все"
@@ -964,5 +961,17 @@
   },
   "welcome_scan": {
     "message": "Анализировать"
+  },
+  "filter_large": {
+    "message": ">100 МБ"
+  },
+  "filter_inactive_1y": {
+    "message": ">1 год"
+  },
+  "filter_inactive_2y": {
+    "message": ">2 года"
+  },
+  "filter_unsubscribable": {
+    "message": "Отписываемые"
   }
 }

@@ -792,10 +792,7 @@
     "message": "EMPFOHLEN"
   },
   "filter_section_filter": {
-    "message": "FILTERN NACH"
-  },
-  "filter_section_inactive": {
-    "message": "INAKTIV"
+    "message": "KRITERIEN"
   },
   "filter_section_unsubscribe": {
     "message": "ABMELDUNG"
@@ -813,7 +810,7 @@
     "message": "Newsletter"
   },
   "unsubscribe_bulk_count": {
-    "message": "$1 Newsletter abmelden"
+    "message": "$1 Absender abmelden"
   },
   "quickFilter_all": {
     "message": "Alle"
@@ -964,5 +961,17 @@
   },
   "welcome_scan": {
     "message": "Mailbox analysieren"
+  },
+  "filter_large": {
+    "message": ">100 MB"
+  },
+  "filter_inactive_1y": {
+    "message": ">1 Jahr"
+  },
+  "filter_inactive_2y": {
+    "message": ">2 Jahre"
+  },
+  "filter_unsubscribable": {
+    "message": "Abmeldbar"
   }
 }
