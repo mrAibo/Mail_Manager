@@ -33,7 +33,7 @@ async function handleMessage(message, tabId) {
     case "checkUnsubscribeForSenders": return handleCheckUnsubscribeForSenders(message.senderGroups || [], message.limitPerSender || 3);
     case "doCompose":          return handleDoCompose(message.to, message.subject);
     case "openMessage":         return handleOpenMessage(message.messageId);
-    case "quickEmpty":         return handleQuickEmpty(message.accountId, message.folderType);
+    case "quickEmpty":         return handleQuickEmpty(message.accountId, message.folderType, tabId);
     default:                   return { error: "Unknown action: " + message.action };
   }
 }
@@ -51,7 +51,7 @@ async function handleOpenMessage(messageId) {
 }
 
 // ─── Quick empty ──────────────────────────────────────────────────────────────
-async function handleQuickEmpty(accountId, folderType) {
+async function handleQuickEmpty(accountId, folderType, tabId) {
   // ponytail: permanent delete requires messagesDelete permission — deliberately not requested.
   if (folderType === "trash") {
     return { error: _("errorNoDeletePermission") || "Permanent deletion is disabled for safety. Delete messages manually in Thunderbird." };
@@ -72,14 +72,13 @@ async function handleQuickEmpty(accountId, folderType) {
 
   if (messageIds.length === 0) return { success: true, count: 0 };
 
-  const trash = await findFolderByType(accountId, "trash");
-  if (!trash) {
-    return { error: _("errorTrashNotFound") || "Trash folder not found — cannot move spam without it." };
-  }
-
-  await browser.messages.move(messageIds, trash.id, { isUserAction: true });
-
-  return { success: true, count: messageIds.length };
+  const result = await handlePerformAction("trash", messageIds, accountId, folder.id, {}, tabId);
+  return {
+    ...result,
+    count: result.movedCount || 0,
+    folderId: folder.id,
+    folderName: folder.name,
+  };
 }
 
 // ─── Inline utilities (identical logic to shared/utils.js) ───────────────────

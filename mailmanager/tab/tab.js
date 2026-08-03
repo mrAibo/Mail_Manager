@@ -425,35 +425,37 @@ async function updateFeatureStatusBar() {
   const protectedCount = state.protectedEmails?.size || 0;
 
   setFeatureStatusText("statusView",
-    `Ansicht: ${currentViewLabelForStatus()}${state.viewMode === "domains" ? ` · ${domainCount} Domains` : ""}`
+    _("featureStatus_viewValue", [
+      `${currentViewLabelForStatus()}${state.viewMode === "domains" ? ` · ${_("featureStatus_domains", [String(domainCount)])}` : ""}`,
+    ])
   );
 
   setFeatureStatusText("statusProfile",
-    `Profil: ${currentScanProfileLabelForStatus()}`
+    _("featureStatus_profileValue", [currentScanProfileLabelForStatus()])
   );
 
   setFeatureStatusText("statusCache",
-    `Cache: ${cacheStatus}`,
+    _("featureStatus_cacheValue", [cacheStatus]),
     cacheStatus === "leer" ? "muted" : "ok"
   );
 
   setFeatureStatusText("statusRules",
-    `Regeln: ${rulesCount === null ? "–" : rulesCount}`,
+    _("featureStatus_rulesValue", [String(rulesCount === null ? "–" : rulesCount)]),
     rulesCount > 0 ? "ok" : "muted"
   );
 
   setFeatureStatusText("statusProtected",
-    `Geschützt: ${protectedCount}`,
+    _("featureStatus_protectedValue", [String(protectedCount)]),
     protectedCount > 0 ? "ok" : "muted"
   );
 
   setFeatureStatusText("statusLog",
-    `Protokoll: ${logCount === null ? "–" : logCount}`,
+    _("featureStatus_logValue", [String(logCount === null ? "–" : logCount)]),
     logCount > 0 ? "ok" : "muted"
   );
 
   setFeatureStatusText("statusSelection",
-    `Auswahl: ${selectedCount} · sichtbar: ${filteredCount}/${senderCount}`,
+    _("featureStatus_selectionValue", [String(selectedCount), String(filteredCount), String(senderCount)]),
     selectedCount > 0 ? "active" : "muted"
   );
 }
@@ -559,26 +561,26 @@ function ensureAdvancedFilterPanel() {
   const panel = document.createElement("details");
   panel.id = "advancedFilterPanel";
   panel.innerHTML = `
-    <summary>Erweiterte Filter</summary>
+    <summary>${_("advancedFilter_title")}</summary>
     <div class="advanced-filter-body">
       <div class="advanced-filter-row">
-        <span class="advanced-filter-label">Größe (MB)</span>
-        <input type="number" id="advFilterSizeMin" min="0" step="1" placeholder="von" />
-        <input type="number" id="advFilterSizeMax" min="0" step="1" placeholder="bis" />
+        <span class="advanced-filter-label">${_("advancedFilter_size")}</span>
+        <input type="number" id="advFilterSizeMin" min="0" step="1" placeholder="${_("advancedFilter_from")}" />
+        <input type="number" id="advFilterSizeMax" min="0" step="1" placeholder="${_("advancedFilter_to")}" />
       </div>
       <div class="advanced-filter-row">
-        <span class="advanced-filter-label">Letzte Mail vor … Tagen</span>
+        <span class="advanced-filter-label">${_("advancedFilter_lastMailDays")}</span>
         <input type="number" id="advFilterDaysMin" min="0" step="1" placeholder="min." />
         <input type="number" id="advFilterDaysMax" min="0" step="1" placeholder="max." />
       </div>
-      <label class="advanced-filter-field" for="advFilterReadStatus">Lese-Status
+      <label class="advanced-filter-field" for="advFilterReadStatus">${_("advancedFilter_readStatus")}
         <select id="advFilterReadStatus">
-          <option value="all">Alle</option>
-          <option value="read">Nur vollständig gelesene</option>
-          <option value="unread">Nur mit ungelesenen</option>
+          <option value="all">${_("advancedFilter_all")}</option>
+          <option value="read">${_("advancedFilter_read")}</option>
+          <option value="unread">${_("advancedFilter_unread")}</option>
         </select>
       </label>
-      <button type="button" id="advFilterReset">Filter zurücksetzen</button>
+      <button type="button" id="advFilterReset">${_("advancedFilter_reset")}</button>
     </div>
   `;
 
@@ -3141,7 +3143,7 @@ async function handleCheckUnsubscribeCandidates() {
   const groups = unsubscribeCheckGroups();
 
   if (groups.length === 0) {
-    $("statsLabel").textContent = "Keine passenden Kandidaten für Abmelde-Prüfung.";
+    $("statsLabel").textContent = _("unsubscribe_checkNone");
     return;
   }
 
@@ -3150,11 +3152,11 @@ async function handleCheckUnsubscribeCandidates() {
   const btn = $("checkUnsubBtn");
   if (btn) {
     btn.disabled = true;
-    btn.textContent = `Prüfe ${groups.length}…`;
+    btn.textContent = _("unsubscribe_checkButtonProgress", [String(groups.length)]);
   }
 
   $("statsLabel").textContent =
-    `Prüfe Abmelde-Links für ${groups.length} Absender …`;
+    _("unsubscribe_checkProgress", [String(groups.length)]);
 
   try {
     const response = await browser.runtime.sendMessage({
@@ -3180,7 +3182,7 @@ async function handleCheckUnsubscribeCandidates() {
     $("statsLabel").textContent =
       `${response.found || 0} von ${response.checked || 0} geprüften Absendern sind abmeldbar.`;
   } catch (err) {
-    showError("Abmelde-Prüfung fehlgeschlagen: " + err.message);
+    showError(_("unsubscribe_checkFailed", [err.message]));
   } finally {
     state.isCheckingUnsubscribe = false;
 
@@ -3204,11 +3206,11 @@ async function handleBulkUnsubscribe() {
   const unsubSenders = unsubscribeActionSenders();
 
   if (unsubSenders.length === 0) {
-    alert("No senders with unsubscribe links found. Run 'Check Unsubscribe Links' first.");
+    alert(_("unsubscribe_noSenders"));
     return;
   }
   if (unsubSenders.length > 50) {
-    alert("Too many senders (max 50). Select fewer or use individual unsubscribe.");
+    alert(_("unsubscribe_tooMany"));
     return;
   }
 
@@ -3230,14 +3232,14 @@ async function handleBulkUnsubscribe() {
 
   const total = httpsSenders.length + mailtoSenders.length;
   if (total === 0) {
-    alert("No actionable unsubscribe links found among selected senders.");
+    alert(_("unsubscribe_noActionable"));
     return;
   }
 
-  let msg = `${total} sender(s) with unsubscribe links:\n`;
-  if (httpsSenders.length) msg += `\n🌐 ${httpsSenders.length} web link(s) — will open in browser`;
-  if (mailtoSenders.length) msg += `\n📧 ${mailtoSenders.length} email(s) — will open compose window(s)`;
-  msg += `\n\nProceed?`;
+  let msg = _("unsubscribe_confirmSummary", [String(total)]);
+  if (httpsSenders.length) msg += `\n🌐 ${_("unsubscribe_confirmWeb", [String(httpsSenders.length)])}`;
+  if (mailtoSenders.length) msg += `\n📧 ${_("unsubscribe_confirmMail", [String(mailtoSenders.length)])}`;
+  msg += `\n\n${_("unsubscribe_proceed")}`;
 
   if (!confirm(msg)) return;
 
@@ -5693,6 +5695,25 @@ async function quickEmptyFolder() {
     });
 
     if (resp?.error) { showError(resp.error); return; }
+    if (resp.count) {
+      await appendActionLog({
+        type: "trash",
+        accountId,
+        accountName: currentAccountName(),
+        folderId: resp.folderId,
+        folderName: resp.folderName,
+        senderCount: 0,
+        inputMessageCount: resp.totalInputCount || resp.count,
+        affectedMessageCount: resp.movedCount || resp.count,
+        skippedCount: resp.skippedCount || 0,
+        sizeBytes: 0,
+        options: {},
+        undoable: Boolean(resp.undoable),
+        senders: [],
+      });
+      if (resp.undoable) showUndoToast();
+      await startScan();
+    }
     showToast(_("quickEmptySuccessSpam") + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
   } catch (err) {
     showError(_("quickEmptyFailed", [err.message]));

@@ -53,6 +53,7 @@ function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpd
             subFolders: [
               { id: "inbox", name: "Inbox", type: "inbox", subFolders: [] },
               { id: "newsletter", name: "Newsletter", subFolders: [] },
+              { id: "junk", name: "Junk", type: "junk", subFolders: [] },
               { id: "trash", name: "Trash", type: "trash", subFolders: [] },
             ],
           },
@@ -70,6 +71,10 @@ function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpd
         if (!message) throw new Error("missing message");
         return { ...message, tags: [...message.tags] };
       },
+      async list(folderId) {
+        return { messages: [...messages.values()].filter(message => message.folder?.id === folderId) };
+      },
+      async continueList() { return { messages: [] }; },
       async move(ids, destinationId) {
         calls.moves.push({ ids: [...ids], destinationId });
         if (ids.some(id => failedMoveIds.has(id))) throw new Error("move failed");
@@ -127,6 +132,33 @@ describe("background action safety", () => {
     assert.match(result.error, /Ordner.*geschützt/i);
     assert.match(archiveResult.error, /Ordner.*geschützt/i);
     assert.equal(calls.moves.length, 0);
+  });
+
+  it("routes quick empty through protection, move tracking, and undo", async () => {
+    const blocked = loadBackground({ protectedEmails: ["protected@example.test"] });
+    blocked.messages.get(1).folder = { id: "junk" };
+
+    const blockedResult = await blocked.context.handleMessage(
+      { action: "quickEmpty", accountId: "account-1", folderType: "junk" }, 11
+    );
+
+    assert.match(blockedResult.error, /geschützt/i);
+    assert.equal(blocked.calls.moves.length, 0);
+
+    const { context, calls, messages, session } = loadBackground();
+    messages.get(2).folder = { id: "junk" };
+    const result = await context.handleMessage(
+      { action: "quickEmpty", accountId: "account-1", folderType: "junk" }, 11
+    );
+
+    assert.equal(result.success, true);
+    assert.equal(result.count, 1);
+    assert.equal(result.undoable, true);
+    assert.deepEqual(calls.moves[0], { ids: [2], destinationId: "trash" });
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(session.store.get("undoEntry:11").restoreGroups)),
+      [{ sourceFolderId: "junk", messageIds: [1002] }]
+    );
   });
 
   it("uses each message's real folder instead of the UI folder id", async () => {
