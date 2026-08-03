@@ -471,29 +471,35 @@ function scheduleFeatureStatusUpdate() {
   }, 80);
 }
 
-const QUICK_FILTER_ROWS = [
-  [{ key: "all", label: "Alle" }, { key: "selected", label: "Ausgewählt" }],
-  [{ key: "bulk", label: "Newsletter/Bulk" }, { key: "highScore", label: "Hoher Score" }, { key: "unsubscribe", label: "Abmeldbar" }],
-  [{ key: "largeSize", label: ">100 MB" }, { key: "inactiveYear", label: "Inaktiv >1 Jahr" }, { key: "inactiveTwoYears", label: "Inaktiv >2 Jahre" }],
+const QUICK_FILTER_SECTIONS = [
+  { label: "filter_section_view", filters: [{ key: "all", label: "filter_all" }, { key: "selected", label: "filter_selected" }] },
+  { label: "filter_section_recommended", filters: [{ key: "highScore", label: "filter_high_score" }] },
+  { label: "filter_section_filter", filters: [{ key: "bulk", label: "filter_bulk" }, { key: "largeSize", label: ">100 MB" }] },
+  { label: "filter_section_inactive", filters: [{ key: "inactiveYear", label: "Inaktiv >1 Jahr" }, { key: "inactiveTwoYears", label: "Inaktiv >2 Jahre" }] },
+  { label: "filter_section_unsubscribe", filters: [{ key: "unsubscribe", label: "Abmeldbar" }] },
 ];
 
 function ensureQuickFilterBar() {
   const target = $("filterSection");
-  if (!target) return;
-  if ($("quickFilterBar")) return;
+  if (!target || $("quickFilterBar")) return;
 
   const bar = document.createElement("div");
   bar.id = "quickFilterBar";
 
-  for (const filters of QUICK_FILTER_ROWS) {
+  for (const section of QUICK_FILTER_SECTIONS) {
+    const label = document.createElement("div");
+    label.className = "quick-filter-section-label";
+    label.textContent = _(section.label);
+    bar.appendChild(label);
+
     const row = document.createElement("div");
     row.className = "quick-filter-row";
-    for (const filter of filters) {
+    for (const filter of section.filters) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "quick-filter-btn";
       btn.dataset.filter = filter.key;
-      btn.textContent = filter.label;
+      btn.textContent = filter.label.startsWith("filter_") ? _(filter.label) : filter.label;
       btn.addEventListener("click", () => {
         state.quickFilter = filter.key;
         syncQuickFilterButtons();
@@ -505,27 +511,24 @@ function ensureQuickFilterBar() {
   }
 
   const actions = document.createElement("div");
-  actions.className = "quick-filter-row";
+  actions.className = "quick-filter-actions";
   const checkBtn = document.createElement("button");
   checkBtn.id = "checkUnsubBtn";
   checkBtn.type = "button";
-  checkBtn.className = "quick-filter-btn check-unsub-btn";
-  checkBtn.textContent = _("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
+  checkBtn.className = "filter-action-btn check-unsub-btn";
+  checkBtn.textContent = `🔎 ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
   checkBtn.title =
     "Prüft List-Unsubscribe-Header nur für ausgewählte oder sichtbare Kandidaten. " +
     "Der normale Scan bleibt dadurch schnell.";
-
   checkBtn.addEventListener("click", handleCheckUnsubscribeCandidates);
-
   actions.appendChild(checkBtn);
 
   // Bulk unsubscribe button — appears after check when senders have unsubscribe links
   const bulkBtn = document.createElement("button");
   bulkBtn.id = "bulkUnsubBtn";
   bulkBtn.type = "button";
-  bulkBtn.className = "quick-filter-btn bulk-unsub-btn";
+  bulkBtn.className = "filter-action-btn filter-action-btn-secondary bulk-unsub-btn";
   bulkBtn.style.display = "none";
-  bulkBtn.textContent = _("quickFilter_bulk_unsubscribe", "Bulk Unsubscribe");
   bulkBtn.addEventListener("click", handleBulkUnsubscribe);
   actions.appendChild(bulkBtn);
   bar.appendChild(actions);
@@ -3181,7 +3184,7 @@ async function handleCheckUnsubscribeCandidates() {
 
     if (btn) {
       btn.disabled = false;
-      btn.textContent = _("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
+      btn.textContent = `🔎 ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
     }
   }
 }
@@ -3247,7 +3250,7 @@ function updateBulkUnsubBtn() {
     s => s.hasUnsubscribe && (state.selected.size === 0 || state.selected.has(s.email))
   ).length;
   btn.style.display = count > 0 ? "" : "none";
-  btn.textContent = `Bulk Unsubscribe (${count})`;
+  btn.textContent = _("unsubscribe_bulk_count", String(count));
 }
 
 function readTrashRules() {

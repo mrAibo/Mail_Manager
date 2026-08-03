@@ -965,6 +965,13 @@ dialog::-webkit-scrollbar-thumb:hover {
   padding: 0;
   border: none;
 }
+.quick-filter-section-label {
+  margin-top: 0.35rem;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
 .quick-filter-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
 .quick-filter-btn {
   border: 1px solid var(--border-strong);
@@ -978,6 +985,22 @@ dialog::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+}
+.quick-filter-actions { display: grid; gap: 0.3rem; margin-top: 0.2rem; }
+.filter-action-btn {
+  width: 100%;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  padding: 0.35rem 0.55rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.filter-action-btn-secondary {
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
+  color: var(--text);
 }
 
 /* ---- Erweiterte Filter (Panel) ---- */

@@ -785,6 +785,36 @@
   "featureStatus_selection": {
     "message": "Выбор: –"
   },
+  "filter_section_view": {
+    "message": "ВИД"
+  },
+  "filter_section_recommended": {
+    "message": "РЕКОМЕНДОВАНО"
+  },
+  "filter_section_filter": {
+    "message": "ФИЛЬТР"
+  },
+  "filter_section_inactive": {
+    "message": "НЕАКТИВНЫЕ"
+  },
+  "filter_section_unsubscribe": {
+    "message": "ОТПИСКА"
+  },
+  "filter_all": {
+    "message": "Все"
+  },
+  "filter_selected": {
+    "message": "Выбранные"
+  },
+  "filter_high_score": {
+    "message": "★ Высокий cleanup score"
+  },
+  "filter_bulk": {
+    "message": "Рассылки"
+  },
+  "unsubscribe_bulk_count": {
+    "message": "Отписаться от $1 рассылок"
+  },
   "quickFilter_all": {
     "message": "Все"
   },

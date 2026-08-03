@@ -785,6 +785,36 @@
   "featureStatus_selection": {
     "message": "Auswahl: –"
   },
+  "filter_section_view": {
+    "message": "ANSICHT"
+  },
+  "filter_section_recommended": {
+    "message": "EMPFOHLEN"
+  },
+  "filter_section_filter": {
+    "message": "FILTERN NACH"
+  },
+  "filter_section_inactive": {
+    "message": "INAKTIV"
+  },
+  "filter_section_unsubscribe": {
+    "message": "ABMELDUNG"
+  },
+  "filter_all": {
+    "message": "Alle anzeigen"
+  },
+  "filter_selected": {
+    "message": "Ausgewählt"
+  },
+  "filter_high_score": {
+    "message": "★ Hoher Cleanup-Score"
+  },
+  "filter_bulk": {
+    "message": "Newsletter"
+  },
+  "unsubscribe_bulk_count": {
+    "message": "$1 Newsletter abmelden"
+  },
   "quickFilter_all": {
     "message": "Alle"
   },
