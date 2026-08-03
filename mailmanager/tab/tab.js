@@ -5612,4 +5612,25 @@ function matchCustomRegexRules(sender) {
   return null;
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// ponytail: Thunderbird doesn't resolve __MSG_ in HTML for tab pages.
+// Walk the DOM and replace all __MSG_foo__ with browser.i18n.getMessage("foo").
+function applyI18nToDOM() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ALL);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  for (const node of nodes) {
+    if (node.nodeType === Node.TEXT_NODE && node.textContent.includes("__MSG_")) {
+      node.textContent = node.textContent.replace(/__MSG_(\w+)__/g, (_, key) => _(key));
+    }
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      for (const attr of [...node.attributes]) {
+        if (attr.value.includes("__MSG_")) {
+          attr.value = attr.value.replace(/__MSG_(\w+)__/g, (_, key) => _(key));
+        }
+      }
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => { applyI18nToDOM(); init(); });
