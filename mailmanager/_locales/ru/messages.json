@@ -429,7 +429,7 @@
     "message": "Закрыть"
   },
   "errorUnknownBackgroundAction": {
-    "message": "Неизвестное действие: $ACTION$"
+    "message": "Неизвестное действие: $1"
   },
   "errorNoAccounts": {
     "message": "Аккаунты не найдены."
@@ -1290,7 +1290,7 @@
     "message": "Показать вложения"
   },
   "messageSelectAria": {
-    "message": "Выбрать это письмо"
+    "message": "Выбрать письмо «$1»"
   },
   "messageSelect": {
     "message": "Выбрать это письмо"
@@ -1308,10 +1308,10 @@
     "message": "вложение"
   },
   "senderMailCount": {
-    "message": "$1 писем"
+    "message": "$1 отправителей · $2 писем"
   },
   "assistantStats": {
-    "message": "$1 писем · $2 отправителей"
+    "message": "$1 отправителей · $2 писем · $3"
   },
   "cleanupAssistantPrepare": {
     "message": "Подготовить очистку"
@@ -1359,25 +1359,25 @@
     "message": "Неактивные > 2 лет"
   },
   "trashWarningRecentDetailed": {
-    "message": "у некоторых отправителей есть письма за последние 30 дней."
+    "message": "$1 выбранных отправителей имеют письма за последние 30 дней. Это может затронуть текущую переписку."
   },
   "trashWarningFewDetailed": {
-    "message": "только 1–3 письма у этих отправителей. Случайное удаление маловероятно."
+    "message": "У $1 выбранных отправителей только 1–3 письма. Это больше похоже на личную переписку, чем на массовую рассылку."
   },
   "trashWarningPersonalDetailed": {
-    "message": "некоторые отправители выглядят как личная переписка — проверьте перед удалением."
+    "message": "$1 выбранных отправителей не похожи на рассылки. Проверьте, нет ли среди них личной или важной переписки."
   },
   "trashWarningReadDetailed": {
-    "message": "$1 selected senders have mostly read emails. This may mean these emails were intentionally used."
+    "message": "У $1 выбранных отправителей большинство писем прочитано. Это может означать, что эти письма были намеренно использованы."
   },
   "trashWarningNonBulkDetailed": {
-    "message": "None of the selected senders are marked as newsletter/bulk or unsubscribable."
+    "message": "Ни один из выбранных отправителей не отмечен как рассылка или доступный для отписки."
   },
   "trashWarningDomainsDetailed": {
-    "message": "The selection affects $1 different domains. A preview is especially useful for very mixed actions."
+    "message": "Выборка затрагивает $1 разных доменов. Для очень смешанных действий особенно полезен предварительный просмотр."
   },
   "trashWarningManyDetailed": {
-    "message": "$1 emails are selected. Calculate a preview before confirming."
+    "message": "Выбрано $1 писем. Перед подтверждением рассчитайте предварительный просмотр."
   },
   "protectionReasonNew": {
     "message": "новые письма"
@@ -1392,7 +1392,7 @@
     "message": "кажется личным"
   },
   "protectionReasonRecommended": {
-    "message": "Protection recommended"
+    "message": "Рекомендуется защита"
   },
   "actionFolder": {
     "message": "В папку"
@@ -1465,5 +1465,26 @@
   },
   "cleanupAssistantUnsubscribable": {
     "message": "Отписываемые: $1"
+  },
+  "domainSenderCount": {
+    "message": "$1 отправителей"
+  },
+  "domainSubdomainCount": {
+    "message": "$1 поддоменов"
+  },
+  "domainDifferentAddressCount": {
+    "message": "$1 разных адресов"
+  },
+  "domainFromSubdomainCount": {
+    "message": "из $1 поддоменов"
+  },
+  "unsubscribeCheckResult": {
+    "message": "$1 из $2 проверенных отправителей доступны для отписки."
+  },
+  "trashSuggestionApply": {
+    "message": "Применить предложение"
+  },
+  "senderCheckbox_aria": {
+    "message": "Выбрать отправителя $1"
   }
 }

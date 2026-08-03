@@ -5,8 +5,8 @@ const root = resolve(dirname(new URL(import.meta.url).pathname), "..");
 const locales = ["de", "en", "ru"];
 const fail = message => { console.error(`ERROR: ${message}`); process.exitCode = 1; };
 const read = file => readFileSync(resolve(root, file), "utf8");
-const keysFromMessages = lang => new Set(Object.keys(JSON.parse(read(`_locales/${lang}/messages.json`))));
-const localeKeys = Object.fromEntries(locales.map(lang => [lang, keysFromMessages(lang)]));
+const localeMessages = Object.fromEntries(locales.map(lang => [lang, JSON.parse(read(`_locales/${lang}/messages.json`))]));
+const localeKeys = Object.fromEntries(locales.map(lang => [lang, new Set(Object.keys(localeMessages[lang]))]));
 const reference = localeKeys.de;
 
 for (const lang of locales.slice(1)) {
@@ -28,6 +28,16 @@ for (const file of ["tab/tab.js", "tab/tab-utilities.js", "shared/utils.js", "ba
 
 for (const key of required) {
   for (const lang of locales) if (!localeKeys[lang].has(key)) fail(`${lang} is missing referenced key: ${key}`);
+}
+
+const placeholderCounts = message => [1, 2, 3].map(n =>
+  (String(message).match(new RegExp(`\\$${n}`, "g")) || []).length
+);
+for (const key of reference) {
+  const counts = Object.fromEntries(locales.map(lang => [lang, placeholderCounts(localeMessages[lang][key].message)]));
+  if (new Set(locales.map(lang => counts[lang].join(","))).size > 1) {
+    fail(`placeholder mismatch for ${key}: ${locales.map(lang => `${lang}=${counts[lang].join("/")}`).join(", ")}`);
+  }
 }
 
 if (!process.exitCode) console.log(`i18n validation passed (${reference.size} keys, ${required.size} references)`);

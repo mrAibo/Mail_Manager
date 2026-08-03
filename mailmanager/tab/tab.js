@@ -496,8 +496,8 @@ function ensureQuickFilterBar() {
   checkBtn.id = "checkUnsubBtn";
   checkBtn.type = "button";
   checkBtn.className = "filter-action-btn check-unsub-btn";
-  checkBtn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
-  checkBtn.title = _("unsubscribeTooltip", "Checks List-Unsubscribe headers only for selected or visible candidates. The normal scan stays fast.");
+  checkBtn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check")}`;
+  checkBtn.title = _("unsubscribeTooltip");
   checkBtn.addEventListener("click", handleCheckUnsubscribeCandidates);
   actions.appendChild(checkBtn);
 
@@ -1542,7 +1542,7 @@ function updateStatsLabel(extra = "") {
   const bytes = state.allSenders.reduce((n, e) => n + e.totalSizeBytes, 0);
 
   $("statsLabel").textContent =
-    `${mails} ${_("statsMails", "Mails")} · ${state.allSenders.length} ${_("statsSenders", "Absender")} · ${formatSize(bytes)}${extra}`;
+    `${mails} ${_("statsMails")} · ${state.allSenders.length} ${_("statsSenders")} · ${formatSize(bytes)}${extra}`;
 }
 
 function showError(msg) {
@@ -1621,7 +1621,7 @@ function normalizeDomain(hostOrEmail) {
     .map(part => part.trim())
     .filter(Boolean);
 
-  if (labels.length <= 2) return labels.join(".") || _("domainUnknown", "unknown");
+  if (labels.length <= 2) return labels.join(".") || _("domainUnknown");
 
   while (labels.length > 2 && COMMON_SUBDOMAIN_PREFIXES.has(labels[0])) {
     labels.shift();
@@ -1795,8 +1795,8 @@ function updateFilterStatsLabel() {
   if (state.viewMode === "domains") {
     const totalDomains = getDomainGroups(state.allSenders).length;
     $("statsLabel").textContent =
-      `${visibleMails} von ${totalMails} Mails · ` +
-      `${state.filteredDomains.length} von ${totalDomains} Domains`;
+      `${visibleMails}/${totalMails} ${_("statsMails")} · ` +
+      `${state.filteredDomains.length}/${totalDomains} ${_("viewDomains")}`;
     return;
   }
 
@@ -1809,9 +1809,9 @@ function updateFilterStatsLabel() {
   }
 
   $("statsLabel").textContent =
-    `${visibleMails} von ${totalMails} Mails · ` +
-    `${state.filteredSenders.length} von ${state.allSenders.length} Absendern · ` +
-    `${formatSize(visibleBytes)} von ${formatSize(totalBytes)}`;
+    `${visibleMails}/${totalMails} ${_("statsMails")} · ` +
+    `${state.filteredSenders.length}/${state.allSenders.length} ${_("statsSenders")} · ` +
+    `${formatSize(visibleBytes)}/${formatSize(totalBytes)}`;
 }
 
 function setSort(key) {
@@ -1937,7 +1937,7 @@ function renderSenders() {
       } else if (item.type === "message") {
         fragment.appendChild(createMessageRow(item.meta, item.senderEmail));
       } else if (item.type === "messageLoading") {
-        fragment.appendChild(createMessageInfoRow("Mails werden geladen …"));
+        fragment.appendChild(createMessageInfoRow(_("messageLoading")));
       } else if (item.type === "loadMore") {
         fragment.appendChild(createLoadMoreRow(item.senderEmail, item.remaining));
       } else if (item.type === "preview") {
@@ -2483,11 +2483,11 @@ function createSenderRow(entry, nested = false) {
   const scoreTitle = escapeHtml(cleanupScoreTooltip(entry));
 
   const bulkBadge = entry.isBulkCandidate
-    ? `<span class="sender-flag" title="Newsletter/Bulk-Kandidat: ${escapeHtml((entry.bulkReasons || []).join(", "))}">📨</span>`
+    ? `<span class="sender-flag" title="${escapeHtml(_("bulkBadge_title", [(entry.bulkReasons || []).join(", ")]))}">📨</span>`
     : "";
 
   const unsubscribeBadge = entry.hasUnsubscribe
-    ? `<span class="sender-flag" title="Abmeldung möglich (List-Unsubscribe-Header)">🚫</span>`
+    ? `<span class="sender-flag" title="${escapeHtml(_("unsubscribeBadge_title"))}">🚫</span>`
     : "";
 
   const protectSuggestionBadge = isProtectionCandidate(entry)
@@ -2496,15 +2496,15 @@ function createSenderRow(entry, nested = false) {
 
   const regexMatch = matchCustomRegexRules(entry);
   const regexBadge = regexMatch
-    ? `<span class="sender-flag custom-regex-badge" title="RegEx-Treffer: ${escapeHtml(regexMatch)}">🔍</span>`
+    ? `<span class="sender-flag custom-regex-badge" title="${escapeHtml(_("regexBadge_title", [regexMatch]))}">🔍</span>`
     : "";
 
   row.innerHTML = `
-    <input type="checkbox" class="row-check" aria-label="Absender ${safeDisplayName} auswählen" ${isSelected ? "checked" : ""} ${isProtected ? "disabled" : ""} />
+    <input type="checkbox" class="row-check" aria-label="${escapeHtml(_("senderCheckbox_aria", [entry.displayName || entry.email]))}" ${isSelected ? "checked" : ""} ${isProtected ? "disabled" : ""} />
     <div class="sender-main">
       <div class="sender-email" title="${safeEmail}">${
         entry.count > 1
-          ? `<span class="sender-expand-toggle" title="Mails anzeigen">${state.expandedSenders.has(entry.email) ? "▾" : "▸"}</span>`
+          ? `<span class="sender-expand-toggle" title="${escapeHtml(_("detail_show_mails"))}">${state.expandedSenders.has(entry.email) ? "▾" : "▸"}</span>`
           : `<span class="sender-expand-spacer"></span>`
       }${isProtected ? "📌 " : ""}${safeDisplayName}<span class="sender-flags">${bulkBadge}${unsubscribeBadge}${protectSuggestionBadge}${regexBadge}</span></div>
       <div class="sender-subjects">${safeSubjects}</div>
@@ -2515,9 +2515,9 @@ function createSenderRow(entry, nested = false) {
     <span class="col-date">${formatRelativeDate(entry.newestDate)}</span>
     <span class="risk-badge ${riskClass}" title="${scoreTitle}" aria-label="${scoreTitle}">${entry.riskScore} ${riskDots}</span>
     <span class="row-actions">
-      <button class="open-msg-btn" title="Neueste Mail öffnen">↗</button>
-      <button class="protect-btn" title="${isProtected ? "Schutz aufheben" : "Schützen"}">${isProtected ? "🔓" : "🛡"}</button>
-      <button class="trash-row-btn" title="Alle Mails dieses Absenders in den Papierkorb">🗑</button>
+      <button class="open-msg-btn" title="${escapeHtml(_("senderContext_openLatest"))}">↗</button>
+      <button class="protect-btn" title="${escapeHtml(_(isProtected ? "unprotectSenderLabel" : "protectSenderLabel"))}">${isProtected ? "🔓" : "🛡"}</button>
+      <button class="trash-row-btn" title="${escapeHtml(_("trashSenderLabel"))}">🗑</button>
     </span>
   `;
 
@@ -2605,22 +2605,22 @@ function createDomainRow(entry) {
     ? `<span class="unsub-badge">${_("domainUnsubscribe")}</span>`
     : "";
 
-  const domainCheckboxLabel = `Domain ${escapeHtml(entry.domain)} (${senders.length} Absender) auswählen`;
+  const domainCheckboxLabel = _("domainCheckbox_aria", [entry.domain, senders.length]);
 
   row.innerHTML = `
-    <input type="checkbox" class="row-check" aria-label="${domainCheckboxLabel}" ${allSelected ? "checked" : ""} />
+    <input type="checkbox" class="row-check" aria-label="${escapeHtml(domainCheckboxLabel)}" ${allSelected ? "checked" : ""} />
     <div class="sender-main">
       <div class="sender-email">
         <span class="toggle-icon ${isExpanded ? "expanded" : ""}">▶</span>
         ${escapeHtml(entry.domain)}
         <span style="font-size: 0.8em; font-weight: normal; color: var(--text-dim); margin-left: 8px;">
-          (${senders.length} Absender${entry.rawDomainCount > 1 ? ` · ${entry.rawDomainCount} Subdomains` : ""})
+          (${_("domainSenderCount", [senders.length])}${entry.rawDomainCount > 1 ? ` · ${_("domainSubdomainCount", [entry.rawDomainCount])}` : ""})
         </span>
       </div>
       <div class="sender-subjects" title="${escapeHtml((entry.rawDomains || []).join(", "))}">
         ${bulkBadge} ${unsubscribeBadge}
-        ${senders.length} verschiedene Adressen
-        ${entry.rawDomainCount > 1 ? `aus ${entry.rawDomainCount} Subdomains` : ""}
+        ${_("domainDifferentAddressCount", [senders.length])}
+        ${entry.rawDomainCount > 1 ? _("domainFromSubdomainCount", [entry.rawDomainCount]) : ""}
       </div>
     </div>
     <span class="col-count">${entry.count}</span>
@@ -2629,8 +2629,8 @@ function createDomainRow(entry) {
     <span class="col-date">${formatRelativeDate(entry.newestDate)}</span>
     <span class="risk-badge ${riskClass}">${entry.riskScore} ${riskDots}</span>
     <span class="row-actions">
-      <button class="domain-rule-btn" title="Aufräum-Regel für Domain">⚙</button>
-      <button class="domain-clean-btn" title="Alle Mails dieser Domain in den Papierkorb">🗑</button>
+      <button class="domain-rule-btn" title="${escapeHtml(_("domainRuleLabel"))}">⚙</button>
+      <button class="domain-clean-btn" title="${escapeHtml(_("domainCleanLabel"))}">🗑</button>
     </span>
   `;
 
@@ -2673,7 +2673,7 @@ async function openSenderMessage(entry) {
     });
 
     if (response?.error) {
-      showError("Mail konnte nicht geöffnet werden: " + response.error);
+      showError(_("errorOpenMessage", [response.error]));
     }
   } catch (_) {
     // background event page not ready — silently ignore
@@ -2769,13 +2769,17 @@ function updateSelectionLabel() {
     return;
   }
 
+  const selectedSenderEntries = state.allSenders.filter(sender => state.selected.has(sender.email));
+  const selectedSenderMailCount = selectedSenderEntries.reduce((total, sender) => total + sender.count, 0);
+  const selectedSenderBytes = selectedSenderEntries.reduce((total, sender) => total + sender.totalSizeBytes, 0);
+
   let label = "";
   if (senderCount > 0 && messageCount > 0) {
-    label = `${senderCount + messageCount} ausgewählt`;
+    label = _("selection_mixed", [senderCount, messageCount]);
   } else if (senderCount > 0) {
-    label = `${senderCount} ausgewählt`;
+    label = _("selection_senders", [senderCount, selectedSenderMailCount, formatSize(selectedSenderBytes)]);
   } else if (messageCount > 0) {
-    label = `${messageCount} ausgewählt`;
+    label = _("selection_messages", [messageCount]);
   }
 
   $("selectionLabel").textContent = label;
@@ -3151,7 +3155,7 @@ async function handleCheckUnsubscribeCandidates() {
     updateCleanupAssistant();
 
     $("statsLabel").textContent =
-      `${response.found || 0} von ${response.checked || 0} geprüften Absendern sind abmeldbar.`;
+      _("unsubscribeCheckResult", [response.found || 0, response.checked || 0]);
   } catch (err) {
     showError(_("unsubscribe_checkFailed", [err.message]));
   } finally {
@@ -3159,7 +3163,7 @@ async function handleCheckUnsubscribeCandidates() {
 
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
+      btn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check")}`;
     }
   }
 }
@@ -3996,16 +4000,16 @@ async function previewTrashAction() {
     updateTrashConfirmState();
 
     setTrashPreviewResult(`
-      <div><strong>${moveCount}</strong> von ${totalInputCount} Mails würden verschoben.</div>
-      <div><strong>${skippedCount}</strong> Mails bleiben durch Aufräum-Regeln erhalten.</div>
-      <div>Geschätzte Größe: <strong>${moveSize}</strong></div>
-      ${samples ? `<div style="margin-top:.5rem">Neueste Beispiele:</div><ul>${samples}</ul>` : ""}
+      <div>${escapeHtml(_("previewMoveCount", [moveCount, totalInputCount]))}</div>
+      <div>${escapeHtml(_("previewKeptCount", [skippedCount]))}</div>
+      <div>${escapeHtml(_("previewEstimatedSize", [moveSize]))}</div>
+      ${samples ? `<div style="margin-top:.5rem">${escapeHtml(_("previewNewestExamples"))}</div><ul>${samples}</ul>` : ""}
     `, warning, true);
   } catch (err) {
     if (!isCurrentPreviewRequest(requestId, trashPreviewRequestId)) return;
     $("confirmOk").dataset.previewReady = "false";
     updateTrashConfirmState();
-    setTrashPreviewResult(`Vorschau fehlgeschlagen: ${escapeHtml(err.message)}`, true, true);
+    setTrashPreviewResult(escapeHtml(_("previewFailed", [err.message])), true, true);
   } finally {
     if (btn && isCurrentPreviewRequest(requestId, trashPreviewRequestId)) {
       btn.disabled = false;
@@ -4061,7 +4065,7 @@ async function openTrashDialogForDomain(domainName) {
   const selected = selectOnlyDomain(domainName);
 
   if (!selected) {
-    showError(`Keine auswählbaren Absender für Domain ${domainName}.`);
+    showError(_("errorNoMatchingSenders"));
     return;
   }
 
@@ -4072,7 +4076,7 @@ async function openTrashDialogForDomainRule(domainName) {
   const selected = selectOnlyDomain(domainName);
 
   if (!selected) {
-    showError(`Keine auswählbaren Absender für Domain ${domainName}.`);
+    showError(_("errorNoMatchingSenders"));
     return;
   }
 
@@ -4123,10 +4127,8 @@ function suggestCleanupRuleForCurrentSelection() {
     return {
       olderThanDays: 90,
       keepNewest: 3,
-      title: "Newsletter/Bulk-Auswahl",
-      reason:
-        "Viele ausgewählte Absender sehen nach Newsletter, Shops oder Benachrichtigungen aus. " +
-        "Für solche Mails ist ein kürzerer Zeitraum meist sinnvoll.",
+      title: _("cleanupAssistantBulkTitle"),
+      reason: _("cleanupAssistantBulkDescription"),
     };
   }
 
@@ -4134,10 +4136,8 @@ function suggestCleanupRuleForCurrentSelection() {
     return {
       olderThanDays: 365,
       keepNewest: 1,
-      title: "Inaktive Absender",
-      reason:
-        "Die meisten ausgewählten Absender waren länger als ein Jahr inaktiv. " +
-        "Die neueste Mail pro Absender bleibt zur Orientierung erhalten.",
+      title: _("cleanupAssistantInactiveTitle"),
+      reason: _("cleanupAssistantInactiveDescription"),
     };
   }
 
@@ -4146,9 +4146,7 @@ function suggestCleanupRuleForCurrentSelection() {
       olderThanDays: 365,
       keepNewest: 5,
       title: _("cleanupAssistantStorageTitle"),
-      reason:
-        "Die Auswahl belegt viel Speicherplatz. Alte Mails werden aufgeräumt, " +
-        "die letzten 5 Mails pro Absender bleiben erhalten.",
+      reason: _("cleanupAssistantStorageDescription"),
     };
   }
 
@@ -4156,19 +4154,16 @@ function suggestCleanupRuleForCurrentSelection() {
     return {
       olderThanDays: 365,
       keepNewest: 5,
-      title: "Große Aufräum-Auswahl",
-      reason:
-        "Die Auswahl enthält viele Mails oder hohe Aufräum-Scores. " +
-        "Ein konservativer Jahresfilter schützt aktuelle Kommunikation.",
+      title: _("cleanupAssistantHighScoreTitle"),
+      reason: _("cleanupAssistantHighScoreDescription"),
     };
   }
 
   return {
     olderThanDays: 365,
     keepNewest: 5,
-    title: "Sicherer Standard",
-    reason:
-      "Konservativer Vorschlag: Nur ältere Mails verschieben und die letzten 5 pro Absender behalten.",
+    title: _("cleanupAssistantPrepare"),
+    reason: _("ruleHint"),
   };
 }
 
@@ -4185,7 +4180,7 @@ function ensureTrashRuleSuggestionBox() {
   box.innerHTML = `
     <div class="trash-rule-suggestion-title"></div>
     <div class="trash-rule-suggestion-text"></div>
-    <button id="applyTrashRuleSuggestion" type="button">Vorschlag übernehmen</button>
+    <button id="applyTrashRuleSuggestion" type="button">${_("trashSuggestionApply")}</button>
   `;
 
   const previewActions = ruleBox.querySelector(".trash-preview-actions");
@@ -4229,8 +4224,7 @@ function updateTrashRuleSuggestion() {
   const text = box.querySelector(".trash-rule-suggestion-text");
 
   if (title) {
-    title.textContent =
-      `Vorschlag: ${suggestion.title} — älter als ${suggestion.olderThanDays} Tage, letzte ${suggestion.keepNewest} behalten`;
+    title.textContent = `${suggestion.title} — ${_("ruleOlderThan")} ${suggestion.olderThanDays} ${_("ruleDaysTrash")}, ${_("ruleKeepNewest")} ${suggestion.keepNewest} ${_("ruleKeepMails")}`;
   }
 
   if (text) {
@@ -4360,18 +4354,13 @@ async function openConfirmDialog(actionType) {
   const totalMailCount = selectedMessageIds().length;
 
   const isTrash = actionType === "trash";
-  const label = "in den Papierkorb verschieben";
-
   let message;
   if (senderCount > 0 && individualCount > 0) {
-    message =
-      `${totalMailCount} Mails (${senderCount} Absender + ${individualCount} einzeln gewählte) ${label}?`;
+    message = _("confirmTrash_mixed", [totalMailCount, senderCount, individualCount]);
   } else if (senderCount > 0) {
-    message =
-      `${totalMailCount} Mails von ${senderCount} Absender(n) ${label}? ` +
-      `Gesamtgröße: ${formatSize(byteCount)}.`;
+    message = _("confirmTrash_senders", [totalMailCount, senderCount, formatSize(byteCount)]);
   } else {
-    message = `${individualCount} einzeln ausgewählte Mail(s) ${label}?`;
+    message = _("confirmTrash_messages", [individualCount]);
   }
 
   $("confirmMessage").textContent = message;
@@ -4667,25 +4656,25 @@ function renderActionLogEntry(entry) {
 
   const more =
     (entry.senders || []).length > 5
-      ? ` +${entry.senders.length - 5} weitere`
+      ? ` +${entry.senders.length - 5}`
       : "";
 
   const rules = [];
 
   if (entry.options?.olderThanDays) {
-    rules.push(`älter als ${entry.options.olderThanDays} Tage`);
+    rules.push(`${_("ruleOlderThan")} ${entry.options.olderThanDays} ${_("ruleDaysTrash")}`);
   }
 
   if (entry.options?.keepNewest) {
-    rules.push(`letzte ${entry.options.keepNewest} behalten`);
+    rules.push(`${_("ruleKeepNewest")} ${entry.options.keepNewest} ${_("ruleKeepMails")}`);
   }
 
   if (entry.options?.folderName) {
-    rules.push(`Zielordner: ${entry.options.folderName}`);
+    rules.push(`${_("actionFolder")}: ${entry.options.folderName}`);
   }
 
   if (entry.options?.tagKey) {
-    rules.push(`Tag: ${entry.options.tagKey}`);
+    rules.push(entry.options.tagKey);
   }
 
   return `
@@ -4696,16 +4685,16 @@ function renderActionLogEntry(entry) {
       </div>
 
       <div class="action-log-entry-main">
-        ${entry.senderCount || 0} Absender ·
-        ${entry.inputMessageCount || 0} ausgewählte Mails ·
-        ${entry.affectedMessageCount || 0} betroffen
-        ${entry.skippedCount ? ` · ${entry.skippedCount} behalten` : ""}
+        ${_("actionLog_senders", [entry.senderCount || 0])} ·
+        ${_("selection_messages", [entry.inputMessageCount || 0])} ·
+        ${entry.affectedMessageCount || 0} ${_("statsMails")}
+        ${entry.skippedCount ? ` · ${_("ruleKeepMails")} ${entry.skippedCount}` : ""}
         ${entry.sizeBytes ? ` · ${formatSize(entry.sizeBytes)}` : ""}
       </div>
 
       <div class="action-log-entry-sub">
-        Konto: ${escapeHtml(entry.accountName || "")} ·
-        Ordner: ${escapeHtml(entry.folderName || "")}
+        ${escapeHtml(entry.accountName || "")} ·
+        ${escapeHtml(entry.folderName || "")}
       </div>
 
       ${rules.length ? `<div class="action-log-entry-rules">${_("actionLogRules", [escapeHtml(rules.join(" · "))])}</div>` : ""}
@@ -4735,7 +4724,7 @@ async function openActionLogDialog() {
 }
 
 async function clearActionLogWithConfirm() {
-  if (!confirm("Aktionsprotokoll wirklich leeren?")) return;
+  if (!confirm(_("confirmClearActionLog"))) return;
 
   await saveActionLog([]);
   await renderActionLog();
@@ -4838,7 +4827,7 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
       const skipped = response?.skippedCount ?? 0;
 
       $("statsLabel").textContent =
-        `${moved} Mails verschoben · ${skipped} durch Aufräum-Regeln behalten`;
+        _("trashPartialStats", [moved, skipped]);
     }
 
     state.selected.clear();
@@ -5081,7 +5070,7 @@ async function handleUnsubscribe(entry = state.allSenders.find(e => e.email === 
   }
 
   if (info.kind === "https") {
-    if (confirm(`Diese URL wird in deinem Browser geöffnet:\n\n${info.url}\n\nFortfahren?`)) {
+    if (confirm(_("unsubscribeOpenUrlConfirm", [info.url]))) {
       browser.windows.openDefaultBrowser(info.url);
     }
   }
@@ -5342,7 +5331,7 @@ async function importProtectedEmailsFromFile(event) {
     const importedEmails = normalizeImportedProtectedEmailsPayload(payload);
 
     if (importedEmails.length === 0) {
-      alert("Keine gültigen geschützten Absender in dieser Datei gefunden.");
+      alert(_("errorNoNewProtectionCandidates"));
       return;
     }
 
@@ -5351,13 +5340,8 @@ async function importProtectedEmailsFromFile(event) {
       ...importedEmails,
     ])].sort((a, b) => a.localeCompare(b));
 
-    const duplicateCount =
-      importedEmails.length - importedEmails.filter(email => !state.protectedEmails.has(email)).length;
-
     const ok = confirm(
-      `${importedEmails.length} geschützte Absender importieren?\n\n` +
-      `${duplicateCount} davon sind bereits vorhanden.\n` +
-      `Die bestehende Schutzliste bleibt erhalten und wird ergänzt.`
+      _("confirmProtectSenders", [importedEmails.length])
     );
 
     if (!ok) return;
@@ -5383,7 +5367,7 @@ async function importProtectedEmailsFromFile(event) {
     }
 
     $("statsLabel").textContent =
-      `${importedEmails.length} geschützte Absender importiert.`;
+      _("protectedSendersSuccess", [importedEmails.length]);
   } catch (err) {
     alert(_("cleanup_import_failed", [err.message]));
   } finally {

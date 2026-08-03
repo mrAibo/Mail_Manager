@@ -1465,5 +1465,26 @@
   },
   "cleanupAssistantUnsubscribable": {
     "message": "Abmeldbar: $1"
+  },
+  "domainSenderCount": {
+    "message": "$1 Absender"
+  },
+  "domainSubdomainCount": {
+    "message": "$1 Subdomains"
+  },
+  "domainDifferentAddressCount": {
+    "message": "$1 verschiedene Adressen"
+  },
+  "domainFromSubdomainCount": {
+    "message": "aus $1 Subdomains"
+  },
+  "unsubscribeCheckResult": {
+    "message": "$1 von $2 geprüften Absendern sind abmeldbar."
+  },
+  "trashSuggestionApply": {
+    "message": "Vorschlag übernehmen"
+  },
+  "senderCheckbox_aria": {
+    "message": "Absender $1 auswählen"
   }
 }

@@ -429,7 +429,7 @@
     "message": "Close"
   },
   "errorUnknownBackgroundAction": {
-    "message": "Unknown action: $ACTION$"
+    "message": "Unknown action: $1"
   },
   "errorNoAccounts": {
     "message": "No accounts found."
@@ -1465,5 +1465,26 @@
   },
   "cleanupAssistantUnsubscribable": {
     "message": "Unsubscribable: $1"
+  },
+  "domainSenderCount": {
+    "message": "$1 senders"
+  },
+  "domainSubdomainCount": {
+    "message": "$1 subdomains"
+  },
+  "domainDifferentAddressCount": {
+    "message": "$1 different addresses"
+  },
+  "domainFromSubdomainCount": {
+    "message": "from $1 subdomains"
+  },
+  "unsubscribeCheckResult": {
+    "message": "$1 of $2 checked senders are unsubscribable."
+  },
+  "trashSuggestionApply": {
+    "message": "Apply suggestion"
+  },
+  "senderCheckbox_aria": {
+    "message": "Select sender $1"
   }
 }
