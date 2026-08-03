@@ -554,6 +554,9 @@
   "errorActionFailed": {
     "message": "Action failed: $1"
   },
+  "errorConnectionFailed": {
+    "message": "Connection error"
+  },
   "errorOpenMessage": {
     "message": "Could not open email: $1"
   },
@@ -1133,6 +1136,18 @@
   "cleanupRuleDelete": {
     "message": "Delete"
   },
+  "cleanupRuleNoSelection": {
+    "message": "No selection."
+  },
+  "cleanupRuleSaved": {
+    "message": "Rule saved."
+  },
+  "cleanupRuleImportConfirm": {
+    "message": "Import $1 rule(s)?\n\n$2 existing rule(s) will be replaced.\nAll other existing rules will remain."
+  },
+  "cleanupRuleImportSuccess": {
+    "message": "$1 rule(s) imported."
+  },
   "previewCalculating": {
     "message": "Calculating preview…"
   },
@@ -1397,6 +1412,9 @@
   "actionFolder": {
     "message": "To folder"
   },
+  "actionFallback": {
+    "message": "Action"
+  },
   "actionLogRules": {
     "message": "Rules: $1"
   },
@@ -1444,6 +1462,9 @@
   },
   "protectNotInCurrentAnalysis": {
     "message": "Not in current analysis"
+  },
+  "protectManagerDetails": {
+    "message": "$1 emails · $2 · latest email $3"
   },
   "replyOpenFailed": {
     "message": "Could not open reply window."

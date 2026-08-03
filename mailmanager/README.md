@@ -300,7 +300,7 @@ bleiben erhalten.
 
 ## Voraussetzungen & Tests
 
-- **Thunderbird 150.0** oder neuer
+- **Thunderbird 153.0** oder neuer
 - **Node.js 20** — für Syntax-/Unit-Tests und den XPI-Build, nicht für den Betrieb
 - keine Server-Komponente, keine externe Datenbank
 

@@ -6,6 +6,8 @@ MailManager ist ein lokales Thunderbird-Add-on zum Prüfen und Aufräumen große
 
 > **Status: Version 0.3.0.** Sichere Funktionen ersetzen kein Backup. Vor dem Einsatz mit wichtigen Mails zuerst ein Backup anlegen und den Ablauf in einem unkritischen Ordner testen. Reale Thunderbird-Integrationstests stehen noch aus.
 
+Version 0.3.0 bringt den Drei-Spalten-Arbeitsbereich, Smart-Cleanup-Karten, Sammelabmeldung, Lokalisierung für Deutsch, Englisch und Russisch sowie SVG-Icons in der Oberfläche. Sie benötigt Thunderbird 153 oder neuer, hält Undo pro MailManager-Tab getrennt und fordert weiterhin nicht die Berechtigung `messagesDelete` an.
+
 ## Inhalt
 
 - [Was ist MailManager?](#was-ist-mailmanager)

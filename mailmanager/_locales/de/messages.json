@@ -554,6 +554,9 @@
   "errorActionFailed": {
     "message": "Fehler: $1"
   },
+  "errorConnectionFailed": {
+    "message": "Verbindungsfehler"
+  },
   "errorOpenMessage": {
     "message": "Mail konnte nicht geöffnet werden: $1"
   },
@@ -1133,6 +1136,18 @@
   "cleanupRuleDelete": {
     "message": "Löschen"
   },
+  "cleanupRuleNoSelection": {
+    "message": "Keine Auswahl."
+  },
+  "cleanupRuleSaved": {
+    "message": "Regel gespeichert."
+  },
+  "cleanupRuleImportConfirm": {
+    "message": "$1 Regel(n) importieren?\n\n$2 vorhandene Regel(n) werden überschrieben.\nAlle anderen vorhandenen Regeln bleiben erhalten."
+  },
+  "cleanupRuleImportSuccess": {
+    "message": "$1 Regel(n) importiert."
+  },
   "previewCalculating": {
     "message": "Berechne Vorschau…"
   },
@@ -1397,6 +1412,9 @@
   "actionFolder": {
     "message": "In Ordner"
   },
+  "actionFallback": {
+    "message": "Aktion"
+  },
   "actionLogRules": {
     "message": "Regeln: $1"
   },
@@ -1444,6 +1462,9 @@
   },
   "protectNotInCurrentAnalysis": {
     "message": "Nicht in aktueller Analyse"
+  },
+  "protectManagerDetails": {
+    "message": "$1 Mails · $2 · letzte Mail $3"
   },
   "replyOpenFailed": {
     "message": "Antwort-Fenster konnte nicht geöffnet werden."

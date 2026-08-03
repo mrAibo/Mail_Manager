@@ -554,6 +554,9 @@
   "errorActionFailed": {
     "message": "Ошибка: $1"
   },
+  "errorConnectionFailed": {
+    "message": "Ошибка соединения"
+  },
   "errorOpenMessage": {
     "message": "Не удалось открыть письмо: $1"
   },
@@ -1133,6 +1136,18 @@
   "cleanupRuleDelete": {
     "message": "Удалить"
   },
+  "cleanupRuleNoSelection": {
+    "message": "Ничего не выбрано."
+  },
+  "cleanupRuleSaved": {
+    "message": "Правило сохранено."
+  },
+  "cleanupRuleImportConfirm": {
+    "message": "Импортировать $1 правил(о)?\n\n$2 существующих правил(о) будут заменены.\nВсе остальные существующие правила останутся."
+  },
+  "cleanupRuleImportSuccess": {
+    "message": "Импортировано правил: $1."
+  },
   "previewCalculating": {
     "message": "Расчёт предпросмотра…"
   },
@@ -1397,6 +1412,9 @@
   "actionFolder": {
     "message": "В папку"
   },
+  "actionFallback": {
+    "message": "Действие"
+  },
   "actionLogRules": {
     "message": "Правила: $1"
   },
@@ -1444,6 +1462,9 @@
   },
   "protectNotInCurrentAnalysis": {
     "message": "Нет в текущем анализе"
+  },
+  "protectManagerDetails": {
+    "message": "$1 писем · $2 · последнее письмо $3"
   },
   "replyOpenFailed": {
     "message": "Не удалось открыть окно ответа."

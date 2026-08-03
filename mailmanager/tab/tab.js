@@ -902,7 +902,7 @@ async function protectMatchingSenders(predicate) {
       protect: true,
     });
   } catch (err) {
-    showError(_("errorActionFailed", [err.message || "Verbindungsfehler"]));
+    showError(_("errorActionFailed", [err.message || _("errorConnectionFailed")]));
     return;
   }
 
@@ -3442,7 +3442,7 @@ async function saveCleanupRuleForCurrentSelection() {
   const scope = selectedCleanupRuleScope();
 
   if (!scope) {
-    updateCleanupRuleInfo(null, null, "Keine Auswahl.");
+    updateCleanupRuleInfo(null, null, _("cleanupRuleNoSelection"));
     return;
   }
 
@@ -3457,7 +3457,7 @@ async function saveCleanupRuleForCurrentSelection() {
   rules[key] = rule;
 
   await saveCleanupRules(rules);
-  updateCleanupRuleInfo(scope, rule, "Regel gespeichert.");
+  updateCleanupRuleInfo(scope, rule, _("cleanupRuleSaved"));
 }
 
 function formatCleanupRule(rule) {
@@ -3466,14 +3466,14 @@ function formatCleanupRule(rule) {
   const parts = [];
 
   if (normalizeRuleNumber(rule.olderThanDays) > 0) {
-    parts.push(`älter als ${normalizeRuleNumber(rule.olderThanDays)} Tage`);
+    parts.push(_("cleanupRuleOlderThan", [String(normalizeRuleNumber(rule.olderThanDays))]));
   }
 
   if (normalizeRuleNumber(rule.keepNewest) > 0) {
-    parts.push(`letzte ${normalizeRuleNumber(rule.keepNewest)} behalten`);
+    parts.push(_("cleanupRuleKeepNewest", [String(normalizeRuleNumber(rule.keepNewest))]));
   }
 
-  return parts.length ? parts.join(" · ") : "keine Regeln";
+  return parts.length ? parts.join(" · ") : _("cleanupRuleNone");
 }
 
 function updateCleanupRuleInfo(scope, rule, prefix = "") {
@@ -3486,12 +3486,11 @@ function updateCleanupRuleInfo(scope, rule, prefix = "") {
   }
 
   if (!rule) {
-    el.textContent = `${prefix ? prefix + " " : ""}Keine gespeicherte Regel für ${scope.label}.`;
+    el.textContent = `${prefix ? prefix + " " : ""}${_("cleanupRuleNoneForScope", [scope.label])}`;
     return;
   }
 
-  el.textContent =
-    `${prefix ? prefix + " " : ""}Gespeicherte Regel für ${scope.label}: ${formatCleanupRule(rule)}.`;
+  el.textContent = `${prefix ? prefix + " " : ""}${_("cleanupRuleSavedForScope", [scope.label, formatCleanupRule(rule)])}`;
 }
 
 function parseCleanupRuleStorageKey(storageKey) {
@@ -3563,7 +3562,7 @@ function renderCleanupRuleManagerEntry(storageKey, rule) {
         </div>
 
         <div class="cleanup-rule-entry-meta">
-          Aktualisiert: ${escapeHtml(updatedAt)}
+          ${escapeHtml(_("cleanupRuleUpdated", [updatedAt]))}
         </div>
       </div>
 
@@ -3588,10 +3587,10 @@ async function renderCleanupRuleManager() {
     const pa = parseCleanupRuleStorageKey(a);
     const pb = parseCleanupRuleStorageKey(b);
 
-    const typeCompare = cleanupRuleTypeLabel(pa.type).localeCompare(cleanupRuleTypeLabel(pb.type), "de");
+    const typeCompare = cleanupRuleTypeLabel(pa.type).localeCompare(cleanupRuleTypeLabel(pb.type), browser.i18n.getUILanguage());
     if (typeCompare !== 0) return typeCompare;
 
-    return pa.label.localeCompare(pb.label, "de");
+    return pa.label.localeCompare(pb.label, browser.i18n.getUILanguage());
   });
 
   if (keys.length === 0) {
@@ -3779,11 +3778,7 @@ async function importCleanupRulesFromFile(event) {
       .filter(key => Object.prototype.hasOwnProperty.call(existingRules, key))
       .length;
 
-    const ok = confirm(
-      `${importedCount} Regel(n) importieren?\n\n` +
-      `${duplicateCount} vorhandene Regel(n) werden überschrieben.\n` +
-      `Alle anderen vorhandenen Regeln bleiben erhalten.`
-    );
+    const ok = confirm(_("cleanupRuleImportConfirm", [String(importedCount), String(duplicateCount)]));
 
     if (!ok) return;
 
@@ -3814,7 +3809,7 @@ async function importCleanupRulesFromFile(event) {
     }
 
     const found = await findCleanupRuleForCurrentSelection();
-    updateCleanupRuleInfo(found?.scope, found?.rule || null, `${importedCount} Regel(n) importiert.`);
+    updateCleanupRuleInfo(found?.scope, found?.rule || null, _("cleanupRuleImportSuccess", [String(importedCount)]));
   } catch (err) {
     alert(_("cleanup_import_failed", [err.message]));
   } finally {
@@ -4478,7 +4473,7 @@ function actionTypeLabel(type) {
     case "folder":
       return _("actionFolder");
     case "tag":
-      return "Tag";
+      return _("action_tag");
     case "unsubscribe":
       return _("actionUnsubscribe");
     case "undo":
@@ -4486,7 +4481,7 @@ function actionTypeLabel(type) {
     case "rules-import":
       return _("actionRulesImport");
     default:
-      return type || "Aktion";
+      return type || _("actionFallback");
   }
 }
 
@@ -4770,7 +4765,7 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
       options,
     });
   } catch (err) {
-    showError(_("errorActionFailed", [err.message || "Verbindungsfehler"]));
+    showError(_("errorActionFailed", [err.message || _("errorConnectionFailed")]));
     return;
   }
 
@@ -4863,8 +4858,8 @@ function openFolderDialog() {
   const account = state.accounts.find(a => a.id === $("accountSelect").value);
   const folders = account?.folders || [];
   const parentSel = $("parentFolderSelect"), existingSel = $("existingFolderSelect");
-  parentSel.innerHTML   = '<option value="">Konto-Root</option>';
-  existingSel.innerHTML = '<option value="">Neuen Ordner erstellen</option>';
+  parentSel.innerHTML   = `<option value="">${_("folderRoot")}</option>`;
+  existingSel.innerHTML = `<option value="">${_("folderNewOption")}</option>`;
   for (const f of folders) {
     const o1 = document.createElement("option"); o1.value = f.id; o1.textContent = f.name; parentSel.appendChild(o1);
     const o2 = document.createElement("option"); o2.value = f.id; o2.textContent = f.name; existingSel.appendChild(o2);
@@ -5169,7 +5164,7 @@ function renderProtectManagerEntry(email) {
   const sender = state.allSenders.find(s => normalizeEmail(s.email) === email);
 
   const details = sender
-    ? `${sender.count} Mails · ${formatSize(sender.totalSizeBytes)} · letzte Mail ${formatRelativeDate(sender.newestDate)}`
+    ? _("protectManagerDetails", [String(sender.count), formatSize(sender.totalSizeBytes), formatRelativeDate(sender.newestDate)])
     : _("protectNotInCurrentAnalysis");
 
   return `
