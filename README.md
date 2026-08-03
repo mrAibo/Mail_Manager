@@ -78,7 +78,7 @@ Protection suggestions consider personal senders, recently active or small sende
 
 - Do not use it as a replacement for backups or your own archiving strategy.
 - Do not use it for unattended mass deletion. The score, bulk detection, and `List-Unsubscribe` are heuristic and can be wrong.
-- A locally built XPI with the permanent ID in `manifest.json` can be installed directly through Thunderbird Add-ons Manager. AMO signing is only needed for public distribution.
+- A locally built XPI with the permanent ID in `manifest.json` can be installed directly through Thunderbird's Add-ons Manager. Publication and review through [addons.thunderbird.net](https://addons.thunderbird.net) is needed for public distribution.
 - Do not treat it as a complete mail client. Reading full messages, editing, and replying remain Thunderbird's job.
 
 ## Alternatives and limitations

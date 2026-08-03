@@ -78,7 +78,7 @@ Die Schutzvorschläge richten sich unter anderem nach persönlichen, kürzlich a
 
 - Nicht als Ersatz für ein Backup oder für eine eigene Archivierungsstrategie.
 - Nicht für unbeaufsichtigtes Massenlöschen: Score, Bulk-Erkennung und `List-Unsubscribe` sind heuristisch und können falsch liegen.
-- Ein lokal gebautes XPI mit der permanenten ID in `manifest.json` kann direkt über den Thunderbird-Add-ons-Manager installiert werden. Eine AMO-Signierung ist nur für die öffentliche Verteilung nötig.
+- Ein lokal gebautes XPI mit der permanenten ID in `manifest.json` kann direkt über den Thunderbird-Add-ons-Manager installiert werden. Für die öffentliche Verteilung ist eine Einreichung und Prüfung über [addons.thunderbird.net](https://addons.thunderbird.net) nötig.
 - Nicht als vollständiger Mail-Client: Vollständiges Lesen, Bearbeiten und Antworten bleiben Aufgaben von Thunderbird.
 
 ## Alternativen und Grenzen
