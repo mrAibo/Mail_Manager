@@ -124,7 +124,7 @@ flowchart TD
 
 | Path | Purpose |
 |---|---|
-| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, permanent extension UUID, author, SVG/PNG icons, Thunderbird 150.0 minimum version, permissions, and background entry point |
+| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, permanent extension UUID, author, SVG/PNG icons, Thunderbird 153.0 minimum version, permissions, and background entry point |
 | [`mailmanager/background/background.js`](mailmanager/background/background.js) | Message router, folder and scan interface, protection checks, actions, and undo |
 | [`mailmanager/tab/tab.js`](mailmanager/tab/tab.js) | UI state, rendering, filters, selection, dialogs, and action creation |
 | [`mailmanager/shared/cleanup-logic.mjs`](mailmanager/shared/cleanup-logic.mjs) | Cleanup and bulk scores, domain normalization, protection suggestions, and rule suggestions |
@@ -138,7 +138,7 @@ For more detail on interaction, permanent installation, and keyboard controls, s
 
 ### Prerequisites
 
-- Thunderbird **150.0 or later**
+- Thunderbird **153.0 or later**
 - Node.js **20** for tests and package builds; it is not needed to run the add-on
 - `zip` for `npm run build`
 
