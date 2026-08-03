@@ -8,6 +8,15 @@
   "actionTitle": {
     "message": "Открыть MailManager"
   },
+  "errorNoDeletePermission": {
+    "message": "Безвозвратное удаление отключено в целях безопасности. Удалите письма вручную в Thunderbird."
+  },
+  "errorTrashNotFound": {
+    "message": "Корзина не найдена — невозможно переместить спам без корзины."
+  },
+  "errorFolderNotFound": {
+    "message": "Папка не найдена: $1"
+  },
   "sidebarBrand": {
     "message": "✉ MailManager"
   },

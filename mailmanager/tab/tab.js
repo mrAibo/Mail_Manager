@@ -150,7 +150,7 @@ async function saveScanCache(accountId, folderId, senders) {
   };
 
   try {
-    await browser.storage.local.set({ [key]: payload });
+    await browser.storage.session.set({ [key]: payload });
   } catch (err) {
     console.warn("MailManager: Scan-Cache konnte nicht gespeichert werden:", err);
   }
@@ -161,7 +161,7 @@ async function loadScanCache(accountId, folderId) {
   if (!key) return null;
 
   try {
-    const data = await browser.storage.local.get(key);
+    const data = await browser.storage.session.get(key);
     const entry = data?.[key];
 
     if (!entry || !Array.isArray(entry.senders)) return null;
@@ -5612,4 +5612,39 @@ function matchCustomRegexRules(sender) {
   return null;
 }
 
-document.addEventListener("DOMContentLoaded", init);
+function localizeDocument() {
+  const _get = (key) => browser.i18n.getMessage(key) || "";
+
+  function resolveMessages(value) {
+    return value.replace(
+      /__MSG_([A-Za-z0-9_@]+)__/g,
+      (match, key) => _get(key) || match
+    );
+  }
+
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT
+  );
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (node.nodeValue?.includes("__MSG_")) {
+      node.nodeValue = resolveMessages(node.nodeValue);
+    }
+  }
+
+  for (const element of document.body.querySelectorAll("*")) {
+    for (const attribute of [...element.attributes]) {
+      if (!attribute.value.includes("__MSG_")) continue;
+      element.setAttribute(attribute.name, resolveMessages(attribute.value));
+    }
+  }
+
+  document.documentElement.lang = browser.i18n.getUILanguage() || "de";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  localizeDocument();
+  init();
+});

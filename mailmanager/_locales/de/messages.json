@@ -8,6 +8,15 @@
   "actionTitle": {
     "message": "MailManager öffnen"
   },
+  "errorNoDeletePermission": {
+    "message": "Dauerhaftes Löschen ist aus Sicherheitsgründen deaktiviert. Bitte manuell in Thunderbird löschen."
+  },
+  "errorTrashNotFound": {
+    "message": "Papierkorb nicht gefunden — Spam kann nicht ohne Papierkorb verschoben werden."
+  },
+  "errorFolderNotFound": {
+    "message": "Ordner nicht gefunden: $1"
+  },
   "sidebarBrand": {
     "message": "✉ MailManager"
   },

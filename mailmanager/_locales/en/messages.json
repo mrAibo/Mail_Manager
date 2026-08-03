@@ -8,6 +8,15 @@
   "actionTitle": {
     "message": "Open MailManager"
   },
+  "errorNoDeletePermission": {
+    "message": "Permanent deletion is disabled for safety. Delete messages manually in Thunderbird."
+  },
+  "errorTrashNotFound": {
+    "message": "Trash folder not found — cannot move spam without it."
+  },
+  "errorFolderNotFound": {
+    "message": "Folder not found: $1"
+  },
   "sidebarBrand": {
     "message": "✉ MailManager"
   },

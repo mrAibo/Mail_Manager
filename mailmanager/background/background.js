@@ -67,17 +67,18 @@ async function handleQuickEmpty(accountId, folderType) {
 
   if (messageIds.length === 0) return { success: true, count: 0 };
 
-  // Permanent delete for trash, move to trash for spam
+  // ponytail: permanent delete requires messagesDelete permission — deliberately not requested.
+  // Trash emptying: not supported without messagesDelete. Spam: move to trash if available.
   if (folderType === "trash") {
-    await browser.messages.delete(messageIds, false);
-  } else {
-    const trash = await findFolderByType(accountId, "trash");
-    if (trash) {
-      await browser.messages.move(messageIds, trash.id, { isUserAction: true });
-    } else {
-      await browser.messages.delete(messageIds, false);
-    }
+    return { error: _("errorNoDeletePermission") || "Permanent deletion is disabled for safety. Delete messages manually in Thunderbird." };
   }
+
+  const trash = await findFolderByType(accountId, "trash");
+  if (!trash) {
+    return { error: _("errorTrashNotFound") || "Trash folder not found — cannot move spam without it." };
+  }
+
+  await browser.messages.move(messageIds, trash.id, { isUserAction: true });
 
   return { success: true, count: messageIds.length };
 }
