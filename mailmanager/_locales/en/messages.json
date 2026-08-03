@@ -12,7 +12,7 @@
     "message": "Permanent deletion is disabled for safety. Delete messages manually in Thunderbird."
   },
   "errorTrashNotFound": {
-    "message": "Trash folder not found — cannot move spam without it."
+    "message": "Trash folder not found."
   },
   "errorFolderNotFound": {
     "message": "Folder not found: $1"
@@ -464,9 +464,6 @@
   "errorSourceFolderNotFound": {
     "message": "Source folder not found."
   },
-  "errorTrashNotFound": {
-    "message": "Trash folder not found."
-  },
   "errorExistingFolderNotFound": {
     "message": "Existing folder not found."
   },
@@ -865,5 +862,59 @@
   },
   "quickEmptyCalculating": {
     "message": "Calculating…"
+  },
+  "welcome_tagline": {
+    "message": "Analyze and clean your mailbox safely"
+  },
+  "welcome_question": {
+    "message": "What do you want to find?"
+  },
+  "welcome_all": {
+    "message": "All Mail"
+  },
+  "welcome_old": {
+    "message": "Old Mail"
+  },
+  "welcome_bulk": {
+    "message": "Newsletters"
+  },
+  "welcome_cleanup": {
+    "message": "Cleanup Candidates"
+  },
+  "action_trash": {
+    "message": "Trash"
+  },
+  "action_move": {
+    "message": "Move"
+  },
+  "action_more": {
+    "message": "More"
+  },
+  "action_mark_read": {
+    "message": "Mark as read"
+  },
+  "action_tag": {
+    "message": "Set tag"
+  },
+  "action_unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "action_export": {
+    "message": "Export"
+  },
+  "detail_empty": {
+    "message": "Select a sender to see details."
+  },
+  "dashboard_title": {
+    "message": "Cleanup Suggestions"
+  },
+  "dashboard_view": {
+    "message": "View →"
+  },
+  "dashboard_select_all": {
+    "message": "Select all"
+  },
+  "welcome_scan": {
+    "message": "Analyze Mailbox"
   }
 }

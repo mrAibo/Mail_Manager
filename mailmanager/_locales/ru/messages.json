@@ -12,7 +12,7 @@
     "message": "Безвозвратное удаление отключено в целях безопасности. Удалите письма вручную в Thunderbird."
   },
   "errorTrashNotFound": {
-    "message": "Корзина не найдена — невозможно переместить спам без корзины."
+    "message": "Папка корзины не найдена."
   },
   "errorFolderNotFound": {
     "message": "Папка не найдена: $1"
@@ -464,9 +464,6 @@
   "errorSourceFolderNotFound": {
     "message": "Исходная папка не найдена."
   },
-  "errorTrashNotFound": {
-    "message": "Папка корзины не найдена."
-  },
   "errorExistingFolderNotFound": {
     "message": "Существующая папка не найдена."
   },
@@ -865,5 +862,59 @@
   },
   "quickEmptyCalculating": {
     "message": "Расчёт…"
+  },
+  "welcome_tagline": {
+    "message": "Анализ и безопасная очистка почты"
+  },
+  "welcome_question": {
+    "message": "Что вы хотите найти?"
+  },
+  "welcome_all": {
+    "message": "Вся почта"
+  },
+  "welcome_old": {
+    "message": "Старые письма"
+  },
+  "welcome_bulk": {
+    "message": "Рассылки"
+  },
+  "welcome_cleanup": {
+    "message": "Кандидаты на очистку"
+  },
+  "action_trash": {
+    "message": "В корзину"
+  },
+  "action_move": {
+    "message": "Переместить"
+  },
+  "action_more": {
+    "message": "Ещё"
+  },
+  "action_mark_read": {
+    "message": "Отметить прочитанным"
+  },
+  "action_tag": {
+    "message": "Назначить тег"
+  },
+  "action_unsubscribe": {
+    "message": "Отписаться"
+  },
+  "action_export": {
+    "message": "Экспорт"
+  },
+  "detail_empty": {
+    "message": "Выберите отправителя для просмотра."
+  },
+  "dashboard_title": {
+    "message": "Предложения по очистке"
+  },
+  "dashboard_view": {
+    "message": "Смотреть →"
+  },
+  "dashboard_select_all": {
+    "message": "Выбрать всё"
+  },
+  "welcome_scan": {
+    "message": "Анализировать"
   }
 }

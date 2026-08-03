@@ -24,8 +24,8 @@ jobs:
           echo "=== Collecting __MSG_ keys from HTML ==="
           grep -oP '__MSG_\\K[A-Za-z0-9_]+(?=__)' tab/tab.html | sort -u > /tmp/html-keys.txt
           echo "=== Checking de/en/ru coverage ==="
+          ok=1
           for lang in de en ru; do
-            ok=1
             while read key; do
               if ! grep -q \"\\\"$key\\\"\" _locales/$lang/messages.json; then
                 echo "MISSING: $lang/$key"
@@ -34,6 +34,7 @@ jobs:
             done < /tmp/html-keys.txt
             if [ "$ok" = 1 ]; then echo "$lang: all keys present"; fi
           done
+          if [ "$ok" = 0 ]; then echo "i18n check FAILED"; exit 1; fi
           echo "=== Safety: messages.delete without permission ==="
           if grep -q 'messages\.delete' background/background.js; then
             if ! grep -q 'messagesDelete' manifest.json; then

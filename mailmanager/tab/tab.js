@@ -715,23 +715,26 @@ function ensureCleanupDashboard() {
   dashboard.id = "cleanupDashboard";
   dashboard.hidden = true;
   dashboard.innerHTML = `
-    <div class="cleanup-dashboard-title">Aufräumvorschläge</div>
+    <div class="cleanup-dashboard-title">${_("dashboard_title")}</div>
     <div class="dashboard-card" data-dashboard-filter="bulk">
       <div class="dashboard-label">Newsletter/Bulk</div>
       <div class="dashboard-value" id="dashBulk">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="bulk">Ansehen →</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="bulk">${_("dashboard_view")}</button>
+      <button type="button" class="dashboard-select" data-dashboard-select="bulk">${_("dashboard_select_all")}</button>
     </div>
 
     <div class="dashboard-card" data-dashboard-filter="largeSize">
       <div class="dashboard-label">Speicherfresser</div>
       <div class="dashboard-value" id="dashLarge">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="largeSize">Ansehen →</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="largeSize">${_("dashboard_view")}</button>
+      <button type="button" class="dashboard-select" data-dashboard-select="largeSize">${_("dashboard_select_all")}</button>
     </div>
 
     <div class="dashboard-card" data-dashboard-filter="inactiveYear">
       <div class="dashboard-label">Inaktiv &gt; 2 Jahre</div>
       <div class="dashboard-value" id="dashInactive">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="inactiveYear">Ansehen →</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="inactiveYear">${_("dashboard_view")}</button>
+      <button type="button" class="dashboard-select" data-dashboard-select="inactiveYear">${_("dashboard_select_all")}</button>
     </div>
   `;
 
@@ -764,7 +767,17 @@ function ensureCleanupDashboard() {
       const predicate = dashboardPredicate(action);
       if (!predicate) return;
 
-      selectMatchingSenders(predicate);
+      state.quickFilter = action;
+      syncQuickFilterButtons();
+      applyFilter();
+    });
+  });
+
+  dashboard.querySelectorAll(".dashboard-select").forEach(button => {
+    button.addEventListener("click", event => {
+      event.stopPropagation();
+      const predicate = dashboardPredicate(button.dataset.dashboardSelect);
+      if (predicate) selectMatchingSenders(predicate);
     });
   });
 }
@@ -1077,6 +1090,11 @@ function setScanUiRunning(running) {
   $("accountSelect").disabled = running;
   $("folderSelect").disabled = running;
   if ($("scanProfileSelect")) $("scanProfileSelect").disabled = running;
+  [$("welcomeAccountSelect"), $("welcomeFolderSelect")].forEach(control => {
+    if (control) control.disabled = running;
+  });
+  document.querySelectorAll(".welcome-profile").forEach(button => { button.disabled = running; });
+  if ($("welcomeScanBtn")) $("welcomeScanBtn").disabled = running;
 
   if (cancelBtn) {
     cancelBtn.hidden = !running;
@@ -1975,7 +1993,7 @@ function renderDetailPanel() {
   if (!panel) return;
   const entry = state.allSenders.find(sender => sender.email === state.detailEmail);
   if (!entry) {
-    panel.innerHTML = '<div class="detail-empty">Absender auswählen, um Details zu sehen.</div>';
+    panel.innerHTML = `<div class="detail-empty">${_("detail_empty")}</div>`;
     return;
   }
   const readPct = entry.count ? Math.round((entry.readCount / entry.count) * 100) : 0;
@@ -1990,9 +2008,8 @@ function renderDetailPanel() {
       <button class="detail-messages">${icon("mail")} Mails anzeigen</button>
     </div>`;
   panel.querySelector(".detail-protect").addEventListener("click", () => toggleProtect(entry.email));
-  panel.querySelector(".detail-unsubscribe").addEventListener("click", () => {
-    state.selected = new Set([entry.email]);
-    updateSelectionLabel(); updateActionButtons(); handleUnsubscribe();
+  panel.querySelector(".detail-unsubscribe").addEventListener("click", async () => {
+    await handleUnsubscribe(entry);
   });
   panel.querySelector(".detail-messages").addEventListener("click", () => toggleSenderExpand(entry.email));
 }
@@ -5026,9 +5043,7 @@ async function openTagDialog() {
 }
 
 // ─── Unsubscribe ──────────────────────────────────────────────────────────────
-async function handleUnsubscribe() {
-  const email = [...state.selected][0];
-  const entry = state.allSenders.find(e => e.email === email);
+async function handleUnsubscribe(entry = state.allSenders.find(e => e.email === [...state.selected][0])) {
 
   if (!entry?.messageIds?.length) {
     if (state.selectedMessages.size > 0) {
@@ -5664,7 +5679,10 @@ async function quickEmptyFolder(folderType) {
     showError(_("quickEmptyFailed", [err.message]));
   } finally {
     const btn = folderType === "trash" ? $("quickEmptyTrashBtn") : $("quickEmptySpamBtn");
-    if (btn) { btn.disabled = false; btn.textContent = (folderType === "trash" ? "🗑 " : "🚫 ") + _(folderType === "trash" ? "quickEmptyTrash" : "quickEmptySpam"); }
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<svg class="icon" aria-hidden="true"><use href="#icon-${folderType === "trash" ? "trash" : "shield"}"/></svg> ${_(folderType === "trash" ? "quickEmptyTrash" : "quickEmptySpam")}`;
+    }
   }
 }
 

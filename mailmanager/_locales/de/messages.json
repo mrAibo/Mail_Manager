@@ -12,7 +12,7 @@
     "message": "Dauerhaftes Löschen ist aus Sicherheitsgründen deaktiviert. Bitte manuell in Thunderbird löschen."
   },
   "errorTrashNotFound": {
-    "message": "Papierkorb nicht gefunden — Spam kann nicht ohne Papierkorb verschoben werden."
+    "message": "Papierkorb-Ordner nicht gefunden."
   },
   "errorFolderNotFound": {
     "message": "Ordner nicht gefunden: $1"
@@ -464,9 +464,6 @@
   "errorSourceFolderNotFound": {
     "message": "Quell-Ordner nicht gefunden."
   },
-  "errorTrashNotFound": {
-    "message": "Papierkorb-Ordner nicht gefunden."
-  },
   "errorExistingFolderNotFound": {
     "message": "Bestehender Ordner nicht gefunden."
   },
@@ -865,5 +862,59 @@
   },
   "quickEmptyCalculating": {
     "message": "Berechne…"
+  },
+  "welcome_tagline": {
+    "message": "Mailbox analysieren und sicher aufräumen"
+  },
+  "welcome_question": {
+    "message": "Was möchtest du finden?"
+  },
+  "welcome_all": {
+    "message": "Alle Mails"
+  },
+  "welcome_old": {
+    "message": "Alte Mails"
+  },
+  "welcome_bulk": {
+    "message": "Newsletter"
+  },
+  "welcome_cleanup": {
+    "message": "Aufräum-Kandidaten"
+  },
+  "action_trash": {
+    "message": "In Papierkorb"
+  },
+  "action_move": {
+    "message": "Verschieben"
+  },
+  "action_more": {
+    "message": "Mehr"
+  },
+  "action_mark_read": {
+    "message": "Als gelesen markieren"
+  },
+  "action_tag": {
+    "message": "Tag setzen"
+  },
+  "action_unsubscribe": {
+    "message": "Abmelden"
+  },
+  "action_export": {
+    "message": "Exportieren"
+  },
+  "detail_empty": {
+    "message": "Absender auswählen, um Details zu sehen."
+  },
+  "dashboard_title": {
+    "message": "Aufräumvorschläge"
+  },
+  "dashboard_view": {
+    "message": "Ansehen →"
+  },
+  "dashboard_select_all": {
+    "message": "Alle auswählen"
+  },
+  "welcome_scan": {
+    "message": "Mailbox analysieren"
   }
 }
