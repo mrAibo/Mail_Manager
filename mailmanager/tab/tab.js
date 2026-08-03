@@ -1,5 +1,5 @@
 // MailManager — Tab UI (source of truth for sender data)
-const _ = (key, subs) => browser.i18n.getMessage(key, subs) || key;
+const _ = (key, subs) => browser.i18n?.getMessage?.(key, subs) || key;
 import { formatSize, formatRelativeDate, toCSV, toJSON } from "../shared/utils.js";
 import { extractPreviewText } from "../shared/message-preview.mjs";
 import { escapeHtml, daysSince, cleanupScoreTooltip, matchesAdvancedFilter, isTextEntryTarget, isCurrentScanMessage, canConfirmTrash, isCurrentPreviewRequest } from "./tab-utilities.js";
@@ -286,16 +286,16 @@ function scanOptionsForProfile(profile) {
 function scanProfileLabel(profile) {
   switch (profile) {
     case "oldYear":
-      return "alte Mails > 1 Jahr";
+      return _("scanProfileOldYear");
     case "bulk":
-      return "Newsletter/Bulk";
+      return _("scanProfileBulk");
     case "unread":
-      return "ungelesene Mails";
+      return _("scanProfileUnread");
     case "cleanupCandidates":
-      return "Aufräum-Kandidaten";
+      return _("scanProfileCleanup");
     case "full":
     default:
-      return "Vollscan";
+      return _("scanProfileFull");
   }
 }
 
@@ -308,7 +308,7 @@ function ensureCancelScanButton() {
   const btn = document.createElement("button");
   btn.id = "cancelScanBtn";
   btn.type = "button";
-  btn.textContent = "Abbrechen";
+  btn.textContent = _("cancelScanBtn");
   btn.hidden = true;
   btn.style.marginLeft = "0.5rem";
   scanBtn.insertAdjacentElement("afterend", btn);
@@ -368,24 +368,24 @@ async function countActionLogForStatus() {
 }
 
 async function scanCacheStatusForCurrentSelection() {
-  if (typeof loadScanCache !== "function") return "unbekannt";
+  if (typeof loadScanCache !== "function") return _("statusUnknown");
 
   const accountId = $("accountSelect")?.value || "";
   const folderId = $("folderSelect")?.value || "";
 
-  if (!accountId || !folderId) return "kein Ordner";
+  if (!accountId || !folderId) return _("statusNoFolder");
 
   try {
     const cached = await loadScanCache(accountId, folderId);
-    if (!cached) return "leer";
+    if (!cached) return _("statusEmpty");
 
     if (typeof formatCacheAge === "function") {
       return formatCacheAge(cached.savedAt);
     }
 
-    return "vorhanden";
+    return _("statusAvailable");
   } catch {
-    return "Fehler";
+    return _("statusError");
   }
 }
 
@@ -400,7 +400,7 @@ function currentViewLabelForStatus() {
 }
 
 function currentScanProfileLabelForStatus() {
-  if (typeof currentScanProfile !== "function") return "Vollscan";
+  if (typeof currentScanProfile !== "function") return _("scanProfileFull");
 
   const profile = currentScanProfile();
 
@@ -896,7 +896,7 @@ async function prepareCleanupActionForMatchingSenders(predicate) {
   selectMatchingSenders(predicate);
 
   if (state.selected.size === 0) {
-    showError("Keine passenden Absender für diese Aktion gefunden.");
+    showError(_("errorNoMatchingSenders"));
     return;
   }
 
@@ -914,7 +914,7 @@ async function protectMatchingSenders(predicate) {
     return;
   }
 
-  const ok = confirm(`${emails.length} Absender schützen?`);
+  const ok = confirm(_("confirmProtectSenders", [String(emails.length)]));
   if (!ok) return;
 
   let response;
@@ -947,7 +947,7 @@ async function protectMatchingSenders(predicate) {
   updateCleanupDashboard();
 
   $("statsLabel").textContent =
-    `${emails.length} Absender wurden geschützt.`;
+    _("protectedSendersSuccess", [String(emails.length)]);
 }
 
 function cleanupAssistantCard({ key, title, description, stats, actionLabel, prepareLabel }) {
@@ -963,7 +963,7 @@ function cleanupAssistantCard({ key, title, description, stats, actionLabel, pre
 
       <div class="assistant-card-actions">
         <button class="assistant-select-btn" data-assistant-key="${escapeHtml(key)}" ${disabled}>
-          ${escapeHtml(actionLabel || "Diese auswählen")}
+          ${escapeHtml(actionLabel || _("cleanupAssistantSelect"))}
         </button>
 
         <button class="assistant-prepare-btn" data-assistant-key="${escapeHtml(key)}" ${disabled}>
@@ -998,20 +998,20 @@ function updateCleanupAssistant() {
   const definitions = [
     {
       key: "protectCandidates",
-      title: "Schutz-Vorschläge",
+      title: _("cleanupAssistantProtectTitle"),
       description: "Persönlich wirkende, neue oder häufig gelesene Absender vor Aufräumaktionen schützen.",
       stats: protectCandidates,
       actionLabel: "Anzeigen",
-      prepareLabel: "Diese schützen",
+      prepareLabel: _("cleanupAssistantProtectAction"),
       predicate: s => isProtectionCandidate(s),
       prepareAction: protectMatchingSenders,
     },
     {
       key: "highScore",
-      title: "Hoher Aufräum-Score",
+      title: _("cleanupAssistantHighScoreTitle"),
       description: "Gute Kandidaten für Löschen, Sortieren oder Abmelden.",
       stats: highScore,
-      actionLabel: "Diese auswählen",
+      actionLabel: _("cleanupAssistantSelect"),
       prepareLabel: "Aufräumen vorbereiten",
       predicate: s => s.riskScore >= 70,
     },
@@ -1020,7 +1020,7 @@ function updateCleanupAssistant() {
       title: "Abmeldbar",
       description: "Absender mit geprüftem List-Unsubscribe-Header.",
       stats: unsubscribe,
-      actionLabel: "Diese auswählen",
+      actionLabel: _("cleanupAssistantSelect"),
       prepareLabel: "Abmeldbare aufräumen",
       predicate: s => s.hasUnsubscribe === true,
     },
@@ -1029,34 +1029,34 @@ function updateCleanupAssistant() {
       title: "Newsletter/Bulk",
       description: "Typische Newsletter, Benachrichtigungen, Shops oder Marketing-Absender.",
       stats: bulk,
-      actionLabel: "Diese auswählen",
+      actionLabel: _("cleanupAssistantSelect"),
       prepareLabel: "Newsletter aufräumen",
       predicate: s => s.isBulkCandidate,
     },
     {
       key: "largeSize",
-      title: "Speicherfresser",
+      title: _("cleanupAssistantStorageTitle"),
       description: "Absender mit besonders viel belegtem Speicher.",
       stats: largeSize,
-      actionLabel: "Diese auswählen",
+      actionLabel: _("cleanupAssistantSelect"),
       prepareLabel: "Speicher aufräumen",
       predicate: s => s.totalSizeBytes >= 100 * 1024 * 1024,
     },
     {
       key: "inactive",
-      title: "Inaktiv >1 Jahr",
+      title: _("cleanupAssistantInactiveTitle"),
       description: "Lange keine neue Mail erhalten.",
       stats: inactive,
-      actionLabel: "Diese auswählen",
+      actionLabel: _("cleanupAssistantSelect"),
       prepareLabel: "Alte Mails prüfen",
       predicate: s => isInactiveForDays(s.newestDate, 365),
     },
     {
       key: "unreadHigh",
-      title: "Viele ungelesene Mails",
+      title: _("cleanupAssistantUnreadTitle"),
       description: "Mindestens 10 Mails und mehr als 50% ungelesen.",
       stats: unreadHigh,
-      actionLabel: "Diese auswählen",
+      actionLabel: _("cleanupAssistantSelect"),
       prepareLabel: "Ungelesene aufräumen",
       predicate: s => unreadRate(s) >= 0.5 && s.count >= 10,
     },
@@ -1461,7 +1461,7 @@ async function startScan() {
 
     if (resp.cancelled && state.activeScanId === scanId) {
       $("progressContainer").hidden = true;
-      $("progressLabel").textContent = "Scan abgebrochen.";
+      $("progressLabel").textContent = _("scanCancelledLabel");
       clearActiveScan();
       return;
     }
@@ -1472,13 +1472,13 @@ async function startScan() {
     }
 
     if (resp.started && state.activeScanId === scanId) {
-      $("progressLabel").textContent = "Scan läuft …";
+      $("progressLabel").textContent = _("scanRunningLabel");
     }
   } catch (err) {
     if (state.activeScanId === scanId) {
       $("progressContainer").hidden = true;
       clearActiveScan();
-      showError("Scan fehlgeschlagen: " + err.message);
+      showError(_("errorScanFailed", [err.message]));
     }
   }
 }
@@ -1540,7 +1540,7 @@ function onBackgroundMessage(msg) {
 
   if (msg.type === "scan-started") {
     $("progressContainer").hidden = false;
-    $("progressLabel").textContent = "Scan läuft über mehrere Ordner …";
+    $("progressLabel").textContent = _("scanRunningMultiLabel");
   }
 
   if (msg.type === "scan-progress") {
@@ -1551,7 +1551,7 @@ function onBackgroundMessage(msg) {
 
   if (msg.type === "scan-cancelled") {
     $("progressContainer").hidden = true;
-    $("progressLabel").textContent = "Scan abgebrochen.";
+    $("progressLabel").textContent = _("scanCancelledLabel");
     clearActiveScan();
   }
 
@@ -1637,7 +1637,7 @@ function normalizeDomain(hostOrEmail) {
     .replace(/[>\s]+$/g, "")
     .replace(/^\.+|\.+$/g, "");
 
-  if (!host) return "unbekannt";
+  if (!host) return _("statusUnknown");
 
   const labels = host
     .split(".")
@@ -2215,9 +2215,9 @@ async function toggleMessagePreview(meta) {
   try {
     const full = await browser.messages.getFull(meta.id);
     const text = extractPreviewText(full, { maxLines: 10, maxChars: 800 });
-    state.messagePreviews.set(meta.id, text || "(kein Textinhalt)");
+    state.messagePreviews.set(meta.id, text || _("messagePreview_noContent"));
   } catch {
-    state.messagePreviews.set(meta.id, "(Vorschau konnte nicht geladen werden)");
+    state.messagePreviews.set(meta.id, _("messagePreview_loadFailed"));
   }
   if (state.expandedPreviews.has(meta.id)) renderSenders();
 }
@@ -2230,7 +2230,7 @@ function createPreviewRow(meta) {
   if (state.messagePreviews.has(meta.id)) {
     row.textContent = state.messagePreviews.get(meta.id);
   } else {
-    row.textContent = "Vorschau wird geladen …";
+    row.textContent = _("messagePreview_loading");
     row.classList.add("loading");
   }
   return row;
@@ -2294,8 +2294,8 @@ async function openAttachmentDialog(meta) {
     item.innerHTML = `
       <span class="attachment-name" title="${escapeHtml(att.name)}">📄 ${escapeHtml(att.name)}</span>
       <span class="attachment-size">${formatSize(att.size)}</span>
-      <button type="button" class="attachment-open">Öffnen</button>
-      <button type="button" class="attachment-save">Speichern</button>
+      <button type="button" class="attachment-open">${_("attachmentOpen")}</button>
+      <button type="button" class="attachment-save">${_("attachmentSave")}</button>
     `;
     item.querySelector(".attachment-open").addEventListener("click", async () => {
       const file = await browser.messages.getAttachmentFile(meta.id, att.partName);
@@ -3558,7 +3558,7 @@ function formatCleanupRuleUpdatedAt(value) {
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return "unbekannt";
+    return _("statusUnknown");
   }
 
   return date.toLocaleString("de-DE", {
@@ -3976,7 +3976,7 @@ function clearTrashPreviewResult() {
   const btn = $("trashPreviewBtn");
   if (btn) {
     btn.disabled = false;
-    btn.textContent = "Vorschau berechnen";
+    btn.textContent = _("previewBtn");
   }
   updateTrashConfirmState();
 }
@@ -3991,10 +3991,10 @@ async function previewTrashAction() {
 
   if (btn) {
     btn.disabled = true;
-    btn.textContent = "Berechne Vorschau…";
+    btn.textContent = _("previewCalculating");
   }
 
-  setTrashPreviewResult("Vorschau wird berechnet …");
+  setTrashPreviewResult(_("previewBeingCalculated"));
 
   try {
     const response = await browser.runtime.sendMessage({
@@ -4038,7 +4038,7 @@ async function previewTrashAction() {
   } finally {
     if (btn && isCurrentPreviewRequest(requestId, trashPreviewRequestId)) {
       btn.disabled = false;
-      btn.textContent = "Vorschau berechnen";
+      btn.textContent = _("previewBtn");
     }
   }
 }
@@ -4174,7 +4174,7 @@ function suggestCleanupRuleForCurrentSelection() {
     return {
       olderThanDays: 365,
       keepNewest: 5,
-      title: "Speicherfresser",
+      title: _("cleanupAssistantStorageTitle"),
       reason:
         "Die Auswahl belegt viel Speicherplatz. Alte Mails werden aufgeräumt, " +
         "die letzten 5 Mails pro Absender bleiben erhalten.",
@@ -4677,7 +4677,7 @@ async function resetColumnVisibility() {
 
 function formatActionLogDate(value) {
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "unbekannt";
+  if (Number.isNaN(date.getTime())) return _("statusUnknown");
 
   return date.toLocaleString("de-DE", {
     year: "numeric",
@@ -4967,7 +4967,7 @@ function populateDropFolderOverlay() {
   if (folders.length === 0) {
     const empty = document.createElement("div");
     empty.className = "drop-folder-empty";
-    empty.textContent = "Keine anderen Ordner verfügbar.";
+    empty.textContent = _("folderNoOtherAvailable");
     list.appendChild(empty);
     return;
   }
@@ -5068,7 +5068,7 @@ async function handleUnsubscribe(entry = state.allSenders.find(e => e.email === 
 
   if (!entry?.messageIds?.length) {
     if (state.selectedMessages.size > 0) {
-      alert("Abmelden funktioniert nur für ganze Absender, nicht für einzeln ausgewählte Mails.");
+      alert(_("unsubscribeWholeSendersOnly"));
     }
     return;
   }
@@ -5099,7 +5099,7 @@ async function handleUnsubscribe(entry = state.allSenders.find(e => e.email === 
   }
 
   if (!info || info.kind === "none") {
-    alert("Kein Abmelde-Link in diesen Mails gefunden.");
+    alert(_("unsubscribe_noLink"));
     return;
   }
 

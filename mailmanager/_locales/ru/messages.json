@@ -974,33 +974,226 @@
   "filter_unsubscribable": {
     "message": "Отписываемые"
   },
-  "featureStatus_viewValue": { "message": "Вид: $1" },
-  "featureStatus_domains": { "message": "$1 доменов" },
-  "featureStatus_profileValue": { "message": "Профиль: $1" },
-  "featureStatus_cacheValue": { "message": "Кэш: $1" },
-  "featureStatus_rulesValue": { "message": "Правила: $1" },
-  "featureStatus_protectedValue": { "message": "Защита: $1" },
-  "featureStatus_logValue": { "message": "Журнал: $1" },
-  "featureStatus_selectionValue": { "message": "Выбор: $1 · видно: $2/$3" },
-  "advancedFilter_title": { "message": "Расширенные фильтры" },
-  "advancedFilter_size": { "message": "Размер (МБ)" },
-  "advancedFilter_from": { "message": "от" },
-  "advancedFilter_to": { "message": "до" },
-  "advancedFilter_lastMailDays": { "message": "Последнее письмо … дней назад" },
-  "advancedFilter_readStatus": { "message": "Статус прочтения" },
-  "advancedFilter_all": { "message": "Все" },
-  "advancedFilter_read": { "message": "Только полностью прочитанные" },
-  "advancedFilter_unread": { "message": "Только с непрочитанными" },
-  "advancedFilter_reset": { "message": "Сбросить фильтры" },
-  "unsubscribe_checkNone": { "message": "Нет подходящих кандидатов для проверки отписки." },
-  "unsubscribe_checkButtonProgress": { "message": "Проверка $1…" },
-  "unsubscribe_checkProgress": { "message": "Проверка ссылок отписки для $1 отправителей …" },
-  "unsubscribe_checkFailed": { "message": "Проверка отписки не удалась: $1" },
-  "unsubscribe_noSenders": { "message": "Не найдены отправители со ссылками отписки. Сначала выполните «Проверить отписку»." },
-  "unsubscribe_tooMany": { "message": "Слишком много отправителей (макс. 50). Выберите меньше или отпишитесь по одному." },
-  "unsubscribe_noActionable": { "message": "Среди выбранных отправителей нет применимых ссылок отписки." },
-  "unsubscribe_confirmSummary": { "message": "Отправители со ссылками отписки: $1" },
-  "unsubscribe_confirmWeb": { "message": "$1 веб-ссылок — откроются в браузере" },
-  "unsubscribe_confirmMail": { "message": "$1 писем — откроются окна создания" },
-  "unsubscribe_proceed": { "message": "Продолжить?" }
+  "featureStatus_viewValue": {
+    "message": "Вид: $1"
+  },
+  "featureStatus_domains": {
+    "message": "$1 доменов"
+  },
+  "featureStatus_profileValue": {
+    "message": "Профиль: $1"
+  },
+  "featureStatus_cacheValue": {
+    "message": "Кэш: $1"
+  },
+  "featureStatus_rulesValue": {
+    "message": "Правила: $1"
+  },
+  "featureStatus_protectedValue": {
+    "message": "Защита: $1"
+  },
+  "featureStatus_logValue": {
+    "message": "Журнал: $1"
+  },
+  "featureStatus_selectionValue": {
+    "message": "Выбор: $1 · видно: $2/$3"
+  },
+  "advancedFilter_title": {
+    "message": "Расширенные фильтры"
+  },
+  "advancedFilter_size": {
+    "message": "Размер (МБ)"
+  },
+  "advancedFilter_from": {
+    "message": "от"
+  },
+  "advancedFilter_to": {
+    "message": "до"
+  },
+  "advancedFilter_lastMailDays": {
+    "message": "Последнее письмо … дней назад"
+  },
+  "advancedFilter_readStatus": {
+    "message": "Статус прочтения"
+  },
+  "advancedFilter_all": {
+    "message": "Все"
+  },
+  "advancedFilter_read": {
+    "message": "Только полностью прочитанные"
+  },
+  "advancedFilter_unread": {
+    "message": "Только с непрочитанными"
+  },
+  "advancedFilter_reset": {
+    "message": "Сбросить фильтры"
+  },
+  "unsubscribe_checkNone": {
+    "message": "Нет подходящих кандидатов для проверки отписки."
+  },
+  "unsubscribe_checkButtonProgress": {
+    "message": "Проверка $1…"
+  },
+  "unsubscribe_checkProgress": {
+    "message": "Проверка ссылок отписки для $1 отправителей …"
+  },
+  "unsubscribe_checkFailed": {
+    "message": "Проверка отписки не удалась: $1"
+  },
+  "unsubscribe_noSenders": {
+    "message": "Не найдены отправители со ссылками отписки. Сначала выполните «Проверить отписку»."
+  },
+  "unsubscribe_tooMany": {
+    "message": "Слишком много отправителей (макс. 50). Выберите меньше или отпишитесь по одному."
+  },
+  "unsubscribe_noActionable": {
+    "message": "Среди выбранных отправителей нет применимых ссылок отписки."
+  },
+  "unsubscribe_confirmSummary": {
+    "message": "Отправители со ссылками отписки: $1"
+  },
+  "unsubscribe_confirmWeb": {
+    "message": "$1 веб-ссылок — откроются в браузере"
+  },
+  "unsubscribe_confirmMail": {
+    "message": "$1 писем — откроются окна создания"
+  },
+  "unsubscribe_proceed": {
+    "message": "Продолжить?"
+  },
+  "statusUnknown": {
+    "message": "неизвестно"
+  },
+  "statusNoFolder": {
+    "message": "нет папки"
+  },
+  "statusEmpty": {
+    "message": "пусто"
+  },
+  "statusAvailable": {
+    "message": "доступно"
+  },
+  "statusError": {
+    "message": "ошибка"
+  },
+  "scanFresh": {
+    "message": "только что просканировано"
+  },
+  "scanCancelRequested": {
+    "message": "Запрошена отмена…"
+  },
+  "errorNoMatchingSenders": {
+    "message": "Не найдены подходящие отправители для этого действия."
+  },
+  "protectedSendersSuccess": {
+    "message": "Защищено отправителей: $1."
+  },
+  "cleanupAssistantProtectTitle": {
+    "message": "Предложения по защите"
+  },
+  "cleanupAssistantHighScoreTitle": {
+    "message": "Высокая оценка очистки"
+  },
+  "cleanupAssistantStorageTitle": {
+    "message": "Пожиратели места"
+  },
+  "cleanupAssistantInactiveTitle": {
+    "message": "Неактивны >1 года"
+  },
+  "cleanupAssistantUnreadTitle": {
+    "message": "Много непрочитанных писем"
+  },
+  "cleanupAssistantSelect": {
+    "message": "Выбрать их"
+  },
+  "cleanupAssistantProtectAction": {
+    "message": "Защитить их"
+  },
+  "cleanupRuleNone": {
+    "message": "нет правил"
+  },
+  "cleanupRuleOlderThan": {
+    "message": "старше $1 дней"
+  },
+  "cleanupRuleKeepNewest": {
+    "message": "оставить последние $1"
+  },
+  "cleanupRuleNoneForScope": {
+    "message": "Нет сохранённого правила для $1."
+  },
+  "cleanupRuleSavedForScope": {
+    "message": "Сохранённое правило для $1: $2."
+  },
+  "cleanupRuleUpdated": {
+    "message": "Обновлено: $1"
+  },
+  "cleanupRuleApply": {
+    "message": "Применить"
+  },
+  "cleanupRuleDelete": {
+    "message": "Удалить"
+  },
+  "previewCalculating": {
+    "message": "Расчёт предпросмотра…"
+  },
+  "previewBeingCalculated": {
+    "message": "Предпросмотр рассчитывается…"
+  },
+  "previewMoveCount": {
+    "message": "$1 из $2 писем будут перемещены."
+  },
+  "previewKeptCount": {
+    "message": "$1 писем сохранены правилами очистки."
+  },
+  "previewEstimatedSize": {
+    "message": "Оценочный размер: $1"
+  },
+  "previewNewestExamples": {
+    "message": "Последние примеры:"
+  },
+  "previewFailed": {
+    "message": "Ошибка предпросмотра: $1"
+  },
+  "folderNoOtherAvailable": {
+    "message": "Других папок нет."
+  },
+  "unsubscribeWholeSendersOnly": {
+    "message": "Отписка работает только для целых отправителей, а не для отдельно выбранных писем."
+  },
+  "unsubscribeOpenUrlConfirm": {
+    "message": "Этот URL будет открыт в браузере:\n\n$1\n\nПродолжить?"
+  },
+  "attachmentDialogTitleDynamic": {
+    "message": "Вложения — $1"
+  },
+  "backgroundNoMessageId": {
+    "message": "Не указан messageId."
+  },
+  "backgroundNoScanId": {
+    "message": "Не указан scanId."
+  },
+  "backgroundScanNotRunning": {
+    "message": "Сканирование больше не выполняется."
+  },
+  "backgroundScanAlreadyRunning": {
+    "message": "Это сканирование уже выполняется."
+  },
+  "backgroundFolderNotFound": {
+    "message": "Папка $1 не найдена"
+  },
+  "backgroundAccountNotFound": {
+    "message": "Аккаунт не найден."
+  },
+  "backgroundNoFoldersToScan": {
+    "message": "Не найдены папки для сканирования."
+  },
+  "backgroundNoSendersToProtect": {
+    "message": "Не указаны отправители для защиты."
+  },
+  "errorNoMessagesMatchRules": {
+    "message": "Нет писем, соответствующих правилам очистки. Ничего не перемещено."
+  },
+  "errorUnknownActionDynamic": {
+    "message": "Неизвестное действие: $1"
+  }
 }

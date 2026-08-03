@@ -974,33 +974,226 @@
   "filter_unsubscribable": {
     "message": "Abmeldbar"
   },
-  "featureStatus_viewValue": { "message": "Ansicht: $1" },
-  "featureStatus_domains": { "message": "$1 Domains" },
-  "featureStatus_profileValue": { "message": "Profil: $1" },
-  "featureStatus_cacheValue": { "message": "Cache: $1" },
-  "featureStatus_rulesValue": { "message": "Regeln: $1" },
-  "featureStatus_protectedValue": { "message": "Geschützt: $1" },
-  "featureStatus_logValue": { "message": "Protokoll: $1" },
-  "featureStatus_selectionValue": { "message": "Auswahl: $1 · sichtbar: $2/$3" },
-  "advancedFilter_title": { "message": "Erweiterte Filter" },
-  "advancedFilter_size": { "message": "Größe (MB)" },
-  "advancedFilter_from": { "message": "von" },
-  "advancedFilter_to": { "message": "bis" },
-  "advancedFilter_lastMailDays": { "message": "Letzte Mail vor … Tagen" },
-  "advancedFilter_readStatus": { "message": "Lese-Status" },
-  "advancedFilter_all": { "message": "Alle" },
-  "advancedFilter_read": { "message": "Nur vollständig gelesene" },
-  "advancedFilter_unread": { "message": "Nur mit ungelesenen" },
-  "advancedFilter_reset": { "message": "Filter zurücksetzen" },
-  "unsubscribe_checkNone": { "message": "Keine passenden Kandidaten für Abmelde-Prüfung." },
-  "unsubscribe_checkButtonProgress": { "message": "Prüfe $1…" },
-  "unsubscribe_checkProgress": { "message": "Prüfe Abmelde-Links für $1 Absender …" },
-  "unsubscribe_checkFailed": { "message": "Abmelde-Prüfung fehlgeschlagen: $1" },
-  "unsubscribe_noSenders": { "message": "Keine Absender mit Abmelde-Links gefunden. Erst „Abmelde-Links prüfen“ ausführen." },
-  "unsubscribe_tooMany": { "message": "Zu viele Absender (max. 50). Weniger auswählen oder einzeln abmelden." },
-  "unsubscribe_noActionable": { "message": "Keine nutzbaren Abmelde-Links unter den ausgewählten Absendern gefunden." },
-  "unsubscribe_confirmSummary": { "message": "$1 Absender mit Abmelde-Links:" },
-  "unsubscribe_confirmWeb": { "message": "$1 Web-Link(s) — wird im Browser geöffnet" },
-  "unsubscribe_confirmMail": { "message": "$1 E-Mail(s) — Verfassen-Fenster wird geöffnet" },
-  "unsubscribe_proceed": { "message": "Fortfahren?" }
+  "featureStatus_viewValue": {
+    "message": "Ansicht: $1"
+  },
+  "featureStatus_domains": {
+    "message": "$1 Domains"
+  },
+  "featureStatus_profileValue": {
+    "message": "Profil: $1"
+  },
+  "featureStatus_cacheValue": {
+    "message": "Cache: $1"
+  },
+  "featureStatus_rulesValue": {
+    "message": "Regeln: $1"
+  },
+  "featureStatus_protectedValue": {
+    "message": "Geschützt: $1"
+  },
+  "featureStatus_logValue": {
+    "message": "Protokoll: $1"
+  },
+  "featureStatus_selectionValue": {
+    "message": "Auswahl: $1 · sichtbar: $2/$3"
+  },
+  "advancedFilter_title": {
+    "message": "Erweiterte Filter"
+  },
+  "advancedFilter_size": {
+    "message": "Größe (MB)"
+  },
+  "advancedFilter_from": {
+    "message": "von"
+  },
+  "advancedFilter_to": {
+    "message": "bis"
+  },
+  "advancedFilter_lastMailDays": {
+    "message": "Letzte Mail vor … Tagen"
+  },
+  "advancedFilter_readStatus": {
+    "message": "Lese-Status"
+  },
+  "advancedFilter_all": {
+    "message": "Alle"
+  },
+  "advancedFilter_read": {
+    "message": "Nur vollständig gelesene"
+  },
+  "advancedFilter_unread": {
+    "message": "Nur mit ungelesenen"
+  },
+  "advancedFilter_reset": {
+    "message": "Filter zurücksetzen"
+  },
+  "unsubscribe_checkNone": {
+    "message": "Keine passenden Kandidaten für Abmelde-Prüfung."
+  },
+  "unsubscribe_checkButtonProgress": {
+    "message": "Prüfe $1…"
+  },
+  "unsubscribe_checkProgress": {
+    "message": "Prüfe Abmelde-Links für $1 Absender …"
+  },
+  "unsubscribe_checkFailed": {
+    "message": "Abmelde-Prüfung fehlgeschlagen: $1"
+  },
+  "unsubscribe_noSenders": {
+    "message": "Keine Absender mit Abmelde-Links gefunden. Erst „Abmelde-Links prüfen“ ausführen."
+  },
+  "unsubscribe_tooMany": {
+    "message": "Zu viele Absender (max. 50). Weniger auswählen oder einzeln abmelden."
+  },
+  "unsubscribe_noActionable": {
+    "message": "Keine nutzbaren Abmelde-Links unter den ausgewählten Absendern gefunden."
+  },
+  "unsubscribe_confirmSummary": {
+    "message": "$1 Absender mit Abmelde-Links:"
+  },
+  "unsubscribe_confirmWeb": {
+    "message": "$1 Web-Link(s) — wird im Browser geöffnet"
+  },
+  "unsubscribe_confirmMail": {
+    "message": "$1 E-Mail(s) — Verfassen-Fenster wird geöffnet"
+  },
+  "unsubscribe_proceed": {
+    "message": "Fortfahren?"
+  },
+  "statusUnknown": {
+    "message": "unbekannt"
+  },
+  "statusNoFolder": {
+    "message": "kein Ordner"
+  },
+  "statusEmpty": {
+    "message": "leer"
+  },
+  "statusAvailable": {
+    "message": "vorhanden"
+  },
+  "statusError": {
+    "message": "Fehler"
+  },
+  "scanFresh": {
+    "message": "frisch gescannt"
+  },
+  "scanCancelRequested": {
+    "message": "Abbruch angefordert …"
+  },
+  "errorNoMatchingSenders": {
+    "message": "Keine passenden Absender für diese Aktion gefunden."
+  },
+  "protectedSendersSuccess": {
+    "message": "$1 Absender wurden geschützt."
+  },
+  "cleanupAssistantProtectTitle": {
+    "message": "Schutz-Vorschläge"
+  },
+  "cleanupAssistantHighScoreTitle": {
+    "message": "Hoher Aufräum-Score"
+  },
+  "cleanupAssistantStorageTitle": {
+    "message": "Speicherfresser"
+  },
+  "cleanupAssistantInactiveTitle": {
+    "message": "Inaktiv >1 Jahr"
+  },
+  "cleanupAssistantUnreadTitle": {
+    "message": "Viele ungelesene Mails"
+  },
+  "cleanupAssistantSelect": {
+    "message": "Diese auswählen"
+  },
+  "cleanupAssistantProtectAction": {
+    "message": "Diese schützen"
+  },
+  "cleanupRuleNone": {
+    "message": "keine Regeln"
+  },
+  "cleanupRuleOlderThan": {
+    "message": "älter als $1 Tage"
+  },
+  "cleanupRuleKeepNewest": {
+    "message": "letzte $1 behalten"
+  },
+  "cleanupRuleNoneForScope": {
+    "message": "Keine gespeicherte Regel für $1."
+  },
+  "cleanupRuleSavedForScope": {
+    "message": "Gespeicherte Regel für $1: $2."
+  },
+  "cleanupRuleUpdated": {
+    "message": "Aktualisiert: $1"
+  },
+  "cleanupRuleApply": {
+    "message": "Anwenden"
+  },
+  "cleanupRuleDelete": {
+    "message": "Löschen"
+  },
+  "previewCalculating": {
+    "message": "Berechne Vorschau…"
+  },
+  "previewBeingCalculated": {
+    "message": "Vorschau wird berechnet …"
+  },
+  "previewMoveCount": {
+    "message": "$1 von $2 Mails würden verschoben."
+  },
+  "previewKeptCount": {
+    "message": "$1 Mails bleiben durch Aufräum-Regeln erhalten."
+  },
+  "previewEstimatedSize": {
+    "message": "Geschätzte Größe: $1"
+  },
+  "previewNewestExamples": {
+    "message": "Neueste Beispiele:"
+  },
+  "previewFailed": {
+    "message": "Vorschau fehlgeschlagen: $1"
+  },
+  "folderNoOtherAvailable": {
+    "message": "Keine anderen Ordner verfügbar."
+  },
+  "unsubscribeWholeSendersOnly": {
+    "message": "Abmelden funktioniert nur für ganze Absender, nicht für einzeln ausgewählte Mails."
+  },
+  "unsubscribeOpenUrlConfirm": {
+    "message": "Diese URL wird in deinem Browser geöffnet:\n\n$1\n\nFortfahren?"
+  },
+  "attachmentDialogTitleDynamic": {
+    "message": "Anhänge — $1"
+  },
+  "backgroundNoMessageId": {
+    "message": "Keine messageId angegeben."
+  },
+  "backgroundNoScanId": {
+    "message": "Keine scanId angegeben."
+  },
+  "backgroundScanNotRunning": {
+    "message": "Scan läuft nicht mehr."
+  },
+  "backgroundScanAlreadyRunning": {
+    "message": "Dieser Scan läuft bereits."
+  },
+  "backgroundFolderNotFound": {
+    "message": "Ordner $1 nicht gefunden"
+  },
+  "backgroundAccountNotFound": {
+    "message": "Konto nicht gefunden."
+  },
+  "backgroundNoFoldersToScan": {
+    "message": "Keine Ordner zum Scannen gefunden."
+  },
+  "backgroundNoSendersToProtect": {
+    "message": "Keine Absender zum Schützen angegeben."
+  },
+  "errorNoMessagesMatchRules": {
+    "message": "Keine Mails erfüllen die Aufräum-Regeln. Es wurde nichts verschoben."
+  },
+  "errorUnknownActionDynamic": {
+    "message": "Unbekannte Aktion: $1"
+  }
 }

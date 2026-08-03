@@ -1,5 +1,6 @@
 // MailManager — Background Event Page (non-persistent — holds NO long-lived state)
-const _ = (key, subs) => browser.i18n.getMessage(key, subs) || key;
+const I18N_FALLBACKS = { errorProtectedSourceFolder: "Der Quell-Ordner ist geschützt.", errorUnknownActionDynamic: "Unbekannte Aktion: $1" };
+const _ = (key, subs) => browser.i18n?.getMessage?.(key, subs) || I18N_FALLBACKS[key]?.replace("$1", subs?.[0] || "") || key;
 
 // ─── Toolbar button opens the tab ────────────────────────────────────────────
 browser.action.onClicked.addListener(() => {
@@ -34,12 +35,12 @@ async function handleMessage(message, tabId) {
     case "doCompose":          return handleDoCompose(message.to, message.subject);
     case "openMessage":         return handleOpenMessage(message.messageId);
     case "quickEmpty":         return handleQuickEmpty(message.accountId, message.folderType, tabId);
-    default:                   return { error: "Unknown action: " + message.action };
+    default:                   return { error: _("errorUnknownBackgroundAction", [message.action]) };
   }
 }
 
 async function handleOpenMessage(messageId) {
-  if (!messageId) return { error: "Keine messageId angegeben." };
+  if (!messageId) return { error: _("backgroundNoMessageId") };
 
   await browser.messageDisplay.open({
     messageId,
@@ -490,10 +491,10 @@ function makeFallbackScanId() {
 }
 
 async function handleCancelScan(scanId) {
-  if (!scanId) return { error: "Keine scanId angegeben." };
+  if (!scanId) return { error: _("backgroundNoScanId") };
 
   const scan = activeScans.get(scanId);
-  if (!scan) return { cancelled: false, reason: "Scan läuft nicht mehr." };
+  if (!scan) return { cancelled: false, reason: _("backgroundScanNotRunning") };
 
   scan.cancelled = true;
   return { cancelled: true };
@@ -503,7 +504,7 @@ async function handleScan(accountId, folderId, scanId, tabId, options = {}) {
   const effectiveScanId = scanId || makeFallbackScanId();
 
   if (activeScans.has(effectiveScanId)) {
-    return { error: "Dieser Scan läuft bereits." };
+    return { error: _("backgroundScanAlreadyRunning") };
   }
 
   const scan = { cancelled: false, tabId };
@@ -520,7 +521,7 @@ async function handleScan(accountId, folderId, scanId, tabId, options = {}) {
 
   try {
     const folder = await findFolder(accountId, folderId);
-    if (!folder) return { error: `Ordner ${folderId} nicht gefunden` };
+    if (!folder) return { error: _("backgroundFolderNotFound", [folderId]) };
 
     let total = 0;
     try {
@@ -680,10 +681,10 @@ async function handleMultiFolderScan(accountId, effectiveScanId, tabId, options,
   const { protectedFolderIds } = await loadProtected();
   const accounts = await browser.accounts.list(true);
   const account = accounts.find(a => a.id === accountId);
-  if (!account?.rootFolder) return { error: "Konto nicht gefunden." };
+  if (!account?.rootFolder) return { error: _("backgroundAccountNotFound") };
 
   const allFolders = collectFolders(account.rootFolder.subFolders || [], protectedFolderIds);
-  if (allFolders.length === 0) return { error: "Keine Ordner zum Scannen gefunden." };
+  if (allFolders.length === 0) return { error: _("backgroundNoFoldersToScan") };
 
   const merged = {};
   let grandTotal = 0;
@@ -825,7 +826,7 @@ async function handleProtectEmails(emails, protect = true) {
   )];
 
   if (normalizedEmails.length === 0) {
-    return { error: "Keine Absender zum Schützen angegeben." };
+    return { error: _("backgroundNoSendersToProtect") };
   }
 
   const { protectedFolderIds, protectedEmails } = await loadProtected();
@@ -965,7 +966,7 @@ async function filterMessageIdsForTrashRules(messageIds, options = {}) {
 
 async function handlePreviewTrash(messageIds, options = {}) {
   if (!Array.isArray(messageIds) || messageIds.length === 0) {
-    return { error: "Keine Nachrichten ausgewählt." };
+    return { error: _("errorNoMessagesSelected") };
   }
 
   const filterResult = await filterMessageIdsForTrashRules(messageIds, options);
@@ -1004,7 +1005,7 @@ async function actionProtectionError(messageIds, folderId) {
   );
 
   if (protectedFolderSet.has(String(folderId))) {
-    return "Der Quell-Ordner ist geschützt.";
+    return _("errorProtectedSourceFolder");
   }
   if (protectedFolderSet.size === 0 && protectedSenderSet.size === 0) return "";
 
@@ -1025,7 +1026,7 @@ async function actionProtectionError(messageIds, folderId) {
       return "Mindestens ein Quell-Ordner konnte nicht sicher geprüft werden. Bitte neu scannen.";
     }
     if (checked.some(message => protectedFolderSet.has(String(message.folder.id)))) {
-      return "Der Quell-Ordner ist geschützt.";
+      return _("errorProtectedSourceFolder");
     }
   }
 
@@ -1037,11 +1038,11 @@ async function actionProtectionError(messageIds, folderId) {
 
 async function handlePerformAction(type, messageIds, accountId, folderId, options, tabId) {
   if (!Array.isArray(messageIds) || messageIds.length === 0) {
-    return { error: "Keine Nachrichten ausgewählt." };
+    return { error: _("errorNoMessagesSelected") };
   }
 
   const undoKey = undoStorageKey(tabId);
-  if (!undoKey) return { error: "Aktion ohne gültige MailManager-Tab-ID abgelehnt." };
+  if (!undoKey) return { error: _("errorNoTabId") };
 
   if (["trash", "folder", "archive", "tag"].includes(type)) {
     const protectionError = await actionProtectionError(messageIds, folderId);
@@ -1073,7 +1074,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
           movedCount: 0,
           skippedCount: filterResult.skippedCount,
           message:
-            "Keine Mails erfüllen die Aufräum-Regeln. Es wurde nichts verschoben.",
+            _("errorNoMessagesMatchRules"),
         };
       }
 
@@ -1108,7 +1109,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
     }
     case "tag": {
       const { tagKey } = options;
-      if (!tagKey) return { error: "Kein tagKey angegeben." };
+      if (!tagKey) return { error: _("errorNoTagKey") };
       const messages = [];
       for (const id of messageIds) messages.push(await browser.messages.get(id));
       const newlyTagged = new Set(messages
@@ -1175,9 +1176,9 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       let targetFolder;
       if (existingFolderId) {
         targetFolder = await findFolder(accountId, existingFolderId);
-        if (!targetFolder) return { error: "Bestehender Ordner nicht gefunden." };
+        if (!targetFolder) return { error: _("errorExistingFolderNotFound") };
       } else {
-        if (!folderName) return { error: "Kein Ordner-Name angegeben." };
+        if (!folderName) return { error: _("errorNoFolderName") };
         let parent;
         if (parentFolderId) {
           parent = await findFolder(accountId, parentFolderId);
@@ -1185,7 +1186,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
           const accounts = await browser.accounts.list(true);
           parent = accounts.find(a => a.id === accountId)?.rootFolder;
         }
-        if (!parent) return { error: "Übergeordneter Ordner nicht gefunden." };
+        if (!parent) return { error: _("errorParentFolderNotFound") };
         targetFolder = await browser.folders.create(parent.id, folderName);
       }
       const { newIds, moves, failedCount, movedCount } = await moveAndTrackIds(messageIds, targetFolder);
@@ -1212,7 +1213,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
     }
 
     default:
-      return { error: "Unbekannte Aktion: " + type };
+      return { error: _("errorUnknownActionDynamic", [type]) };
   }
 
   return { success: true, undoable: true };
@@ -1220,10 +1221,10 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
 
 async function handleUndo(tabId) {
   const key = undoStorageKey(tabId);
-  if (!key) return { error: "Rückgängig ohne gültige MailManager-Tab-ID abgelehnt." };
+  if (!key) return { error: _("errorUndoNoTab") };
   const data = await browser.storage.session.get(key);
   const undoEntry = data[key];
-  if (!undoEntry) return { error: "Nichts zum Rückgängigmachen." };
+  if (!undoEntry) return { error: _("errorNothingToUndo") };
 
   let failedCount = 0;
   if (undoEntry.type === "trash" || undoEntry.type === "folder" || undoEntry.type === "archive") {
