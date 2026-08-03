@@ -1460,79 +1460,10 @@
   "domainUnknown": {
     "message": "unknown"
   },
-  "freshlyScanned": {
-    "message": "freshly scanned"
-  },
-  "scanCannotCancel": {
-    "message": "Scan can no longer be cancelled"
-  },
-  "showAttachments": {
-    "message": "Show attachments"
-  },
-  "selectThisEmail": {
-    "message": "Select this email"
-  },
-  "loadMoreEmails": {
-    "message": "Load $1 more emails"
-  },
   "cleanupAssistantNoData": {
     "message": "No analysis yet. Scan a folder …"
   },
-  "cleanupAssistantPersonal": {
-    "message": "Personal-looking"
-  },
-  "cleanupAssistantGoodCandidates": {
-    "message": "Good candidates"
-  },
   "cleanupAssistantUnsubscribable": {
     "message": "Unsubscribable: $1"
-  },
-  "cleanupNewsletterCleanup": {
-    "message": "Clean up newsletters"
-  },
-  "cleanupStorageCleanup": {
-    "message": "Clean up storage"
-  },
-  "cleanupOldMailReview": {
-    "message": "Review old mail"
-  },
-  "cleanupUnreadCleanup": {
-    "message": "Clean up unread"
-  },
-  "trashWarningRecent": {
-    "message": "selected senders have mail from the last 30 days"
-  },
-  "trashWarningCurrent": {
-    "message": "Current communication may be affected"
-  },
-  "trashWarningFew": {
-    "message": "only 1–3 emails"
-  },
-  "trashWarningNotBulk": {
-    "message": "do not look like newsletters/bulk"
-  },
-  "trashWarningMostlyRead": {
-    "message": "mostly read emails"
-  },
-  "trashWarningDomains": {
-    "message": "different domains"
-  },
-  "trashWarningCount": {
-    "message": "$1 emails selected"
-  },
-  "protectionNewMails": {
-    "message": "new mail"
-  },
-  "protectionFewMails": {
-    "message": "few emails"
-  },
-  "protectionMostlyRead": {
-    "message": "mostly read"
-  },
-  "protectionFeelsPersonal": {
-    "message": "feels personal"
-  },
-  "protectionRecommended": {
-    "message": "Protection recommended"
   }
 }

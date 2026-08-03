@@ -1275,10 +1275,10 @@
     "message": "Ошибка инициализации: $1"
   },
   "scanFreshWithProfile": {
-    "message": " · freshly scanned · $1"
+    "message": " · только что · $1"
   },
   "scanCancelUnavailable": {
-    "message": "Scan can no longer be cancelled."
+    "message": "Сканирование больше не может быть отменено"
   },
   "scanCancelFailed": {
     "message": "Ошибка отмены: $1"
@@ -1287,13 +1287,13 @@
     "message": "(без темы)"
   },
   "attachmentsShow": {
-    "message": "Show attachments"
+    "message": "Показать вложения"
   },
   "messageSelectAria": {
-    "message": "Select email “$1”"
+    "message": "Выбрать это письмо"
   },
   "messageSelect": {
-    "message": "Select this email"
+    "message": "Выбрать это письмо"
   },
   "messageRead": {
     "message": "прочитано"
@@ -1302,70 +1302,70 @@
     "message": "не прочитано"
   },
   "messageLoadMore": {
-    "message": "Load $1 more emails"
+    "message": "Загрузить ещё $1 писем"
   },
   "attachmentFallbackName": {
-    "message": "attachment"
+    "message": "вложение"
   },
   "senderMailCount": {
-    "message": "$1 senders · $2 emails"
+    "message": "$1 писем"
   },
   "assistantStats": {
-    "message": "$1 senders · $2 emails · $3"
+    "message": "$1 писем · $2 отправителей"
   },
   "cleanupAssistantPrepare": {
     "message": "Подготовить очистку"
   },
   "cleanupAssistantProtectDescription": {
-    "message": "Protect senders that look personal, recent, or frequently read before cleanup."
+    "message": "Защитить отправителей, которые выглядят личными, недавними или часто читаемыми."
   },
   "cleanupAssistantHighScoreDescription": {
-    "message": "Good candidates for deleting, sorting, or unsubscribing."
+    "message": "Хорошие кандидаты для удаления, сортировки или отписки."
   },
   "cleanupAssistantBulkTitle": {
-    "message": "Newsletter/bulk"
+    "message": "Рассылки"
   },
   "cleanupAssistantUnsubscribeDescription": {
-    "message": "Senders with a verified List-Unsubscribe header."
+    "message": "Отправители с подтверждённым заголовком List-Unsubscribe."
   },
   "cleanupAssistantUnsubscribePrepare": {
-    "message": "Clean up unsubscribable senders"
+    "message": "Очистить отписываемых отправителей"
   },
   "cleanupAssistantBulkDescription": {
-    "message": "Typical newsletters, notifications, shops, or marketing senders."
+    "message": "Типичные рассылки, уведомления, магазины или маркетинговые отправители."
   },
   "cleanupAssistantBulkPrepare": {
-    "message": "Clean up newsletters"
+    "message": "Очистить рассылки"
   },
   "cleanupAssistantStorageDescription": {
-    "message": "Senders using particularly large amounts of storage."
+    "message": "Отправители, использующие особенно много места."
   },
   "cleanupAssistantStoragePrepare": {
-    "message": "Clean up storage"
+    "message": "Очистить хранилище"
   },
   "cleanupAssistantInactiveDescription": {
-    "message": "No recent email received."
+    "message": "Нет недавних писем."
   },
   "cleanupAssistantInactivePrepare": {
-    "message": "Review old emails"
+    "message": "Проверить старые письма"
   },
   "cleanupAssistantUnreadDescription": {
-    "message": "At least 10 emails and more than 50% unread."
+    "message": "Минимум 10 писем и более 50% непрочитанных."
   },
   "cleanupAssistantUnreadPrepare": {
-    "message": "Clean up unread emails"
+    "message": "Очистить непрочитанные"
   },
   "dashboardInactiveTwoYears": {
-    "message": "Inactive > 2 years"
+    "message": "Неактивные > 2 лет"
   },
   "trashWarningRecentDetailed": {
-    "message": "$1 selected senders have emails from the last 30 days. Current communication may be affected."
+    "message": "у некоторых отправителей есть письма за последние 30 дней."
   },
   "trashWarningFewDetailed": {
-    "message": "$1 selected senders have only 1–3 emails. This looks more like individual correspondence than bulk mail."
+    "message": "только 1–3 письма у этих отправителей. Случайное удаление маловероятно."
   },
   "trashWarningPersonalDetailed": {
-    "message": "$1 selected senders do not look like newsletter/bulk. Check whether personal or important communication is included."
+    "message": "некоторые отправители выглядят как личная переписка — проверьте перед удалением."
   },
   "trashWarningReadDetailed": {
     "message": "$1 selected senders have mostly read emails. This may mean these emails were intentionally used."
@@ -1380,16 +1380,16 @@
     "message": "$1 emails are selected. Calculate a preview before confirming."
   },
   "protectionReasonNew": {
-    "message": "new emails"
+    "message": "новые письма"
   },
   "protectionReasonFew": {
-    "message": "few emails"
+    "message": "мало писем"
   },
   "protectionReasonRead": {
-    "message": "mostly read"
+    "message": "в основном прочитаны"
   },
   "protectionReasonPersonal": {
-    "message": "looks personal"
+    "message": "кажется личным"
   },
   "protectionReasonRecommended": {
     "message": "Protection recommended"
@@ -1407,7 +1407,7 @@
     "message": "Импорт правил"
   },
   "actionUndo": {
-    "message": "Undo"
+    "message": "Отмена"
   },
   "actionUnsubscribe": {
     "message": "Отписаться"
@@ -1448,21 +1448,6 @@
   "replyOpenFailed": {
     "message": "Не удалось открыть окно ответа."
   },
-  "freshlyScanned": {
-    "message": "только что просканировано"
-  },
-  "scanCannotCancel": {
-    "message": "Сканирование больше не может быть отменено"
-  },
-  "showAttachments": {
-    "message": "Показать вложения"
-  },
-  "selectThisEmail": {
-    "message": "Выбрать это письмо"
-  },
-  "loadMoreEmails": {
-    "message": "Загрузить ещё $1 писем"
-  },
   "unsubscribeTooltip": {
     "message": "Проверяет заголовки List-Unsubscribe только для выбранных или видимых кандидатов. Обычное сканирование остаётся быстрым."
   },
@@ -1478,61 +1463,7 @@
   "cleanupAssistantNoData": {
     "message": "Нет данных для анализа. Сначала просканируйте папку."
   },
-  "cleanupAssistantPersonal": {
-    "message": "Личные"
-  },
-  "cleanupAssistantGoodCandidates": {
-    "message": "Хорошие кандидаты для очистки"
-  },
   "cleanupAssistantUnsubscribable": {
     "message": "Отписываемые: $1"
-  },
-  "cleanupNewsletterCleanup": {
-    "message": "Очистка рассылок"
-  },
-  "cleanupStorageCleanup": {
-    "message": "Очистка хранилища"
-  },
-  "cleanupOldMailReview": {
-    "message": "Проверка старых писем"
-  },
-  "cleanupUnreadCleanup": {
-    "message": "Очистка непрочитанных"
-  },
-  "trashWarningRecent": {
-    "message": "выбранные отправители имеют письма за последние 30 дней"
-  },
-  "trashWarningCurrent": {
-    "message": "Текущая переписка может быть затронута"
-  },
-  "trashWarningFew": {
-    "message": "только 1–3 письма"
-  },
-  "trashWarningNotBulk": {
-    "message": "не похожи на рассылки"
-  },
-  "trashWarningMostlyRead": {
-    "message": "в основном прочитанные письма"
-  },
-  "trashWarningDomains": {
-    "message": "разные домены"
-  },
-  "trashWarningCount": {
-    "message": "выбрано $1 писем"
-  },
-  "protectionNewMails": {
-    "message": "новые письма"
-  },
-  "protectionFewMails": {
-    "message": "мало писем"
-  },
-  "protectionMostlyRead": {
-    "message": "в основном прочитаны"
-  },
-  "protectionFeelsPersonal": {
-    "message": "кажется личным"
-  },
-  "protectionRecommended": {
-    "message": "Рекомендуется защита"
   }
 }

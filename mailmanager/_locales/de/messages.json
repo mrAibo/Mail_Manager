@@ -429,7 +429,7 @@
     "message": "Schließen"
   },
   "errorUnknownBackgroundAction": {
-    "message": "Unknown action: $ACTION$"
+    "message": "Unbekannte Background-Aktion: $1"
   },
   "errorNoAccounts": {
     "message": "Keine Konten gefunden."
@@ -1460,79 +1460,10 @@
   "domainUnknown": {
     "message": "unbekannt"
   },
-  "freshlyScanned": {
-    "message": "frisch gescannt"
-  },
-  "scanCannotCancel": {
-    "message": "Scan kann nicht mehr abgebrochen werden"
-  },
-  "showAttachments": {
-    "message": "Anhänge anzeigen"
-  },
-  "selectThisEmail": {
-    "message": "Diese Mail auswählen"
-  },
-  "loadMoreEmails": {
-    "message": "Weitere $1 Mails laden"
-  },
   "cleanupAssistantNoData": {
     "message": "Noch keine Analyse. Ordner scannen …"
   },
-  "cleanupAssistantPersonal": {
-    "message": "Persönlich wirkende"
-  },
-  "cleanupAssistantGoodCandidates": {
-    "message": "Gute Kandidaten"
-  },
   "cleanupAssistantUnsubscribable": {
     "message": "Abmeldbar: $1"
-  },
-  "cleanupNewsletterCleanup": {
-    "message": "Newsletter aufräumen"
-  },
-  "cleanupStorageCleanup": {
-    "message": "Speicher aufräumen"
-  },
-  "cleanupOldMailReview": {
-    "message": "Alte Mails prüfen"
-  },
-  "cleanupUnreadCleanup": {
-    "message": "Ungelesene aufräumen"
-  },
-  "trashWarningRecent": {
-    "message": "ausgewählte Absender haben Mails aus den letzten 30 Tagen"
-  },
-  "trashWarningCurrent": {
-    "message": "Aktuelle Kommunikation könnte betroffen sein"
-  },
-  "trashWarningFew": {
-    "message": "nur 1–3 Mails"
-  },
-  "trashWarningNotBulk": {
-    "message": "sehen nicht nach Newsletter/Bulk aus"
-  },
-  "trashWarningMostlyRead": {
-    "message": "überwiegend gelesene Mails"
-  },
-  "trashWarningDomains": {
-    "message": "verschiedene Domains"
-  },
-  "trashWarningCount": {
-    "message": "$1 Mails sind ausgewählt"
-  },
-  "protectionNewMails": {
-    "message": "neue Mails"
-  },
-  "protectionFewMails": {
-    "message": "wenige Mails"
-  },
-  "protectionMostlyRead": {
-    "message": "überwiegend gelesen"
-  },
-  "protectionFeelsPersonal": {
-    "message": "wirkt persönlich"
-  },
-  "protectionRecommended": {
-    "message": "Schutz empfohlen"
   }
 }
