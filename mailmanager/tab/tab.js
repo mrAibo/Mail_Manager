@@ -5613,17 +5613,17 @@ function matchCustomRegexRules(sender) {
 }
 
 // ponytail: Thunderbird doesn't resolve __MSG_ in HTML for tab pages.
-// Walk the DOM and replace all __MSG_foo__ with browser.i18n.getMessage("foo").
+// Module scripts load after DOM is ready — run immediately, don't wait for DOMContentLoaded.
 function applyI18nToDOM() {
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ALL);
+  const walker = document.createTreeWalker(document.body, 0xFFFFFFFF); // NodeFilter.SHOW_ALL
   const nodes = [];
   while (walker.nextNode()) nodes.push(walker.currentNode);
 
   for (const node of nodes) {
-    if (node.nodeType === Node.TEXT_NODE && node.textContent.includes("__MSG_")) {
+    if (node.nodeType === 3 && node.textContent.includes("__MSG_")) { // TEXT_NODE
       node.textContent = node.textContent.replace(/__MSG_(\w+)__/g, (_, key) => _(key));
     }
-    if (node.nodeType === Node.ELEMENT_NODE) {
+    if (node.nodeType === 1) { // ELEMENT_NODE
       for (const attr of [...node.attributes]) {
         if (attr.value.includes("__MSG_")) {
           attr.value = attr.value.replace(/__MSG_(\w+)__/g, (_, key) => _(key));
@@ -5633,4 +5633,5 @@ function applyI18nToDOM() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => { applyI18nToDOM(); init(); });
+applyI18nToDOM();
+init();
