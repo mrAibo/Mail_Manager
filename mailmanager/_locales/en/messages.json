@@ -791,6 +791,9 @@
   "quickFilter_unsubscribe_check": {
     "message": "Check Unsubscribe Links"
   },
+  "quickFilter_bulk_unsubscribe": {
+    "message": "Bulk Unsubscribe"
+  },
   "quickFilter_selected": {
     "message": "Selected"
   },

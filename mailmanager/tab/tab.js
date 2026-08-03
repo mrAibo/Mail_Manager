@@ -515,6 +515,16 @@ function ensureQuickFilterBar() {
 
   bar.appendChild(checkBtn);
 
+  // Bulk unsubscribe button — appears after check when senders have unsubscribe links
+  const bulkBtn = document.createElement("button");
+  bulkBtn.id = "bulkUnsubBtn";
+  bulkBtn.type = "button";
+  bulkBtn.className = "quick-filter-btn bulk-unsub-btn";
+  bulkBtn.style.display = "none";
+  bulkBtn.textContent = _("quickFilter_bulk_unsubscribe", "Bulk Unsubscribe");
+  bulkBtn.addEventListener("click", handleBulkUnsubscribe);
+  bar.appendChild(bulkBtn);
+
   target.appendChild(bar);
   syncQuickFilterButtons();
 }
@@ -3063,6 +3073,7 @@ async function handleCheckUnsubscribeCandidates() {
     }
 
     applyUnsubscribeResults(response.results || []);
+    updateBulkUnsubBtn();
 
     const accountId = $("accountSelect").value;
     const folderId = $("folderSelect").value;
@@ -3083,6 +3094,70 @@ async function handleCheckUnsubscribeCandidates() {
       btn.textContent = _("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
     }
   }
+}
+
+async function handleBulkUnsubscribe() {
+  const unsubSenders = state.allSenders.filter(
+    s => s.hasUnsubscribe && (state.selected.size === 0 || state.selected.has(s.email))
+  );
+
+  if (unsubSenders.length === 0) {
+    alert("No senders with unsubscribe links found. Run 'Check Unsubscribe Links' first.");
+    return;
+  }
+
+  const httpsSenders = [];
+  const mailtoSenders = [];
+
+  for (const sender of unsubSenders) {
+    let info = sender.unsubscribeInfo;
+    if (!info || info.kind === "none") {
+      const messageId = sender.newestMessageId || sender.messageIds?.[0];
+      if (!messageId) continue;
+      info = await browser.runtime.sendMessage({ action: "getUnsubscribeInfo", messageId });
+      sender.unsubscribeInfo = info || { kind: "none" };
+      sender.unsubscribeKind = info?.kind || "none";
+    }
+    if (info?.kind === "https") httpsSenders.push({ email: sender.email, url: info.url });
+    else if (info?.kind === "mailto") mailtoSenders.push({ email: sender.email, address: info.address, subject: info.subject || "Unsubscribe" });
+  }
+
+  const total = httpsSenders.length + mailtoSenders.length;
+  if (total === 0) {
+    alert("No actionable unsubscribe links found among selected senders.");
+    return;
+  }
+
+  let msg = `${total} sender(s) with unsubscribe links:\n`;
+  if (httpsSenders.length) msg += `\n🌐 ${httpsSenders.length} web link(s) — will open in browser`;
+  if (mailtoSenders.length) msg += `\n📧 ${mailtoSenders.length} email(s) — will open compose window(s)`;
+  msg += `\n\nProceed?`;
+
+  if (!confirm(msg)) return;
+
+  for (const { email } of mailtoSenders) {
+    const s = mailtoSenders.find(x => x.email === email);
+    await browser.runtime.sendMessage({
+      action: "doCompose",
+      to: s.address,
+      subject: s.subject,
+    });
+  }
+
+  for (const { url } of httpsSenders) {
+    // ponytail: open one browser window per sender — browsers handle tabs
+    browser.windows.openDefaultBrowser(url);
+  }
+}
+
+function updateBulkUnsubBtn() {
+  const btn = $("bulkUnsubBtn");
+  if (!btn) return;
+  const count = state.allSenders.filter(
+    s => s.hasUnsubscribe && (state.selected.size === 0 || state.selected.has(s.email))
+  ).length;
+  btn.style.display = count > 0 ? "" : "none";
+  btn.textContent = `Bulk Unsubscribe (${count})`;
 }
 
 function readTrashRules() {
