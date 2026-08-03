@@ -506,7 +506,7 @@ function ensureQuickFilterBar() {
   checkBtn.id = "checkUnsubBtn";
   checkBtn.type = "button";
   checkBtn.className = "quick-filter-btn check-unsub-btn";
-  checkBtn.textContent = i18n("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
+  checkBtn.textContent = _("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
   checkBtn.title =
     "Prüft List-Unsubscribe-Header nur für ausgewählte oder sichtbare Kandidaten. " +
     "Der normale Scan bleibt dadurch schnell.";
@@ -3080,7 +3080,7 @@ async function handleCheckUnsubscribeCandidates() {
 
     if (btn) {
       btn.disabled = false;
-      btn.textContent = i18n("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
+      btn.textContent = _("quickFilter_unsubscribe_check", "Check Unsubscribe Links");
     }
   }
 }
