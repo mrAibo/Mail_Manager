@@ -76,7 +76,7 @@ Protection suggestions consider personal senders, recently active or small sende
 
 - Do not use it as a replacement for backups or your own archiving strategy.
 - Do not use it for unattended mass deletion. The score, bulk detection, and `List-Unsubscribe` are heuristic and can be wrong.
-- Do not use it as a publicly installed add-on until it is signed. A locally built XPI may be rejected by a normal Thunderbird installation.
+- A locally built XPI with the permanent ID in `manifest.json` can be installed directly through Thunderbird Add-ons Manager. AMO signing is only needed for public distribution.
 - Do not treat it as a complete mail client. Reading full messages, editing, and replying remain Thunderbird's job.
 
 ## Alternatives and limitations
@@ -87,7 +87,7 @@ Protection suggestions consider personal senders, recently active or small sende
 | Avoid future newsletters | Finds possible bulk senders and `List-Unsubscribe` | Unsubscribe with the sender or use Thunderbird filters |
 | Keep old messages permanently | Can move them into a folder | Thunderbird archiving or dedicated IMAP archive folders |
 | Empty a mailbox without review | Not what the normal cleanup flow is for | Only after a backup, using the appropriate Thunderbird feature |
-| Installable long-term add-on | Build an XPI; public signing is not available yet | Wait for a signed release through [addons.thunderbird.net](https://addons.thunderbird.net/) |
+| Installable long-term add-on | Install a locally built XPI with its permanent ID through Add-ons Manager | Use [addons.thunderbird.net](https://addons.thunderbird.net/) for public distribution |
 
 Known limitations:
 
@@ -159,7 +159,7 @@ npm run build     # creates ../mailmanager.xpi
 
 [`mailmanager.xpi`](mailmanager.xpi) in the repository root is the canonical package artifact. [`dist/mailmanager.xpi`](dist/mailmanager.xpi) is the tracked copy. The build excludes tests, `node_modules`, `package.json`, and the nested README. CI runs `npm run check`, builds the XPI, verifies it with `unzip -t`, and uploads `mailmanager.xpi` as a build artifact.
 
-A permanent installation requires a signed XPI. The locally generated package is not signed automatically. For public installation, sign it through [addons.thunderbird.net](https://addons.thunderbird.net/) and publish it as a versioned GitHub release; do not disable signature verification in a normal Thunderbird profile.
+A locally built XPI with the permanent ID in `manifest.json` can be installed permanently through Thunderbird Add-ons Manager; Mozilla signing is not required. For public distribution, publish through [addons.thunderbird.net](https://addons.thunderbird.net/) as a versioned release.
 
 ### Test coverage
 

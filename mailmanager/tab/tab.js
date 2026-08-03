@@ -474,8 +474,7 @@ function scheduleFeatureStatusUpdate() {
 const QUICK_FILTER_SECTIONS = [
   { label: "filter_section_view", filters: [{ key: "all", label: "filter_all" }, { key: "selected", label: "filter_selected" }] },
   { label: "filter_section_recommended", filters: [{ key: "highScore", label: "filter_high_score" }] },
-  { label: "filter_section_filter", filters: [{ key: "bulk", label: "filter_bulk" }, { key: "largeSize", label: "filter_large" }] },
-  { label: "filter_section_filter", filters: [{ key: "inactiveYear", label: "filter_inactive_1y" }, { key: "inactiveTwoYears", label: "filter_inactive_2y" }] },
+  { label: "filter_section_filter", filters: [{ key: "bulk", label: "filter_bulk" }, { key: "largeSize", label: "filter_large" }, { key: "inactiveYear", label: "filter_inactive_1y" }, { key: "inactiveTwoYears", label: "filter_inactive_2y" }] },
   { label: "filter_section_unsubscribe", filters: [{ key: "unsubscribe", label: "filter_unsubscribable" }] },
 ];
 
@@ -516,7 +515,7 @@ function ensureQuickFilterBar() {
   checkBtn.id = "checkUnsubBtn";
   checkBtn.type = "button";
   checkBtn.className = "filter-action-btn check-unsub-btn";
-  checkBtn.innerHTML = `<svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg> ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
+  checkBtn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
   checkBtn.title =
     "Prüft List-Unsubscribe-Header nur für ausgewählte oder sichtbare Kandidaten. " +
     "Der normale Scan bleibt dadurch schnell.";
@@ -1804,6 +1803,7 @@ function applyFilter() {
 
   sortAndRender();
   updateFilterStatsLabel();
+  updateBulkUnsubBtn();
   scheduleFeatureStatusUpdate();
 }
 
@@ -2715,6 +2715,7 @@ function toggleRowSelect(email, checked) {
 
   updateSelectionLabel();
   updateActionButtons();
+  updateBulkUnsubBtn();
   syncSelectAll();
 
   if (state.quickFilter === "selected") {
@@ -2742,6 +2743,7 @@ function toggleSelectAll() {
   }
   renderSenders();
   updateActionButtons();
+  updateBulkUnsubBtn();
 
   if (state.quickFilter === "selected") {
     applyFilter();
@@ -3184,7 +3186,7 @@ async function handleCheckUnsubscribeCandidates() {
 
     if (btn) {
       btn.disabled = false;
-      btn.textContent = `🔎 ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
+      btn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
     }
   }
 }
@@ -3203,6 +3205,10 @@ async function handleBulkUnsubscribe() {
 
   if (unsubSenders.length === 0) {
     alert("No senders with unsubscribe links found. Run 'Check Unsubscribe Links' first.");
+    return;
+  }
+  if (unsubSenders.length > 50) {
+    alert("Too many senders (max 50). Select fewer or use individual unsubscribe.");
     return;
   }
 

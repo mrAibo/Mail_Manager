@@ -1029,7 +1029,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
   const undoKey = undoStorageKey(tabId);
   if (!undoKey) return { error: "Aktion ohne gültige MailManager-Tab-ID abgelehnt." };
 
-  if (["trash", "folder", "tag"].includes(type)) {
+  if (["trash", "folder", "archive", "tag"].includes(type)) {
     const protectionError = await actionProtectionError(messageIds, folderId);
     if (protectionError) return { error: protectionError };
   }
@@ -1095,24 +1095,29 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
     case "tag": {
       const { tagKey } = options;
       if (!tagKey) return { error: "Kein tagKey angegeben." };
+      const newlyTagged = [];
       for (const id of messageIds) {
         const msg = await browser.messages.get(id);
+        if (!(msg.tags || []).includes(tagKey)) newlyTagged.push(id);
         await browser.messages.update(id, { tags: [...new Set([...(msg.tags || []), tagKey])] });
       }
       await browser.storage.session.set({
-        [undoKey]: { type: "tag", messageIds, tagKey, accountId },
+        [undoKey]: { type: "tag", messageIds: newlyTagged, tagKey, accountId },
       });
       break;
     }
 
     case "markAsRead": {
       let count = 0;
+      const previousReadState = [];
       for (const id of messageIds) {
+        const msg = await browser.messages.get(id);
+        previousReadState.push({ id: msg.id, read: msg.read });
         await browser.messages.update(id, { read: true });
         count++;
       }
       await browser.storage.session.set({
-        [undoKey]: { type: "markAsRead", messageIds, accountId },
+        [undoKey]: { type: "markAsRead", previousReadState, accountId },
       });
       return { success: true, undoable: true, markedCount: count };
     }
@@ -1197,8 +1202,8 @@ async function handleUndo(tabId) {
       });
     }
   } else if (undoEntry.type === "markAsRead") {
-    for (const id of undoEntry.messageIds) {
-      await browser.messages.update(id, { read: false });
+    for (const { id, read } of undoEntry.previousReadState) {
+      await browser.messages.update(id, { read });
     }
   }
 
@@ -1235,7 +1240,7 @@ function parseListUnsubscribeHeader(raw) {
     };
   }
 
-  const httpsMatch = raw.match(/<(https?:\/\/[^>]+)>/i);
+  const httpsMatch = raw.match(/<(https:\/\/[^>]+)>/i);
   if (httpsMatch) {
     return {
       kind: "https",

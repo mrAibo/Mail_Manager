@@ -117,8 +117,10 @@ describe("background action safety", () => {
     const { context, calls } = loadBackground({ protectedFolderIds: ["inbox"] });
 
     const result = await context.handlePerformAction("trash", [2], "account-1", "inbox", {}, 11);
+    const archiveResult = await context.handlePerformAction("archive", [2], "account-1", "inbox", {}, 11);
 
     assert.match(result.error, /Ordner.*geschützt/i);
+    assert.match(archiveResult.error, /Ordner.*geschützt/i);
     assert.equal(calls.moves.length, 0);
   });
 
@@ -159,6 +161,7 @@ describe("background action safety", () => {
 
   it("keeps undo entries isolated per MailManager tab", async () => {
     const { context, messages, session } = loadBackground();
+    messages.get(1).tags = ["tag-a"];
 
     await context.handleMessage({
       action: "performAction", type: "tag", messageIds: [1],
@@ -169,15 +172,28 @@ describe("background action safety", () => {
       accountId: "account-1", folderId: "inbox", options: { tagKey: "tag-b" },
     }, 22);
 
-    assert.equal(session.store.get("undoEntry:11").messageIds[0], 1);
+    assert.equal(session.store.get("undoEntry:11").messageIds.length, 0);
     assert.equal(session.store.get("undoEntry:22").messageIds[0], 2);
 
     await context.handleMessage({ action: "undo" }, 11);
 
-    assert.deepEqual([...messages.get(1).tags], []);
+    assert.equal(messages.get(1).tags.includes("tag-a"), true);
     assert.deepEqual([...messages.get(2).tags], ["tag-b"]);
     assert.equal(session.store.has("undoEntry:11"), false);
     assert.equal(session.store.has("undoEntry:22"), true);
+    await context.handleMessage({ action: "undo" }, 22);
+    assert.equal(messages.get(2).tags.length, 0);
+
+    messages.get(1).read = true;
+    messages.get(2).read = false;
+    await context.handleMessage({
+      action: "performAction", type: "markAsRead", messageIds: [1, 2],
+      accountId: "account-1", folderId: "inbox", options: {},
+    }, 11);
+    await context.handleMessage({ action: "undo" }, 11);
+
+    assert.equal(messages.get(1).read, true);
+    assert.equal(messages.get(2).read, false);
   });
 
   it("fails closed when the sender has no tab id", async () => {
@@ -205,6 +221,9 @@ describe("background action safety", () => {
 });
 
 it("does not request permanent-delete permission", async () => {
+  const { context } = loadBackground();
   const manifest = JSON.parse(await readFile(new URL("../manifest.json", import.meta.url), "utf8"));
   assert.equal(manifest.permissions.includes("messagesDelete"), false);
+  assert.equal(context.parseListUnsubscribeHeader("<http://example.test/unsub>").kind, "none");
+  assert.equal(context.parseListUnsubscribeHeader("<https://example.test/unsub>").kind, "https");
 });
