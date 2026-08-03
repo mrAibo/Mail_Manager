@@ -5128,16 +5128,19 @@ function showToast(message) {
   setTimeout(() => { toast.hidden = true; }, 3000);
 }
 
-function showUndoToast() {
+function showUndoToast(message = "") {
   if (state.undoTimer) clearInterval(state.undoTimer);
   let seconds = 10;
   const toast = $("undoToast"), countdown = $("undoCountdown");
   toast.hidden = false;
-  countdown.textContent = `(${seconds}s)`;
+  const render = () => {
+    countdown.textContent = `${message ? message + " · " : ""}(${seconds}s)`;
+  };
+  render();
   state.undoTimer = setInterval(() => {
     seconds--;
-    countdown.textContent = `(${seconds}s)`;
-    if (seconds <= 0) { clearInterval(state.undoTimer); toast.hidden = true; }
+    if (seconds <= 0) { clearInterval(state.undoTimer); toast.hidden = true; return; }
+    render();
   }, 1000);
 }
 
@@ -5712,11 +5715,8 @@ async function quickEmptyFolder() {
         senders: [],
       });
       if (resp.undoable) {
-        showUndoToast();
-        // ponytail: show success in undo toast; partial failure as separate alert
         const msg = `${_("quickEmptySuccessSpam")} (${resp.count || 0} ${_("colCount").toLowerCase()})`;
-        const toast = $("undoToast");
-        if (toast) toast.querySelector("span")?.insertAdjacentText("afterbegin", msg + " · ");
+        showUndoToast(msg);
         if (resp.failedCount > 0) {
           alert(`${resp.failedCount} message(s) could not be moved.`);
         }
