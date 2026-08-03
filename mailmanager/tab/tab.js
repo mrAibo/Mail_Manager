@@ -471,14 +471,10 @@ function scheduleFeatureStatusUpdate() {
   }, 80);
 }
 
-const QUICK_FILTERS = [
-  { key: "all",          label: "Alle" },
-  { key: "highScore",    label: "Hoher Score" },
-  { key: "largeSize",    label: ">100 MB" },
-  { key: "inactiveYear", label: "Inaktiv >1 Jahr" },
-  { key: "bulk",         label: "Newsletter/Bulk" },
-  { key: "unsubscribe",  label: "Abmeldbar" },
-  { key: "selected",     label: "Ausgewählt" },
+const QUICK_FILTER_ROWS = [
+  [{ key: "all", label: "Alle" }, { key: "selected", label: "Ausgewählt" }],
+  [{ key: "bulk", label: "Newsletter/Bulk" }, { key: "highScore", label: "Hoher Score" }, { key: "unsubscribe", label: "Abmeldbar" }],
+  [{ key: "largeSize", label: ">100 MB" }, { key: "inactiveYear", label: "Inaktiv >1 Jahr" }, { key: "inactiveTwoYears", label: "Inaktiv >2 Jahre" }],
 ];
 
 function ensureQuickFilterBar() {
@@ -489,22 +485,27 @@ function ensureQuickFilterBar() {
   const bar = document.createElement("div");
   bar.id = "quickFilterBar";
 
-  for (const filter of QUICK_FILTERS) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "quick-filter-btn";
-    btn.dataset.filter = filter.key;
-    btn.textContent = filter.label;
-
-    btn.addEventListener("click", () => {
-      state.quickFilter = filter.key;
-      syncQuickFilterButtons();
-      applyFilter();
-    });
-
-    bar.appendChild(btn);
+  for (const filters of QUICK_FILTER_ROWS) {
+    const row = document.createElement("div");
+    row.className = "quick-filter-row";
+    for (const filter of filters) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "quick-filter-btn";
+      btn.dataset.filter = filter.key;
+      btn.textContent = filter.label;
+      btn.addEventListener("click", () => {
+        state.quickFilter = filter.key;
+        syncQuickFilterButtons();
+        applyFilter();
+      });
+      row.appendChild(btn);
+    }
+    bar.appendChild(row);
   }
 
+  const actions = document.createElement("div");
+  actions.className = "quick-filter-row";
   const checkBtn = document.createElement("button");
   checkBtn.id = "checkUnsubBtn";
   checkBtn.type = "button";
@@ -516,7 +517,7 @@ function ensureQuickFilterBar() {
 
   checkBtn.addEventListener("click", handleCheckUnsubscribeCandidates);
 
-  bar.appendChild(checkBtn);
+  actions.appendChild(checkBtn);
 
   // Bulk unsubscribe button — appears after check when senders have unsubscribe links
   const bulkBtn = document.createElement("button");
@@ -526,7 +527,8 @@ function ensureQuickFilterBar() {
   bulkBtn.style.display = "none";
   bulkBtn.textContent = _("quickFilter_bulk_unsubscribe", "Bulk Unsubscribe");
   bulkBtn.addEventListener("click", handleBulkUnsubscribe);
-  bar.appendChild(bulkBtn);
+  actions.appendChild(bulkBtn);
+  bar.appendChild(actions);
 
   target.appendChild(bar);
   syncQuickFilterButtons();
@@ -661,6 +663,9 @@ function matchesQuickFilter(sender) {
     case "inactiveYear":
       return isInactiveForDays(sender.newestDate, 365);
 
+    case "inactiveTwoYears":
+      return isInactiveForDays(sender.newestDate, 730);
+
     case "recentMonth": {
       const age = daysSince(sender.newestDate);
       return age !== null && age <= 30;
@@ -730,11 +735,11 @@ function ensureCleanupDashboard() {
       <button type="button" class="dashboard-select" data-dashboard-select="largeSize">${_("dashboard_select_all")}</button>
     </div>
 
-    <div class="dashboard-card" data-dashboard-filter="inactiveYear">
+    <div class="dashboard-card" data-dashboard-filter="inactiveTwoYears">
       <div class="dashboard-label">Inaktiv &gt; 2 Jahre</div>
       <div class="dashboard-value" id="dashInactive">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="inactiveYear">${_("dashboard_view")}</button>
-      <button type="button" class="dashboard-select" data-dashboard-select="inactiveYear">${_("dashboard_select_all")}</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="inactiveTwoYears">${_("dashboard_view")}</button>
+      <button type="button" class="dashboard-select" data-dashboard-select="inactiveTwoYears">${_("dashboard_select_all")}</button>
     </div>
   `;
 
@@ -793,7 +798,7 @@ function dashboardPredicate(key) {
     case "largeSize":
       return sender => (sender.totalSizeBytes || 0) >= 100 * 1024 * 1024;
 
-    case "inactiveYear":
+    case "inactiveTwoYears":
       return sender => isInactiveForDays(sender.newestDate, 730);
 
     default:
@@ -1245,8 +1250,7 @@ async function init() {
   $("diagnosticsClose")?.addEventListener("click", () => $("diagnosticsDialog").close());
 
   // Quick actions
-  $("quickEmptyTrashBtn")?.addEventListener("click", () => quickEmptyFolder("trash"));
-  $("quickEmptySpamBtn")?.addEventListener("click", () => quickEmptyFolder("junk"));
+  $("quickEmptySpamBtn")?.addEventListener("click", quickEmptyFolder);
 
   $("senderList").addEventListener("contextmenu", e => {
     const messageRow = e.target.closest(".message-row");
@@ -2000,12 +2004,12 @@ function renderDetailPanel() {
   const subjects = (entry.sampleSubjects || []).slice(0, 3);
   panel.innerHTML = `
     <div class="detail-heading"><div><h2>${escapeHtml(entry.displayName || entry.email)}</h2><div class="detail-email">${escapeHtml(entry.email)}</div></div><span class="risk-badge ${entry.riskScore >= 70 ? "risk-high" : entry.riskScore >= 40 ? "risk-mid" : "risk-low"}">${entry.riskScore}</span></div>
-    <dl class="detail-stats"><div><dt>Mails</dt><dd>${entry.count}</dd></div><div><dt>Speicher</dt><dd>${formatSize(entry.totalSizeBytes)}</dd></div><div><dt>Gelesen</dt><dd>${readPct}%</dd></div></dl>
-    <h3>Neueste Betreffe</h3><ul class="detail-subjects">${subjects.length ? subjects.map(subject => `<li>${escapeHtml(subject)}</li>`).join("") : "<li>Keine Betreffe verfügbar</li>"}</ul>
+    <dl class="detail-stats"><div><dt>${_("detail_mails")}</dt><dd>${entry.count}</dd></div><div><dt>${_("detail_storage")}</dt><dd>${formatSize(entry.totalSizeBytes)}</dd></div><div><dt>${_("detail_read")}</dt><dd>${readPct}%</dd></div></dl>
+    <h3>${_("detail_subjects")}</h3><ul class="detail-subjects">${subjects.length ? subjects.map(subject => `<li>${escapeHtml(subject)}</li>`).join("") : `<li>${_("detail_no_subjects")}</li>`}</ul>
     <div class="detail-actions">
-      <button class="detail-protect">${icon("shield")} ${state.protectedEmails.has(entry.email) ? "Schutz aufheben" : "Schützen"}</button>
-      <button class="detail-unsubscribe" ${entry.messageIds?.length ? "" : "disabled"}>${icon("unsubscribe")} Abmelden</button>
-      <button class="detail-messages">${icon("mail")} Mails anzeigen</button>
+      <button class="detail-protect">${icon("shield")} ${state.protectedEmails.has(entry.email) ? _("detail_unprotect") : _("detail_protect")}</button>
+      <button class="detail-unsubscribe" ${entry.messageIds?.length ? "" : "disabled"}>${icon("unsubscribe")} ${_("action_unsubscribe")}</button>
+      <button class="detail-messages">${icon("mail")} ${_("detail_show_mails")}</button>
     </div>`;
   panel.querySelector(".detail-protect").addEventListener("click", () => toggleProtect(entry.email));
   panel.querySelector(".detail-unsubscribe").addEventListener("click", async () => {
@@ -5654,34 +5658,31 @@ function renderCustomRegexList() {
 
 // ─── Quick actions ─────────────────────────────────────────────────────────────
 
-async function quickEmptyFolder(folderType) {
+async function quickEmptyFolder() {
   const accountId = $("accountSelect").value;
   if (!accountId) { showError(_("errorNoAccountSelected")); return; }
 
-  const confirmKey = folderType === "trash" ? "quickEmptyConfirmTrash" : "quickEmptyConfirmSpam";
-  const successKey = folderType === "trash" ? "quickEmptySuccessTrash" : "quickEmptySuccessSpam";
-
-  if (!confirm(_(confirmKey))) return;
+  if (!confirm(_("quickEmptyConfirmSpam"))) return;
 
   try {
-    const btn = folderType === "trash" ? $("quickEmptyTrashBtn") : $("quickEmptySpamBtn");
+    const btn = $("quickEmptySpamBtn");
     if (btn) { btn.disabled = true; btn.textContent = _("quickEmptyCalculating"); }
 
     const resp = await browser.runtime.sendMessage({
       action: "quickEmpty",
       accountId,
-      folderType,
+      folderType: "junk",
     });
 
     if (resp?.error) { showError(resp.error); return; }
-    showToast(_(successKey) + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
+    showToast(_("quickEmptySuccessSpam") + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
   } catch (err) {
     showError(_("quickEmptyFailed", [err.message]));
   } finally {
-    const btn = folderType === "trash" ? $("quickEmptyTrashBtn") : $("quickEmptySpamBtn");
+    const btn = $("quickEmptySpamBtn");
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = `<svg class="icon" aria-hidden="true"><use href="#icon-${folderType === "trash" ? "trash" : "shield"}"/></svg> ${_(folderType === "trash" ? "quickEmptyTrash" : "quickEmptySpam")}`;
+      btn.innerHTML = `<svg class="icon" aria-hidden="true"><use href="#icon-unsubscribe"/></svg> ${_("quickEmptySpam")}`;
     }
   }
 }

@@ -52,6 +52,11 @@ async function handleOpenMessage(messageId) {
 
 // ─── Quick empty ──────────────────────────────────────────────────────────────
 async function handleQuickEmpty(accountId, folderType) {
+  // ponytail: permanent delete requires messagesDelete permission — deliberately not requested.
+  if (folderType === "trash") {
+    return { error: _("errorNoDeletePermission") || "Permanent deletion is disabled for safety. Delete messages manually in Thunderbird." };
+  }
+
   const folder = await findFolderByType(accountId, folderType);
   if (!folder) return { error: _("errorFolderNotFound", [folderType]) };
 
@@ -66,12 +71,6 @@ async function handleQuickEmpty(accountId, folderType) {
   }
 
   if (messageIds.length === 0) return { success: true, count: 0 };
-
-  // ponytail: permanent delete requires messagesDelete permission — deliberately not requested.
-  // Trash emptying: not supported without messagesDelete. Spam: move to trash if available.
-  if (folderType === "trash") {
-    return { error: _("errorNoDeletePermission") || "Permanent deletion is disabled for safety. Delete messages manually in Thunderbird." };
-  }
 
   const trash = await findFolderByType(accountId, "trash");
   if (!trash) {

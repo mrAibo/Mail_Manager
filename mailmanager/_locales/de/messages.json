@@ -830,9 +830,6 @@
   "stats_summary": {
     "message": "$MAILS$ Mails · $SENDERS$ Absender · $SIZE$"
   },
-  "quickEmptyTrash": {
-    "message": "Papierkorb leeren"
-  },
   "quickEmptySpam": {
     "message": "Spam leeren"
   },
@@ -845,14 +842,8 @@
   "errorArchiveFailed": {
     "message": "Keine der $1 Mails konnte nach '$2' archiviert werden."
   },
-  "quickEmptyConfirmTrash": {
-    "message": "Wirklich den gesamten Papierkorb leeren? Dies kann nicht rückgängig gemacht werden."
-  },
   "quickEmptyConfirmSpam": {
     "message": "Wirklich den gesamten Spam-Ordner leeren?"
-  },
-  "quickEmptySuccessTrash": {
-    "message": "Papierkorb wurde geleert."
   },
   "quickEmptySuccessSpam": {
     "message": "Spam-Ordner wurde geleert."
@@ -904,6 +895,33 @@
   },
   "detail_empty": {
     "message": "Absender auswählen, um Details zu sehen."
+  },
+  "detail_mails": {
+    "message": "Mails"
+  },
+  "detail_storage": {
+    "message": "Speicher"
+  },
+  "detail_read": {
+    "message": "Gelesen"
+  },
+  "detail_subjects": {
+    "message": "Neueste Betreffe"
+  },
+  "detail_no_subjects": {
+    "message": "Keine Betreffe verfügbar"
+  },
+  "detail_protect": {
+    "message": "Schützen"
+  },
+  "detail_unprotect": {
+    "message": "Schutz aufheben"
+  },
+  "detail_show_mails": {
+    "message": "Mails anzeigen"
+  },
+  "selection_none": {
+    "message": "Keine Auswahl"
   },
   "dashboard_title": {
     "message": "Aufräumvorschläge"

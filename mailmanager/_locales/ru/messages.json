@@ -830,9 +830,6 @@
   "stats_summary": {
     "message": "$MAILS$ писем · $SENDERS$ отпр. · $SIZE$"
   },
-  "quickEmptyTrash": {
-    "message": "Очистить корзину"
-  },
   "quickEmptySpam": {
     "message": "Очистить спам"
   },
@@ -845,14 +842,8 @@
   "errorArchiveFailed": {
     "message": "Не удалось архивировать $1 писем в '$2'."
   },
-  "quickEmptyConfirmTrash": {
-    "message": "Действительно очистить корзину? Это необратимо."
-  },
   "quickEmptyConfirmSpam": {
     "message": "Действительно очистить спам?"
-  },
-  "quickEmptySuccessTrash": {
-    "message": "Корзина очищена."
   },
   "quickEmptySuccessSpam": {
     "message": "Спам очищен."
@@ -904,6 +895,33 @@
   },
   "detail_empty": {
     "message": "Выберите отправителя для просмотра."
+  },
+  "detail_mails": {
+    "message": "Писем"
+  },
+  "detail_storage": {
+    "message": "Память"
+  },
+  "detail_read": {
+    "message": "Прочитано"
+  },
+  "detail_subjects": {
+    "message": "Последние темы"
+  },
+  "detail_no_subjects": {
+    "message": "Нет тем"
+  },
+  "detail_protect": {
+    "message": "Защитить"
+  },
+  "detail_unprotect": {
+    "message": "Снять защиту"
+  },
+  "detail_show_mails": {
+    "message": "Показать письма"
+  },
+  "selection_none": {
+    "message": "Нет выбора"
   },
   "dashboard_title": {
     "message": "Предложения по очистке"

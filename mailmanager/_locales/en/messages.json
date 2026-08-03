@@ -830,9 +830,6 @@
   "stats_summary": {
     "message": "$MAILS$ emails · $SENDERS$ senders · $SIZE$"
   },
-  "quickEmptyTrash": {
-    "message": "Empty Trash"
-  },
   "quickEmptySpam": {
     "message": "Empty Spam"
   },
@@ -845,14 +842,8 @@
   "errorArchiveFailed": {
     "message": "Could not archive any of the $1 emails to '$2'."
   },
-  "quickEmptyConfirmTrash": {
-    "message": "Really empty the entire Trash? This cannot be undone."
-  },
   "quickEmptyConfirmSpam": {
     "message": "Really empty the entire Spam folder?"
-  },
-  "quickEmptySuccessTrash": {
-    "message": "Trash emptied."
   },
   "quickEmptySuccessSpam": {
     "message": "Spam folder emptied."
@@ -904,6 +895,33 @@
   },
   "detail_empty": {
     "message": "Select a sender to see details."
+  },
+  "detail_mails": {
+    "message": "Mails"
+  },
+  "detail_storage": {
+    "message": "Storage"
+  },
+  "detail_read": {
+    "message": "Read"
+  },
+  "detail_subjects": {
+    "message": "Latest Subjects"
+  },
+  "detail_no_subjects": {
+    "message": "No subjects available"
+  },
+  "detail_protect": {
+    "message": "Protect"
+  },
+  "detail_unprotect": {
+    "message": "Remove protection"
+  },
+  "detail_show_mails": {
+    "message": "Show mails"
+  },
+  "selection_none": {
+    "message": "No selection"
   },
   "dashboard_title": {
     "message": "Cleanup Suggestions"

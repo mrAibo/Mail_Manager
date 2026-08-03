@@ -62,7 +62,6 @@
           <button id="columnBtn" class="action-btn">__MSG_columnBtn__</button>
           <button id="diagnosticsBtn" class="action-btn">__MSG_diagnosticsBtn__</button>
           <hr class="tools-separator" />
-          <button id="quickEmptyTrashBtn" class="action-btn quick-action"><svg class="icon" aria-hidden="true"><use href="#icon-trash" /></svg> __MSG_quickEmptyTrash__</button>
           <button id="quickEmptySpamBtn" class="action-btn quick-action"><svg class="icon" aria-hidden="true"><use href="#icon-unsubscribe" /></svg> __MSG_quickEmptySpam__</button>
         </div>
       </details>
@@ -117,7 +116,7 @@
     </div>
 
     <div id="mainActionbar">
-      <span id="selectionLabel" aria-live="polite"></span>
+      <span id="selectionLabel" aria-live="polite" data-empty-text="__MSG_selection_none__"></span>
       <div id="actionButtons">
         <button id="trashBtn" class="action-btn danger" disabled><svg class="icon" aria-hidden="true"><use href="#icon-trash" /></svg> __MSG_action_trash__</button>
         <button id="folderBtn" class="action-btn" disabled><svg class="icon" aria-hidden="true"><use href="#icon-folder" /></svg> __MSG_action_move__ <span aria-hidden="true">▾</span></button>
