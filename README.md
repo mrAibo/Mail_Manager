@@ -1,167 +1,167 @@
 # MailManager
 
-MailManager ist ein lokales Thunderbird-Add-on zum Prüfen und Aufräumen großer Postfächer. Es scannt ausgewählte Ordner, fasst Nachrichten nach Absender oder Domain zusammen und lässt dich die Auswahl vor einer Aktion kontrollieren. Das Add-on arbeitet im Thunderbird-Profil: kein eigener Server, keine Cloud-Synchronisation, kein Tracking und keine Telemetrie.
+MailManager is a local Thunderbird add-on for reviewing and cleaning up large mailboxes. It scans selected folders, groups messages by sender or domain, and lets you inspect the selection before anything happens. The add-on stays inside your Thunderbird profile: no separate server, no cloud sync, no tracking, and no telemetry.
 
-> **Status: frühe Alpha, Version 0.2.0.** Sichere Funktionen ersetzen kein Backup. Vor dem Einsatz mit wichtigen Mails zuerst ein Backup anlegen und den Ablauf in einem unkritischen Ordner testen. Reale Thunderbird-Integrationstests und eine Signierung für die öffentliche Verteilung stehen noch aus.
+> **Status: early alpha, version 0.2.0.** Safety features are not a substitute for backups. Back up important mail first, then try the workflow in a non-critical folder. Real Thunderbird integration tests and signing for public distribution are still outstanding.
 
-## Inhalt
+## Contents
 
-- [Was ist MailManager?](#was-ist-mailmanager)
-- [Warum gibt es diese Schutzmechanismen?](#warum-gibt-es-diese-schutzmechanismen)
-- [Wann passt MailManager?](#wann-passt-mailmanager)
-- [Alternativen und Grenzen](#alternativen-und-grenzen)
-- [So funktioniert der Ablauf](#so-funktioniert-der-ablauf)
-- [Architektur und Projektkarte](#architektur-und-projektkarte)
-- [Installation und Entwicklung](#installation-und-entwicklung)
-- [Berechtigungen, Datenschutz und Lizenz](#berechtigungen-datenschutz-und-lizenz)
+- [What is MailManager?](#what-is-mailmanager)
+- [Why these safeguards exist](#why-these-safeguards-exist)
+- [When MailManager is a good fit](#when-mailmanager-is-a-good-fit)
+- [Alternatives and limitations](#alternatives-and-limitations)
+- [How the workflow works](#how-the-workflow-works)
+- [Architecture and project map](#architecture-and-project-map)
+- [Installation and development](#installation-and-development)
+- [Permissions, privacy, and license](#permissions-privacy-and-license)
 
-## Was ist MailManager?
+## What is MailManager?
 
-MailManager hilft beim Aufräumen, nicht beim automatischen Löschen. Ein Scan liest Nachrichten-Metadaten aus Thunderbird und bildet daraus Absender- und Domain-Gruppen. Für jede Gruppe zeigt die Oberfläche unter anderem Anzahl, Größe, Lesequote, älteste und neueste Nachricht sowie Beispiel-Betreffe. Einzelne Mails lassen sich aufklappen, prüfen und auswählen.
+MailManager helps you clean up mail; it does not delete mail automatically. A scan reads message metadata from Thunderbird and turns it into sender and domain groups. For each group, the interface shows the message count, size, read rate, oldest and newest message, and sample subjects. You can expand a group, inspect individual messages, and choose exactly what to act on.
 
-### Was die Oberfläche bietet
+### What the interface provides
 
-- **Quellauswahl und Scan-Profile**: ein Konto, ein Ordner oder alle nicht systemeigenen Ordner; Vollscan, nur Mails älter als ein Jahr, nur Newsletter/Bulk, nur ungelesene Mails oder Aufräum-Kandidaten.
-- **Absender- und Domainansicht**: Absender vergleichen oder zusammengehörige Domains bündeln; Sortierung nach Aufräum-Score, Anzahl, Größe, Alter, Aktivität oder A–Z.
-- **Filter und Kandidatenprüfung**: Suche, Schnellfilter und kombinierbare erweiterte Filter für Größe, Alter/Aktivität und Lesestatus. Dazu gehören etwa Newsletter/Bulk, abmeldbare Absender, hohe Scores, große Gruppen und geschützte Absender.
-- **Nachrichtenprüfung**: Absender lassen sich in Nachrichtenzeilen aufklappen. Diese werden neueste zuerst in Seiten zu 50 Nachrichten geladen. Die Inline-Vorschau extrahiert einen kurzen Klartext-Auszug; Anhänge lassen sich öffnen oder speichern.
-- **Aktionen**: Auswahl in den Papierkorb oder einen bestehenden bzw. neuen Ordner verschieben, als gelesen markieren, Thunderbird-Tags setzen, Abmeldeinformationen prüfen sowie Scan-Daten als CSV oder JSON exportieren.
-- **Lokale Verwaltung**: Aufräum-Regeln, Schutzliste, Aktionsprotokoll, Diagnoseansicht, sichtbare Spalten und eigene RegEx-Regeln für Markierungen.
-- **Bedienung**: Kontextmenüs, Tastaturnavigation in aufgeklappten Nachrichtenlisten, Bereichsauswahl mit Umschalt-Klick und Drag-and-drop in einen Zielordner.
-- **Darstellung und Sprachen**: helles und dunkles Farbschema; Übersetzungen für Deutsch, Englisch und Russisch.
+- **Source selection and scan profiles:** one account, one folder, or every non-system folder; full scan, mail older than one year, newsletters/bulk mail, unread mail, or cleanup candidates.
+- **Sender and domain views:** compare senders or group related domains; sort by cleanup score, count, size, age, activity, or A–Z.
+- **Filters and candidate review:** search, quick filters, and combinable advanced filters for size, age/activity, and read status. These include newsletter/bulk mail, senders with unsubscribe options, high scores, large groups, and protected senders.
+- **Message review:** expand a sender into message rows, loaded newest first in pages of 50. The inline preview extracts a short plain-text excerpt; attachments can be opened or saved.
+- **Actions:** move a selection to Trash or to an existing or new folder, mark it as read, apply Thunderbird tags, check unsubscribe information, or export scan data as CSV or JSON.
+- **Local administration:** cleanup rules, a protection list, action log, diagnostics view, visible columns, and custom regular-expression rules for labels.
+- **Interaction:** context menus, keyboard navigation in expanded message lists, shift-click range selection, and drag and drop to a destination folder.
+- **Appearance and languages:** light and dark color schemes, with German, English, and Russian translations.
 
-### Aufräum-Score und Bulk-Erkennung
+### Cleanup score and bulk detection
 
-Der Aufräum-Score von 0 bis 100 ist ein Hinweis für die Prüfung, kein Spam- oder Sicherheitsurteil. Er gewichtet Mail-Volumen, Ungelesen-Rate und Inaktivität. Ein hoher Score heißt deshalb: Diese Gruppe ist vermutlich ein lohnender Kandidat für einen Blick, nicht dass sie sicher gelöscht werden darf.
+The cleanup score runs from 0 to 100. It is a prompt to review a group, not a spam or security verdict. It weighs mail volume, unread rate, and inactivity. A high score means the group is probably worth a closer look; it never means the group is safe to delete.
 
-Die Bulk-Erkennung betrachtet typische Newsletter- und Marketingmuster in Adresse, Anzeigename und Beispiel-Betreff. Sie erkennt außerdem `List-Unsubscribe`-Header auf Anfrage. Die Suche für diese Muster ist diakritika-insensitiv, also etwa bei `ä`/`a` oder `ß`/`ss`. Eigene RegEx-Regeln können zusätzliche Muster wie `amazon|ebay` markieren.
+Bulk detection looks for common newsletter and marketing patterns in addresses, display names, and sample subjects. It can also check `List-Unsubscribe` headers on demand. Pattern matching ignores diacritics, so `ä` and `a`, or `ß` and `ss`, are treated alike. Custom regular-expression rules can label additional patterns such as `amazon|ebay`.
 
-## Warum gibt es diese Schutzmechanismen?
+## Why these safeguards exist
 
-Mailbox-Aufräumen hat eine unangenehme Eigenschaft: Ein Treffer kann hundert Nachrichten bedeuten, und eine falsche Auswahl kann schwer zu bemerken sein. MailManager hält deshalb Analyse, Vorschau und Aktion getrennt.
+Cleaning up a mailbox has an awkward property: one match can mean hundreds of messages, and a bad selection can be hard to spot. MailManager therefore keeps analysis, preview, and action separate.
 
-### Schutz vor der Aktion
+### Before an action
 
-- Systemordner wie Gesendet, Entwürfe, Archiv, Papierkorb, Spam/Junk und Postausgang werden nicht als Scan-Ziel angeboten.
-- Geschützte Absender und geschützte Quellordner werden im Background vor Papierkorb-, Verschiebe- und Tag-Aktionen erneut geprüft. Fehlen verlässliche Ordnerdaten, schlägt die Aktion fehl, statt zu raten.
-- Der Papierkorb-Dialog berechnet vorab Anzahl, Größe und durch Regeln ausgesparte Nachrichten. Nach einer Regeländerung bleibt die Bestätigung gesperrt, bis eine neue Vorschau vorliegt.
-- Warnungen decken unter anderem sehr neue Mails, persönliche Absender, kleine Gruppen, überwiegend gelesene Auswahl, große Mengen und gemischte Domains ab. Bei hohen Warnungen ist eine zusätzliche Bestätigung nötig.
-- Gespeicherte Regeln können nur ältere Mails berücksichtigen und pro Absender die neuesten *N* Nachrichten behalten.
-- Der normale Aufräumfluss verschiebt in den Papierkorb. Eine öffentlich erreichbare Aktion zum permanenten Löschen wird nicht angeboten und die Berechtigung `messagesDelete` wird nicht angefordert.
-- Rückgängig funktioniert nur, wenn Thunderbird beim Verschieben neue Message-IDs zurückliefert; die Undo-Einträge sind pro MailManager-Tab getrennt.
-- CSV-Export escaped Anführungszeichen und neutralisiert Formelpräfixe in Absenderfeldern, damit ein Tabellenprogramm sie nicht als Formeln ausführt.
+- System folders such as Sent, Drafts, Archive, Trash, Spam/Junk, and Outbox are not offered as scan targets.
+- Protected senders and protected source folders are checked again in the background before Trash, move, or tag actions. If reliable folder data is unavailable, the action fails rather than guessing.
+- The Trash dialog calculates the count, size, and messages excluded by rules in advance. Changing a rule locks confirmation until a fresh preview is available.
+- Warnings cover very recent mail, personal senders, small groups, mostly read selections, large volumes, and mixed domains. High warning levels require another confirmation.
+- Saved rules can restrict candidates to older mail and keep the newest *N* messages per sender.
+- The normal cleanup flow moves messages to Trash. There is no publicly reachable permanent-delete action, and the add-on does not request the `messagesDelete` permission.
+- Undo works only when Thunderbird returns new message IDs after a move; undo entries are separate for each MailManager tab.
+- CSV export escapes quotation marks and neutralizes formula prefixes in sender fields, so spreadsheet software does not execute them as formulas.
 
-### Warum lokal?
+### Why local processing?
 
-Der sensible Teil einer Mailbox ist nicht nur der Nachrichtentext. Schon Absender, Betreffe, Größen und Zeitpunkte sagen viel aus. MailManager verarbeitet diese Daten innerhalb von Thunderbird. `browser.storage.local` speichert nur MailManager-Daten wie Regeln, Schutzliste, Protokoll und UI-Einstellungen. Der Scan-Cache liegt in `browser.storage.session`; nach einem Thunderbird-Neustart ist ein neuer Scan nötig. Exportdateien entstehen nur nach einer ausdrücklichen Exportaktion.
+The sensitive part of a mailbox is not just the message body. Senders, subjects, sizes, and timestamps reveal plenty on their own. MailManager processes this data inside Thunderbird. `browser.storage.local` stores only MailManager data such as rules, the protection list, the log, and UI settings. The scan cache lives in `browser.storage.session`, so restarting Thunderbird requires a new scan. Export files are created only after you explicitly export them.
 
-Eine `https:`-Abmelde-URL wird erst nach Bestätigung im Standardbrowser geöffnet. Bei `mailto:` öffnet MailManager nur ein vorbefülltes Thunderbird-Verfassen-Fenster.
+An `https:` unsubscribe URL opens in the default browser only after confirmation. For `mailto:`, MailManager opens only a prefilled Thunderbird compose window.
 
-## Wann passt MailManager?
+## When MailManager is a good fit
 
-MailManager passt, wenn ein Postfach über Jahre gewachsen ist und du die Auswahl nachvollziehbar eingrenzen willst: Newsletter prüfen, inaktive Absender finden, Speicherverbrauch vergleichen oder alte Mails nach klaren Regeln in den Papierkorb verschieben.
+MailManager fits a mailbox that has grown over years and needs a reviewable way to narrow the selection: checking newsletters, finding inactive senders, comparing storage use, or moving old mail to Trash under clear rules.
 
-Ein sinnvoller Ablauf sieht so aus:
+### How the workflow works
 
-1. Konto, Ordner oder alle nicht systemeigenen Ordner und ein Scan-Profil wählen.
-2. Scan starten und Kandidaten mit Suche, Sortierung, Schnellfiltern oder dem Dashboard eingrenzen.
-3. Verdächtige Absender aufklappen, einzelne Nachrichten per Vorschau oder in Thunderbird prüfen und wichtige Absender schützen.
-4. Auswahl in den Papierkorb-Dialog übernehmen. Regeln wie "älter als 365 Tage" und "die letzten 5 behalten" setzen.
-5. Die automatisch berechnete Vorschau und Sicherheitswarnungen prüfen. Nach Änderungen die Vorschau erneut berechnen.
-6. Erst dann bestätigen, Ergebnis und Aktionsprotokoll kontrollieren und bei verfügbarem Undo sofort zurücknehmen.
+1. Choose an account, a folder, or all non-system folders, then select a scan profile.
+2. Start the scan and narrow candidates with search, sorting, quick filters, or the dashboard.
+3. Expand questionable senders, inspect individual messages in the preview or Thunderbird, and protect important senders.
+4. Send the selection to the Trash dialog. Set rules such as "older than 365 days" and "keep the latest 5."
+5. Review the calculated preview and safety warnings. Recalculate the preview after any change.
+6. Only then confirm, check the result and action log, and undo immediately if it is available.
 
-Die Schutzvorschläge richten sich unter anderem nach persönlichen, kürzlich aktiven oder kleinen Absendergruppen sowie einer hohen Lesequote. Sie sind Vorschläge, keine automatische Klassifikation.
+Protection suggestions consider personal senders, recently active or small sender groups, and a high read rate. They are suggestions, not automatic classification.
 
-### Wann nicht?
+### When not to use it
 
-- Nicht als Ersatz für ein Backup oder für eine eigene Archivierungsstrategie.
-- Nicht für unbeaufsichtigtes Massenlöschen: Score, Bulk-Erkennung und `List-Unsubscribe` sind heuristisch und können falsch liegen.
-- Nicht für eine öffentliche Dauerinstallation ohne Signierung. Ein lokal gebautes XPI kann von einer normalen Thunderbird-Installation abgelehnt werden.
-- Nicht als vollständiger Mail-Client: Vollständiges Lesen, Bearbeiten und Antworten bleiben Aufgaben von Thunderbird.
+- Do not use it as a replacement for backups or your own archiving strategy.
+- Do not use it for unattended mass deletion. The score, bulk detection, and `List-Unsubscribe` are heuristic and can be wrong.
+- Do not use it as a publicly installed add-on until it is signed. A locally built XPI may be rejected by a normal Thunderbird installation.
+- Do not treat it as a complete mail client. Reading full messages, editing, and replying remain Thunderbird's job.
 
-## Alternativen und Grenzen
+## Alternatives and limitations
 
-| Bedarf | MailManager | Alternative |
+| Need | MailManager | Alternative |
 |---|---|---|
-| Ein paar Mails einzeln entfernen | Gruppiert und prüft Auswahl vor der Aktion | Direkt in Thunderbird löschen oder verschieben |
-| Newsletter künftig vermeiden | Erkennt mögliche Bulk-Absender und `List-Unsubscribe` | Beim jeweiligen Absender abmelden oder Thunderbird-Filter verwenden |
-| Alte Nachrichten dauerhaft aufbewahren | Kann sie in einen Ordner verschieben | Thunderbird-Archivierung oder eigene IMAP-Archivordner |
-| Mailbox ohne Prüfung leeren | Nicht der Zweck des normalen Aufräumflusses | Nur nach Backup und mit der jeweiligen Thunderbird-Funktion |
-| Dauerhaft installierbares Add-on | XPI bauen; öffentliche Signierung fehlt noch | Auf eine signierte Veröffentlichung über [addons.thunderbird.net](https://addons.thunderbird.net/) warten |
+| Remove a few messages one by one | Groups messages and lets you review the selection before acting | Delete or move them directly in Thunderbird |
+| Avoid future newsletters | Finds possible bulk senders and `List-Unsubscribe` | Unsubscribe with the sender or use Thunderbird filters |
+| Keep old messages permanently | Can move them into a folder | Thunderbird archiving or dedicated IMAP archive folders |
+| Empty a mailbox without review | Not what the normal cleanup flow is for | Only after a backup, using the appropriate Thunderbird feature |
+| Installable long-term add-on | Build an XPI; public signing is not available yet | Wait for a signed release through [addons.thunderbird.net](https://addons.thunderbird.net/) |
 
-Bekannte Grenzen:
+Known limitations:
 
-- Thunderbird kann Message-IDs beim Verschieben ändern; damit hängt die Zuverlässigkeit von Undo an den von Thunderbird zurückgemeldeten IDs.
-- Die Inline-Vorschau zeigt nur einen gekürzten Klartext-Auszug. HTML wird nur als Fallback vereinfacht, nicht als vollständige Nachricht gerendert.
-- Die Abmeldeprüfung läuft erst bei Bedarf, damit der reguläre Scan nicht unnötig mehr liest.
-- Scan-, Verschiebe-, Undo-, Vorschau-, Abmelde- und Anhangsabläufe müssen zusätzlich in einem laufenden Thunderbird geprüft werden.
+- Thunderbird can change message IDs during a move, so undo reliability depends on the IDs Thunderbird returns.
+- The inline preview shows only a shortened plain-text excerpt. HTML is simplified only as a fallback; it is not rendered as a full message.
+- Unsubscribe checks run only when needed, so a regular scan does not read more than necessary.
+- Scan, move, undo, preview, unsubscribe, and attachment flows still need testing in a running Thunderbird instance.
 
-## Architektur und Projektkarte
+## Architecture and project map
 
-### So funktioniert der Ablauf
+### How the pieces fit together
 
 ```mermaid
 flowchart TD
-    U([Person in Thunderbird]) --> T[MailManager-Tab]
-    T --> B[Background-Skript]
+    U([Person in Thunderbird]) --> T[MailManager tab]
+    T --> B[Background script]
     B --> A{{Thunderbird MailExtension APIs}}
     A --> B
     B --> T
     T --> S[(browser.storage.local / session)]
 ```
 
-1. Der Toolbar-Button öffnet `tab/tab.html` in einem eigenen Thunderbird-Tab.
-2. `tab/tab.js` fragt Konten und Ordner an, startet Scans und hält den UI-Zustand der aktuellen Ansicht.
-3. `background/background.js` spricht mit den Thunderbird-APIs, liest Ordner und Nachrichten, prüft Schutzgrenzen und führt bestätigte Aktionen aus.
-4. Die testbaren Funktionen in `shared/` berechnen Scores, normalisieren Domains, formatieren Exporte und gewinnen Vorschautext.
-5. Der Tab zeigt Ergebnis, Vorschau und Warnungen. Erst eine gültige Vorschau erlaubt die Papierkorb-Bestätigung.
+1. The toolbar button opens `tab/tab.html` in its own Thunderbird tab.
+2. `tab/tab.js` requests accounts and folders, starts scans, and keeps the UI state for the current view.
+3. `background/background.js` talks to Thunderbird APIs, reads folders and messages, checks protection boundaries, and performs confirmed actions.
+4. Testable functions in `shared/` calculate scores, normalize domains, format exports, and extract preview text.
+5. The tab displays results, previews, and warnings. Only a valid preview enables Trash confirmation.
 
-### Die entscheidenden Dateien
+### Key files
 
-| Pfad | Wofür er da ist |
+| Path | Purpose |
 |---|---|
-| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, Mindestversion Thunderbird 150.0, Berechtigungen und Background-Einstiegspunkt |
-| [`mailmanager/background/background.js`](mailmanager/background/background.js) | Nachrichtenrouter, Ordner- und Scanschnittstelle, Schutzprüfung, Aktionen und Undo |
-| [`mailmanager/tab/tab.js`](mailmanager/tab/tab.js) | UI-Zustand, Darstellung, Filter, Auswahl, Dialoge und Aktionserzeugung |
-| [`mailmanager/shared/cleanup-logic.mjs`](mailmanager/shared/cleanup-logic.mjs) | Aufräum- und Bulk-Score, Domain-Normalisierung, Schutzvorschläge und Regelvorschläge |
-| [`mailmanager/shared/message-preview.mjs`](mailmanager/shared/message-preview.mjs) | Begrenzter Klartext-Auszug aus einer Thunderbird-Nachrichtenstruktur |
-| [`mailmanager/shared/utils.js`](mailmanager/shared/utils.js) | Autor-Parsing, Anzeigeformate sowie CSV- und JSON-Export |
-| [`mailmanager/tests/`](mailmanager/tests/) | Node.js-Tests für Logik, Vorschau, UI-Helfer und Background-Schutzgrenzen |
+| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, Thunderbird 150.0 minimum version, permissions, and background entry point |
+| [`mailmanager/background/background.js`](mailmanager/background/background.js) | Message router, folder and scan interface, protection checks, actions, and undo |
+| [`mailmanager/tab/tab.js`](mailmanager/tab/tab.js) | UI state, rendering, filters, selection, dialogs, and action creation |
+| [`mailmanager/shared/cleanup-logic.mjs`](mailmanager/shared/cleanup-logic.mjs) | Cleanup and bulk scores, domain normalization, protection suggestions, and rule suggestions |
+| [`mailmanager/shared/message-preview.mjs`](mailmanager/shared/message-preview.mjs) | Limited plain-text excerpt from a Thunderbird message structure |
+| [`mailmanager/shared/utils.js`](mailmanager/shared/utils.js) | Author parsing, display formatting, and CSV and JSON export |
+| [`mailmanager/tests/`](mailmanager/tests/) | Node.js tests for logic, previews, UI helpers, and background protection boundaries |
 
-Weitere Details zur Bedienung, festen Installation und Tastatursteuerung stehen in [`mailmanager/README.md`](mailmanager/README.md). Änderungen stehen im [`CHANGELOG.md`](CHANGELOG.md).
+For more detail on interaction, permanent installation, and keyboard controls, see [`mailmanager/README.md`](mailmanager/README.md). Changes are listed in [`CHANGELOG.md`](CHANGELOG.md).
 
-## Installation und Entwicklung
+## Installation and development
 
-### Voraussetzungen
+### Prerequisites
 
-- Thunderbird **150.0 oder neuer**
-- Node.js **20** für Tests und Paketbau; zum Ausführen des Add-ons nicht nötig
-- `zip` für `npm run build`
+- Thunderbird **150.0 or later**
+- Node.js **20** for tests and package builds; it is not needed to run the add-on
+- `zip` for `npm run build`
 
-### Temporär zum Entwickeln laden
+### Load temporarily for development
 
 ```text
-Thunderbird → ≡ → Add-ons und Themes → Erweiterungen
-→ ⚙ → Add-ons debuggen → Temporäres Add-on laden…
-→ mailmanager/manifest.json auswählen
+Thunderbird → ≡ → Add-ons and Themes → Extensions
+→ ⚙ → Debug Add-ons → Load Temporary Add-on…
+→ Select mailmanager/manifest.json
 ```
 
-Nach Änderungen in der Debug-Ansicht **Neu laden** wählen. Temporäre Add-ons werden beim Beenden von Thunderbird entfernt.
+After making changes, select **Reload** in the debugging view. Thunderbird removes temporary add-ons when it closes.
 
-### Prüfen und bauen
+### Check and build
 
 ```bash
 git clone https://github.com/mrAibo/Mail_Manager.git
 cd Mail_Manager/mailmanager
-npm run check     # Syntaxprüfungen und 83 Unit-Tests
-npm run build     # erstellt ../mailmanager.xpi
+npm run check     # syntax checks and 83 unit tests
+npm run build     # creates ../mailmanager.xpi
 ```
 
-[`mailmanager.xpi`](mailmanager.xpi) im Repository-Root ist das kanonische Paketartefakt. [`dist/mailmanager.xpi`](dist/mailmanager.xpi) ist die mitgeführte Kopie. Der Build schließt Tests, `node_modules`, `package.json` und die Unterordner-README aus. Die CI führt `npm run check` aus, baut das XPI, prüft es mit `unzip -t` und lädt `mailmanager.xpi` als Build-Artefakt hoch.
+[`mailmanager.xpi`](mailmanager.xpi) in the repository root is the canonical package artifact. [`dist/mailmanager.xpi`](dist/mailmanager.xpi) is the tracked copy. The build excludes tests, `node_modules`, `package.json`, and the nested README. CI runs `npm run check`, builds the XPI, verifies it with `unzip -t`, and uploads `mailmanager.xpi` as a build artifact.
 
-Für eine dauerhafte Installation muss das XPI signiert sein. Das lokal erzeugte Paket ist nicht automatisch signiert. Für eine öffentliche Installation sollte es über [addons.thunderbird.net](https://addons.thunderbird.net/) signiert und als versionierter GitHub-Release veröffentlicht werden; die Signaturprüfung im normalen Thunderbird-Profil sollte nicht abgeschaltet werden.
+A permanent installation requires a signed XPI. The locally generated package is not signed automatically. For public installation, sign it through [addons.thunderbird.net](https://addons.thunderbird.net/) and publish it as a versioned GitHub release; do not disable signature verification in a normal Thunderbird profile.
 
-### Testabdeckung
+### Test coverage
 
 ```bash
 cd mailmanager
@@ -169,23 +169,23 @@ npm test
 node --check tab/tab.js
 ```
 
-Die Tests decken Score-, Bulk-, Domain-, Filter-, Export- und Vorschau-Logik sowie die Schutzgrenzen im Background mit gemockten Thunderbird-APIs ab. Der aktuelle Lauf umfasst **83 Tests in 5 Testdateien**.
+The tests cover scoring, bulk detection, domains, filters, export, and preview logic, plus background protection boundaries with mocked Thunderbird APIs. The current run includes **83 tests in 5 test files**.
 
-## Berechtigungen, Datenschutz und Lizenz
+## Permissions, privacy, and license
 
-| Berechtigung | Zweck |
+| Permission | Purpose |
 |---|---|
-| `accountsRead` | Konten und Ordner lesen |
-| `accountsFolders` | Zielordner anlegen |
-| `messagesRead` | Nachrichten-Metadaten, Vorschauen und Anhänge lesen |
-| `messagesMove` | Nachrichten in Papierkorb oder Ordner verschieben |
-| `messagesUpdate` | Nachrichten als gelesen markieren |
-| `messagesTags` | Thunderbird-Tags lesen und setzen |
-| `compose` | Antwort- oder Abmeldeentwurf öffnen |
-| `storage` | Regeln, Schutzliste, Protokoll, Cache und UI-Einstellungen speichern |
+| `accountsRead` | Read accounts and folders |
+| `accountsFolders` | Create destination folders |
+| `messagesRead` | Read message metadata, previews, and attachments |
+| `messagesMove` | Move messages to Trash or folders |
+| `messagesUpdate` | Mark messages as read |
+| `messagesTags` | Read and set Thunderbird tags |
+| `compose` | Open a reply or unsubscribe draft |
+| `storage` | Store rules, protection list, log, cache, and UI settings |
 
-Nicht angefordert werden Adressbuch-, Kalender- oder Netzwerkberechtigungen. MailManager verschickt keine Mails automatisch und überträgt keine Mail-Inhalte an eigene Dienste.
+The add-on does not request address-book, calendar, or network permissions. MailManager never sends mail automatically or transfers mail contents to its own services.
 
-## Lizenz
+## License
 
 [MIT](LICENSE) © 2026 Aleksej Voronin.
