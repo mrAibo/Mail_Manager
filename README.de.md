@@ -163,7 +163,7 @@ npm run build     # erstellt ../mailmanager.xpi
 
 [`mailmanager.xpi`](mailmanager.xpi) im Repository-Root ist das kanonische Paketartefakt. [`dist/mailmanager.xpi`](dist/mailmanager.xpi) ist die mitgeführte Kopie. Der Build schließt Tests, `node_modules`, `package.json` und die Unterordner-README aus. Die CI führt `npm run check` aus, baut das XPI, prüft es mit `unzip -t` und lädt `mailmanager.xpi` als Build-Artefakt hoch.
 
-Für ein dauerhaft installierbares XPI ist eine feste Erweiterungs-ID nötig (in `manifest.json` gesetzt). Thunderbird verlangt für die lokale Installation keine Mozilla-Signierung: Ein lokal gebautes XPI mit fester ID lässt sich über den Add-ons-Manager installieren. Bei einer Einreichung zur öffentlichen Verteilung über [addons.thunderbird.net](https://addons.thunderbird.net/) wird das XPI automatisch signiert.
+Für ein dauerhaft installierbares XPI ist eine feste Erweiterungs-ID nötig (in `manifest.json` gesetzt). Thunderbird verlangt für die lokale Installation keine Mozilla-Signierung: Ein lokal gebautes XPI mit fester ID lässt sich über den Add-ons-Manager installieren. Für die öffentliche Verteilung das XPI über [addons.thunderbird.net](https://addons.thunderbird.net/) einreichen und veröffentlichen.
 
 ### Testabdeckung
 

@@ -1249,6 +1249,11 @@ function getHeaderValue(headers, headerName) {
   return "";
 }
 
+function safeDecodeURIComponent(value) {
+  try { return decodeURIComponent(value); }
+  catch { return value; }
+}
+
 function parseListUnsubscribeHeader(raw) {
   if (!raw) return { kind: "none" };
 
@@ -1257,7 +1262,7 @@ function parseListUnsubscribeHeader(raw) {
     const params = new URLSearchParams(mailtoMatch[2] || "");
     return {
       kind: "mailto",
-      address: decodeURIComponent(mailtoMatch[1]),
+      address: safeDecodeURIComponent(mailtoMatch[1]),
       subject: params.get("subject") || "Unsubscribe",
     };
   }
