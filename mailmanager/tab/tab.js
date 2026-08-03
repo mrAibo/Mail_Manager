@@ -5612,21 +5612,4 @@ function matchCustomRegexRules(sender) {
   return null;
 }
 
-// ponytail: Thunderbird doesn't resolve __MSG_ in HTML for tab pages.
-// Replace in text content and attributes using a simple recursive walk.
-(function() {
-  function walk(node) {
-    if (node.nodeType === 3 && node.textContent.includes("__MSG_")) { // TEXT_NODE
-      node.textContent = node.textContent.replace(/__MSG_(\w+)__/g, (_, k) => _(k));
-    } else if (node.nodeType === 1) { // ELEMENT_NODE
-      for (const attr of node.attributes) {
-        if (attr.value.includes("__MSG_"))
-          attr.value = attr.value.replace(/__MSG_(\w+)__/g, (_, k) => _(k));
-      }
-      for (let c = node.firstChild; c; c = c.nextSibling) walk(c);
-    }
-  }
-  walk(document.body);
-})();
-
-init();
+document.addEventListener("DOMContentLoaded", init);
