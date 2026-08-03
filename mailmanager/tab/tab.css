@@ -43,12 +43,16 @@
 
 body {
   font-family: system-ui, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   background: var(--bg);
   color: var(--text);
   display: flex;
   height: 100vh;
   overflow: hidden;
+}
+
+button, select, input {
+  min-height: 32px;
 }
 
 .domain-row {
@@ -103,7 +107,7 @@ button:not(:disabled):hover { background: var(--bg-hover); }
 .action-btn.danger:not(:disabled):hover { background: var(--danger); color: #fff; }
 
 .sender-row:hover     { background: var(--bg-hover); }
-.sender-row.protected { opacity: .45; }
+.sender-row.protected { background: #1E3A5F; }         /* blue tint instead of faded */
 .sender-row.selected  { background: var(--bg-selected); }
 
 .sender-main { overflow: hidden; }
@@ -124,9 +128,9 @@ button:not(:disabled):hover { background: var(--bg-hover); }
   text-align: center;
   float: right;
 }
-.risk-high { background: var(--danger); color: #fff; }
-.risk-mid  { background: var(--warn); color: #fff; }
-.risk-low  { background: var(--neutral-badge); color: var(--text-dim); }
+.risk-high { background: #2563EB; color: #fff; }    /* blue: good cleanup candidate */
+.risk-mid  { background: #EA580C; color: #fff; }    /* orange: review */
+.risk-low  { background: #6B7280; color: #fff; }    /* gray: keep */
 
 
 .protect-btn { background: none; border: none; font-size: .85rem; padding: 0; opacity: .5; cursor: pointer; }
@@ -1389,8 +1393,7 @@ dialog::-webkit-scrollbar-thumb:hover {
 
 .message-row.selected {
   background-color: var(--bg-selected);
-  border-left: 3px solid var(--accent);
-  padding-left: 3px;
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .message-row.selected .message-checkbox {
