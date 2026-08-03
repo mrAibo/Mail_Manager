@@ -9,7 +9,7 @@
 
   <aside id="sidebar">
     <div id="sidebarHeader">
-      <span id="sidebarBrand">✉ MailManager</span>
+      <span id="sidebarBrand"><svg class="icon" aria-hidden="true"><use href="#icon-mail" /></svg> MailManager</span>
       <button id="sidebarToggle" title="__MSG_sidebarToggle__" aria-label="__MSG_sidebarToggle__">«</button>
     </div>
 
@@ -62,8 +62,8 @@
           <button id="columnBtn" class="action-btn">__MSG_columnBtn__</button>
           <button id="diagnosticsBtn" class="action-btn">__MSG_diagnosticsBtn__</button>
           <hr class="tools-separator" />
-          <button id="quickEmptyTrashBtn" class="action-btn quick-action">🗑 __MSG_quickEmptyTrash__</button>
-          <button id="quickEmptySpamBtn" class="action-btn quick-action">🚫 __MSG_quickEmptySpam__</button>
+          <button id="quickEmptyTrashBtn" class="action-btn quick-action"><svg class="icon" aria-hidden="true"><use href="#icon-trash" /></svg> __MSG_quickEmptyTrash__</button>
+          <button id="quickEmptySpamBtn" class="action-btn quick-action"><svg class="icon" aria-hidden="true"><use href="#icon-unsubscribe" /></svg> __MSG_quickEmptySpam__</button>
         </div>
       </details>
     </div>
@@ -99,25 +99,38 @@
     <div id="senderList" role="table" aria-label="__MSG_senderListAria__"></div>
 
     <div id="welcomeBanner" class="welcome-banner">
-      <div class="welcome-title">__MSG_welcomeTitle__</div>
-      <div class="welcome-steps">
-        <div class="welcome-step"><span class="welcome-num">①</span> __MSG_welcomeStep1__</div>
-        <div class="welcome-step"><span class="welcome-num">②</span> __MSG_welcomeStep2__</div>
-        <div class="welcome-step"><span class="welcome-num">③</span> __MSG_welcomeStep3__</div>
+      <svg class="welcome-icon icon" aria-hidden="true"><use href="#icon-scan" /></svg>
+      <div class="welcome-title">MailManager</div>
+      <p class="welcome-copy">Mailbox analysieren und sicher aufräumen</p>
+      <div class="welcome-sources">
+        <label>Konto <select id="welcomeAccountSelect" aria-label="__MSG_accountLabel__"></select></label>
+        <label>Ordner <select id="welcomeFolderSelect" aria-label="__MSG_folderLabel__"></select></label>
       </div>
+      <div class="welcome-question">Was möchtest du finden?</div>
+      <div class="welcome-profiles" role="group" aria-label="Scan-Profil">
+        <button type="button" class="welcome-profile active" data-profile="full">Alle Mails</button>
+        <button type="button" class="welcome-profile" data-profile="oldYear">Alte Mails</button>
+        <button type="button" class="welcome-profile" data-profile="bulk">Newsletter</button>
+        <button type="button" class="welcome-profile" data-profile="cleanupCandidates">Große Speicherfresser</button>
+      </div>
+      <button id="welcomeScanBtn" type="button" class="welcome-scan"><svg class="icon" aria-hidden="true"><use href="#icon-scan" /></svg> __MSG_scanBtn__</button>
     </div>
 
     <div id="mainActionbar">
-      <span class="action-step">__MSG_actionStep__</span>
       <span id="selectionLabel" aria-live="polite"></span>
       <div id="actionButtons">
-        <button id="trashBtn"  class="action-btn danger" disabled>__MSG_trashBtn__</button>
-        <button id="folderBtn" class="action-btn"        disabled>__MSG_folderBtn__</button>
-        <button id="readBtn"   class="action-btn"        disabled>__MSG_readBtn__</button>
-        <button id="archiveBtn" class="action-btn"       disabled>📥 __MSG_archiveBtn__</button>
-        <button id="tagBtn"    class="action-btn"        disabled>__MSG_tagBtn__</button>
-        <button id="unsubBtn"  class="action-btn"        disabled>__MSG_unsubBtn__</button>
-        <button id="exportBtn" class="action-btn">__MSG_exportBtn__</button>
+        <button id="trashBtn" class="action-btn danger" disabled><svg class="icon" aria-hidden="true"><use href="#icon-trash" /></svg> In Papierkorb</button>
+        <button id="folderBtn" class="action-btn" disabled><svg class="icon" aria-hidden="true"><use href="#icon-folder" /></svg> Verschieben <span aria-hidden="true">▾</span></button>
+        <details id="moreMenu" class="action-menu">
+          <summary>Mehr <span aria-hidden="true">▾</span></summary>
+          <div class="action-menu-panel">
+            <button id="readBtn" class="action-btn" disabled><svg class="icon" aria-hidden="true"><use href="#icon-check" /></svg> Als gelesen markieren</button>
+            <button id="archiveBtn" class="action-btn" disabled><svg class="icon" aria-hidden="true"><use href="#icon-archive" /></svg> __MSG_archiveBtn__</button>
+            <button id="tagBtn" class="action-btn" disabled><svg class="icon" aria-hidden="true"><use href="#icon-tag" /></svg> Tag setzen</button>
+            <button id="unsubBtn" class="action-btn" disabled><svg class="icon" aria-hidden="true"><use href="#icon-unsubscribe" /></svg> __MSG_unsubBtn__</button>
+            <button id="exportBtn" class="action-btn"><svg class="icon" aria-hidden="true"><use href="#icon-export" /></svg> __MSG_exportBtn__</button>
+          </div>
+        </details>
       </div>
       <div id="undoToast" hidden>
         <button id="undoBtn">__MSG_undoBtn__</button>
@@ -125,6 +138,12 @@
       </div>
     </div>
   </main>
+
+  <aside id="detailPanel" aria-live="polite"><div class="detail-empty">Absender auswählen, um Details zu sehen.</div></aside>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 7l9 6 9-6" /></symbol><symbol id="icon-scan" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5M8 11h6M11 8v6"/></symbol><symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m-9 0 1 13h10l1-13M10 11v5m4-5v5"/></symbol><symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z"/></symbol><symbol id="icon-archive" viewBox="0 0 24 24"><path d="M4 5h16v4H4zm2 4h12v10H6zm3 4 4 4 4-4"/></symbol><symbol id="icon-tag" viewBox="0 0 24 24"><path d="M3 12V5h7l11 11-7 7zm4-4h.01"/></symbol><symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V6z"/></symbol><symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1L14.5 3h-4L10 6a7 7 0 0 0-1.7 1l-2.4-1-2 3.5L6 11a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.4 3h4l.4-3a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5c.1-.3.1-.7.1-1z"/></symbol><symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 20h14"/></symbol><symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="icon-unsubscribe" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 8l8 5 8-5M7 3l10 18"/></symbol><symbol id="icon-export" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 20h14M5 4H3v17h18v-2"/></symbol>
+  </svg>
 
   <dialog id="confirmDialog">
     <p id="confirmMessage"></p>

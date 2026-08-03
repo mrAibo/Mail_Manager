@@ -36,6 +36,7 @@ const state = {
   isCheckingUnsubscribe: false,
   selected:           new Set(),  // selected email addresses (senders)
   selectedMessages:   new Set(),  // selected message IDs (individual mails)
+  detailEmail:        null,       // sender shown in the detail panel
   dragMessageIds:     null,        // message IDs being dragged (drag & drop into folder)
   undoTimer:          null,
   activeScanId:       null,
@@ -197,6 +198,8 @@ function clearCurrentResults() {
   state.selected.clear();
   state.selectedMessages.clear();
   state.lastSelectedEmail = null;
+  state.detailEmail = null;
+  renderDetailPanel();
   state.quickFilter = "all";
   state.advancedFilter = emptyAdvancedFilter();
   state.expandedSenders.clear();
@@ -712,22 +715,23 @@ function ensureCleanupDashboard() {
   dashboard.id = "cleanupDashboard";
   dashboard.hidden = true;
   dashboard.innerHTML = `
+    <div class="cleanup-dashboard-title">Aufräumvorschläge</div>
     <div class="dashboard-card" data-dashboard-filter="bulk">
       <div class="dashboard-label">Newsletter/Bulk</div>
       <div class="dashboard-value" id="dashBulk">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="bulk">Auswählen</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="bulk">Ansehen →</button>
     </div>
 
     <div class="dashboard-card" data-dashboard-filter="largeSize">
       <div class="dashboard-label">Speicherfresser</div>
       <div class="dashboard-value" id="dashLarge">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="largeSize">Auswählen</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="largeSize">Ansehen →</button>
     </div>
 
     <div class="dashboard-card" data-dashboard-filter="inactiveYear">
-      <div class="dashboard-label">Inaktiv &gt; 1 Jahr</div>
+      <div class="dashboard-label">Inaktiv &gt; 2 Jahre</div>
       <div class="dashboard-value" id="dashInactive">0</div>
-      <button type="button" class="dashboard-action" data-dashboard-action="inactiveYear">Auswählen</button>
+      <button type="button" class="dashboard-action" data-dashboard-action="inactiveYear">Ansehen →</button>
     </div>
   `;
 
@@ -777,7 +781,7 @@ function dashboardPredicate(key) {
       return sender => (sender.totalSizeBytes || 0) >= 100 * 1024 * 1024;
 
     case "inactiveYear":
-      return sender => isInactiveForDays(sender.newestDate, 365);
+      return sender => isInactiveForDays(sender.newestDate, 730);
 
     default:
       return null;
@@ -829,7 +833,7 @@ function updateCleanupDashboard() {
 
   const bulk     = dashboardStatsFor(sender => Boolean(sender.isBulkCandidate));
   const large    = dashboardStatsFor(sender => (sender.totalSizeBytes || 0) >= 100 * 1024 * 1024);
-  const inactive = dashboardStatsFor(sender => isInactiveForDays(sender.newestDate, 365));
+  const inactive = dashboardStatsFor(sender => isInactiveForDays(sender.newestDate, 730));
 
   setDashboardValue("dashBulk",     `${bulk.senderCount} · ${bulk.mailCount} Mails`);
   setDashboardValue("dashLarge",    `${large.senderCount} · ${formatSize(large.bytes)}`);
@@ -1121,6 +1125,21 @@ async function init() {
   $("scanProfileSelect")?.addEventListener("change", scheduleFeatureStatusUpdate);
   $("scanBtn").addEventListener("click", startScan);
   $("cancelScanBtn").addEventListener("click", cancelScan);
+  $("welcomeScanBtn")?.addEventListener("click", startScan);
+  $("welcomeAccountSelect")?.addEventListener("change", event => {
+    $("accountSelect").value = event.target.value;
+    $("accountSelect").dispatchEvent(new Event("change"));
+  });
+  $("welcomeFolderSelect")?.addEventListener("change", event => {
+    $("folderSelect").value = event.target.value;
+    $("folderSelect").dispatchEvent(new Event("change"));
+  });
+  document.querySelectorAll(".welcome-profile").forEach(button => {
+    button.addEventListener("click", () => {
+      $("scanProfileSelect").value = button.dataset.profile;
+      document.querySelectorAll(".welcome-profile").forEach(item => item.classList.toggle("active", item === button));
+    });
+  });
   $("filterInput").addEventListener("input", debounce(applyFilter, 150));
   $("selectAll").addEventListener("change", toggleSelectAll);
 
@@ -1313,6 +1332,7 @@ function populateAccountDropdown() {
     sel.appendChild(opt);
   }
   populateFolderDropdown();
+  syncWelcomeSources();
 }
 
 function populateFolderDropdown() {
@@ -1331,6 +1351,16 @@ function populateFolderDropdown() {
     opt.value = folder.id;
     opt.textContent = folder.name + (folder.protected ? " 🛡" : "");
     sel.appendChild(opt);
+  }
+  syncWelcomeSources();
+}
+
+function syncWelcomeSources() {
+  for (const [sourceId, targetId] of [["accountSelect", "welcomeAccountSelect"], ["folderSelect", "welcomeFolderSelect"]]) {
+    const source = $(sourceId), target = $(targetId);
+    if (!source || !target) continue;
+    target.innerHTML = source.innerHTML;
+    target.value = source.value;
   }
 }
 
@@ -1812,6 +1842,11 @@ function sortAndRender() {
 
   state.filteredSenders.sort(sorter);
 
+  if (state.detailEmail && !state.filteredSenders.some(sender => sender.email === state.detailEmail)) {
+    state.detailEmail = null;
+  }
+  renderDetailPanel();
+
   if (state.viewMode === "domains") {
     state.filteredDomains.sort(sorter);
   }
@@ -1924,6 +1959,42 @@ function renderSenders() {
   }
 
   renderChunk();
+}
+
+function icon(name) {
+  return `<svg class="icon" aria-hidden="true"><use href="#icon-${name}" /></svg>`;
+}
+
+function showSenderDetail(email) {
+  state.detailEmail = email;
+  renderDetailPanel();
+}
+
+function renderDetailPanel() {
+  const panel = $("detailPanel");
+  if (!panel) return;
+  const entry = state.allSenders.find(sender => sender.email === state.detailEmail);
+  if (!entry) {
+    panel.innerHTML = '<div class="detail-empty">Absender auswählen, um Details zu sehen.</div>';
+    return;
+  }
+  const readPct = entry.count ? Math.round((entry.readCount / entry.count) * 100) : 0;
+  const subjects = (entry.sampleSubjects || []).slice(0, 3);
+  panel.innerHTML = `
+    <div class="detail-heading"><div><h2>${escapeHtml(entry.displayName || entry.email)}</h2><div class="detail-email">${escapeHtml(entry.email)}</div></div><span class="risk-badge ${entry.riskScore >= 70 ? "risk-high" : entry.riskScore >= 40 ? "risk-mid" : "risk-low"}">${entry.riskScore}</span></div>
+    <dl class="detail-stats"><div><dt>Mails</dt><dd>${entry.count}</dd></div><div><dt>Speicher</dt><dd>${formatSize(entry.totalSizeBytes)}</dd></div><div><dt>Gelesen</dt><dd>${readPct}%</dd></div></dl>
+    <h3>Neueste Betreffe</h3><ul class="detail-subjects">${subjects.length ? subjects.map(subject => `<li>${escapeHtml(subject)}</li>`).join("") : "<li>Keine Betreffe verfügbar</li>"}</ul>
+    <div class="detail-actions">
+      <button class="detail-protect">${icon("shield")} ${state.protectedEmails.has(entry.email) ? "Schutz aufheben" : "Schützen"}</button>
+      <button class="detail-unsubscribe" ${entry.messageIds?.length ? "" : "disabled"}>${icon("unsubscribe")} Abmelden</button>
+      <button class="detail-messages">${icon("mail")} Mails anzeigen</button>
+    </div>`;
+  panel.querySelector(".detail-protect").addEventListener("click", () => toggleProtect(entry.email));
+  panel.querySelector(".detail-unsubscribe").addEventListener("click", () => {
+    state.selected = new Set([entry.email]);
+    updateSelectionLabel(); updateActionButtons(); handleUnsubscribe();
+  });
+  panel.querySelector(".detail-messages").addEventListener("click", () => toggleSenderExpand(entry.email));
 }
 
 // ─── Mail-Inspektion: Laden ─────────────────────────────────────────────────
@@ -2473,6 +2544,7 @@ function createSenderRow(entry, nested = false) {
 
   row.addEventListener("click", e => {
     handleSenderRowClick(entry, e);
+    showSenderDetail(entry.email);
   });
 
   row.querySelector(".open-msg-btn").addEventListener("click", e => {
@@ -2607,7 +2679,7 @@ async function openSenderMessage(entry) {
 
 // ─── Selection ────────────────────────────────────────────────────────────────
 function toggleRowSelect(email, checked) {
-  if (checked) state.selected.add(email); else state.selected.delete(email);
+  if (checked) { state.selected.add(email); showSenderDetail(email); } else state.selected.delete(email);
 
   const row = findRow(email);
   if (row) {
@@ -2694,14 +2766,11 @@ function updateSelectionLabel() {
 
   let label = "";
   if (senderCount > 0 && messageCount > 0) {
-    label = `${senderCount} Absender + ${messageCount} Mail(s) ausgewählt`;
+    label = `${senderCount + messageCount} ausgewählt`;
   } else if (senderCount > 0) {
-    const sel = state.filteredSenders.filter(s => state.selected.has(s.email));
-    const mails = sel.reduce((n, e) => n + e.count, 0);
-    const bytes = sel.reduce((n, e) => n + e.totalSizeBytes, 0);
-    label = `${senderCount} Absender · ${mails} Mails · ${formatSize(bytes)}`;
+    label = `${senderCount} ausgewählt`;
   } else if (messageCount > 0) {
-    label = `${messageCount} Mail(s) ausgewählt`;
+    label = `${messageCount} ausgewählt`;
   }
 
   $("selectionLabel").textContent = label;
@@ -2709,7 +2778,7 @@ function updateSelectionLabel() {
 
 function updateActionButtons() {
   const has = state.selected.size > 0 || state.selectedMessages.size > 0;
-  ["trashBtn", "folderBtn", "readBtn", "archiveBtn", "tagBtn", "unsubBtn"].forEach(id => $(id).disabled = !has);
+  ["trashBtn", "folderBtn", "readBtn", "archiveBtn", "tagBtn", "unsubBtn"].forEach(id => { const button = $(id); if (button) button.disabled = !has; });
 }
 
 // ─── Message selection helpers ─────────────────────────────────────────────────
