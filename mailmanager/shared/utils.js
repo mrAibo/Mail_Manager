@@ -1,6 +1,16 @@
 // Pure utility functions — no browser API calls, no side effects
 // Implemented in Tasks 2–4
 
+const DATE_FALLBACKS = {
+  relativeToday: "heute",
+  relativeYesterday: "gestern",
+  relativeDaysAgo: "vor $1 Tagen",
+  relativeWeeksAgo: "vor $1 Wochen",
+  relativeMonthsAgo: "vor $1 Monaten",
+};
+const _ = (key, subs = []) => globalThis.browser?.i18n?.getMessage?.(key, subs)
+  || DATE_FALLBACKS[key]?.replace("$1", subs[0]) || key;
+
 /**
  * Parses a Thunderbird message author string.
  * Handles: "Display Name <email@example.com>" and bare "email@example.com"
@@ -44,19 +54,21 @@ export function formatSize(bytes) {
 }
 
 /**
- * German relative date string.
+ * Localized relative date string.
  * @param {Date} date
  * @param {Date} [now]
  * @returns {string}
  */
 export function formatRelativeDate(date, now = new Date()) {
   const days = Math.floor((now - date) / 86400000);
-  if (days === 0) return "heute";
-  if (days === 1) return "gestern";
-  if (days < 7)   return `vor ${days} Tagen`;
+  if (days === 0) return _("relativeToday");
+  if (days === 1) return _("relativeYesterday");
+  if (days < 7) return _("relativeDaysAgo", [days]);
+  const weeks = Math.round(days / 7);
+  if (weeks < 5) return _("relativeWeeksAgo", [weeks]);
   const months = Math.round(days / 30);
-  if (months < 12) return `vor ${months} Mon.`;
-  return date.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+  if (months < 12) return _("relativeMonthsAgo", [months]);
+  return date.toLocaleDateString(globalThis.browser?.i18n?.getUILanguage?.() || "de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
 /**

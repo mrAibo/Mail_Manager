@@ -1195,5 +1195,77 @@
   },
   "errorUnknownActionDynamic": {
     "message": "Неизвестное действие: $1"
+  },
+  "cleanupScoreHelp": {
+    "message": "Оценка очистки: приоритет для уборки почтового ящика. Рассчитывается по объёму писем, доле непрочитанных и неактивности. Высокое значение означает: хороший кандидат на удаление, архивирование, сортировку или отписку."
+  },
+  "undo_partial_failure": {
+    "message": "Не удалось восстановить $1 сообщ. Проверьте почтовый ящик."
+  },
+  "quickempty_partial_failure": {
+    "message": "Не удалось переместить $1 сообщ."
+  },
+  "cleanup_import_invalid": {
+    "message": "В этом файле нет действительных правил очистки."
+  },
+  "cleanup_import_failed": {
+    "message": "Импорт не удался: $1"
+  },
+  "export_no_data": {
+    "message": "Нет данных для экспорта."
+  },
+  "partialActionTagged": {
+    "message": "помечено"
+  },
+  "partialActionRead": {
+    "message": "отмечено как прочитанное"
+  },
+  "partialActionMoved": {
+    "message": "перемещено"
+  },
+  "partialActionFailure": {
+    "message": "$1 писем $2, $3 не удалось $2 (устаревшие ID сообщений). Пересканируйте список."
+  },
+  "quickEmptyAlreadyEmptySpam": {
+    "message": "Папка спама уже пуста."
+  },
+  "relativeToday": {
+    "message": "сегодня"
+  },
+  "relativeYesterday": {
+    "message": "вчера"
+  },
+  "relativeDaysAgo": {
+    "message": "$1 дн. назад"
+  },
+  "relativeWeeksAgo": {
+    "message": "$1 нед. назад"
+  },
+  "relativeMonthsAgo": {
+    "message": "$1 мес. назад"
+  },
+  "cleanupScoreTooltipScore": {
+    "message": "Оценка очистки: $1/100"
+  },
+  "cleanupScoreTooltipMeaning": {
+    "message": "Значение:"
+  },
+  "cleanupScoreTooltipHigh": {
+    "message": "Высокое значение = хороший кандидат на очистку."
+  },
+  "cleanupScoreTooltipSafe": {
+    "message": "Не является риском спама или безопасности."
+  },
+  "cleanupScoreTooltipMails": {
+    "message": "Писем: $1"
+  },
+  "cleanupScoreTooltipUnread": {
+    "message": "Непрочитано: $1 ($2%)"
+  },
+  "cleanupScoreTooltipLastUnknown": {
+    "message": "Последнее письмо: неизвестно"
+  },
+  "cleanupScoreTooltipLastDays": {
+    "message": "Последнее письмо: $1 дн. назад"
   }
 }

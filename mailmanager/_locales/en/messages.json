@@ -1195,5 +1195,77 @@
   },
   "errorUnknownActionDynamic": {
     "message": "Unknown action: $1"
+  },
+  "cleanupScoreHelp": {
+    "message": "Cleanup score: mailbox cleanup priority. Calculated from email volume, unread rate, and inactivity. A high value means: a good candidate for deleting, archiving, sorting, or unsubscribing."
+  },
+  "undo_partial_failure": {
+    "message": "$1 message(s) could not be restored. Please review your mailbox."
+  },
+  "quickempty_partial_failure": {
+    "message": "$1 message(s) could not be moved."
+  },
+  "cleanup_import_invalid": {
+    "message": "No valid cleanup rules found in this file."
+  },
+  "cleanup_import_failed": {
+    "message": "Import failed: $1"
+  },
+  "export_no_data": {
+    "message": "No data to export."
+  },
+  "partialActionTagged": {
+    "message": "tagged"
+  },
+  "partialActionRead": {
+    "message": "marked as read"
+  },
+  "partialActionMoved": {
+    "message": "moved"
+  },
+  "partialActionFailure": {
+    "message": "$1 email(s) $2, $3 could not be $2 (stale message IDs). Re-scan to refresh the list."
+  },
+  "quickEmptyAlreadyEmptySpam": {
+    "message": "Spam folder is already empty."
+  },
+  "relativeToday": {
+    "message": "today"
+  },
+  "relativeYesterday": {
+    "message": "yesterday"
+  },
+  "relativeDaysAgo": {
+    "message": "$1 days ago"
+  },
+  "relativeWeeksAgo": {
+    "message": "$1 weeks ago"
+  },
+  "relativeMonthsAgo": {
+    "message": "$1 months ago"
+  },
+  "cleanupScoreTooltipScore": {
+    "message": "Cleanup score: $1/100"
+  },
+  "cleanupScoreTooltipMeaning": {
+    "message": "Meaning:"
+  },
+  "cleanupScoreTooltipHigh": {
+    "message": "High value = good cleanup candidate."
+  },
+  "cleanupScoreTooltipSafe": {
+    "message": "Not a spam or security risk."
+  },
+  "cleanupScoreTooltipMails": {
+    "message": "Emails: $1"
+  },
+  "cleanupScoreTooltipUnread": {
+    "message": "Unread: $1 ($2%)"
+  },
+  "cleanupScoreTooltipLastUnknown": {
+    "message": "Last email: unknown"
+  },
+  "cleanupScoreTooltipLastDays": {
+    "message": "Last email: $1 day(s) ago"
   }
 }

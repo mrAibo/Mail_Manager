@@ -20,7 +20,7 @@ const addMatches = (text, regex) => {
 };
 addMatches(read("tab/tab.html"), /__MSG_([A-Za-z0-9_@]+)__/g);
 addMatches(read("manifest.json"), /__MSG_([A-Za-z0-9_@]+)__/g);
-for (const file of ["tab/tab.js", "background/background.js"]) {
+for (const file of ["tab/tab.js", "tab/tab-utilities.js", "shared/utils.js", "background/background.js"]) {
   const source = read(file);
   addMatches(source, /_\(\s*["']([A-Za-z0-9_@]+)["']/g);
   addMatches(source, /browser\.i18n\.getMessage\(\s*["']([A-Za-z0-9_@]+)["']/g);

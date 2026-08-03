@@ -61,7 +61,7 @@ describe("formatRelativeDate", () => {
   const now = new Date("2026-05-10");
   it("returns 'heute'",       () => assert.equal(formatRelativeDate(new Date("2026-05-10"), now), "heute"));
   it("returns 'vor 2 Tagen'", () => assert.equal(formatRelativeDate(new Date("2026-05-08"), now), "vor 2 Tagen"));
-  it("returns months",        () => assert.equal(formatRelativeDate(new Date("2026-02-10"), now), "vor 3 Mon."));
+  it("returns months",        () => assert.equal(formatRelativeDate(new Date("2026-02-10"), now), "vor 3 Monaten"));
   it("returns full date for old", () => assert.equal(formatRelativeDate(new Date("2024-01-15"), now), "15.01.2024"));
 });
 

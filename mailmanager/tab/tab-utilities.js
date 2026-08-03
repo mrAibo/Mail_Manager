@@ -1,6 +1,19 @@
 // MailManager — Tab Utilities
 // Reine Hilfsfunktionen ohne externe Dependencies
 
+const TOOLTIP_FALLBACKS = {
+  cleanupScoreTooltipScore: "Aufräum-Score: $1/100",
+  cleanupScoreTooltipMeaning: "Bedeutung:",
+  cleanupScoreTooltipHigh: "Hoher Wert = guter Kandidat zum Aufräumen.",
+  cleanupScoreTooltipSafe: "Kein Spam- oder Sicherheitsrisiko.",
+  cleanupScoreTooltipMails: "Mails: $1",
+  cleanupScoreTooltipUnread: "Ungelesen: $1 ($2%)",
+  cleanupScoreTooltipLastUnknown: "Letzte Mail: unbekannt",
+  cleanupScoreTooltipLastDays: "Letzte Mail vor: $1 Tag(en)",
+};
+const _ = (key, subs = []) => globalThis.browser?.i18n?.getMessage?.(key, subs)
+  || TOOLTIP_FALLBACKS[key]?.replace("$1", subs[0]).replace("$2", subs[1]) || key;
+
 /**
  * Escapet HTML-Sonderzeichen um XSS zu verhindern.
  */
@@ -109,14 +122,14 @@ export function cleanupScoreTooltip(entry) {
   const inactiveDays = daysSince(entry.newestDate);
 
   return [
-    `Aufräum-Score: ${entry.riskScore}/100`,
+    _("cleanupScoreTooltipScore", [entry.riskScore]),
     "",
-    "Bedeutung:",
-    "Hoher Wert = guter Kandidat zum Aufräumen.",
-    "Kein Spam- oder Sicherheitsrisiko.",
+    _("cleanupScoreTooltipMeaning"),
+    _("cleanupScoreTooltipHigh"),
+    _("cleanupScoreTooltipSafe"),
     "",
-    `Mails: ${entry.count}`,
-    `Ungelesen: ${unreadCount} (${unreadPct}%)`,
-    inactiveDays === null ? "Letzte Mail: unbekannt" : `Letzte Mail vor: ${inactiveDays} Tag(en)`,
+    _("cleanupScoreTooltipMails", [entry.count]),
+    _("cleanupScoreTooltipUnread", [unreadCount, unreadPct]),
+    inactiveDays === null ? _("cleanupScoreTooltipLastUnknown") : _("cleanupScoreTooltipLastDays", [inactiveDays]),
   ].join("\n");
 }

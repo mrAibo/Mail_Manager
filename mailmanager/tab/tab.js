@@ -58,10 +58,7 @@ function debounce(fn, ms) {
   };
 }
 
-const CLEANUP_SCORE_HELP =
-  "Aufräum-Score: Priorität fürs Mailbox-Aufräumen. " +
-  "Berechnet aus Mail-Volumen, Ungelesen-Rate und Inaktivität. " +
-  "Hoher Wert bedeutet: guter Kandidat zum Löschen, Archivieren, Sortieren oder Abmelden.";
+const CLEANUP_SCORE_HELP = _("cleanupScoreHelp");
 
 function replaceExactText(root, from, to) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -97,12 +94,12 @@ const COLUMN_VISIBILITY_KEY = "mailmanager.columnVisibility.v1";
 const ACTION_LOG_LIMIT = 200;
 
 const CONFIGURABLE_COLUMNS = [
-  { id: "col-sender", label: "Absender" },
-  { id: "col-count", label: "Mails" },
-  { id: "col-size", label: "Größe" },
-  { id: "col-read", label: "Gelesen" },
-  { id: "col-date", label: "Letzte Mail" },
-  { id: "col-risk", label: "Aufräum-Score" },
+  { id: "col-sender", label: _("colSender") },
+  { id: "col-count", label: _("colCount") },
+  { id: "col-size", label: _("colSize") },
+  { id: "col-read", label: _("colRead") },
+  { id: "col-date", label: _("colDate") },
+  { id: "col-risk", label: _("colRisk") },
 ];
 
 const DEFAULT_COLUMN_VISIBILITY = {
@@ -180,16 +177,16 @@ async function loadScanCache(accountId, folderId) {
 
 function formatCacheAge(savedAt) {
   const d = new Date(savedAt);
-  if (Number.isNaN(d.getTime())) return "aus Cache";
+  if (Number.isNaN(d.getTime())) return _("fromCacheGeneric");
 
   const seconds = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
-  if (seconds < 60) return "gerade eben aus Cache";
+  if (seconds < 60) return _("fromCacheJustNow");
 
   const minutes = Math.round(seconds / 60);
-  if (minutes < 60) return `vor ${minutes} Min. aus Cache`;
+  if (minutes < 60) return _("fromCacheMinutes", [minutes]);
 
   const hours = Math.round(minutes / 60);
-  return `vor ${hours} Std. aus Cache`;
+  return _("fromCacheHours", [hours]);
 }
 
 function clearCurrentResults() {
@@ -234,7 +231,7 @@ async function showCachedScanForCurrentSelection() {
 
   state.allSenders = cached.senders;
   applyFilter();
-  updateStatsLabel(` · ${formatCacheAge(cached.savedAt)} · Neu scannen zum Aktualisieren`);
+  updateStatsLabel(_("cacheLabel", [formatCacheAge(cached.savedAt)]));
   updateCleanupAssistant();
   updateCleanupDashboard();
   scheduleFeatureStatusUpdate();
@@ -3795,7 +3792,7 @@ async function importCleanupRulesFromFile(event) {
     const importedCount = Object.keys(importedRules).length;
 
     if (importedCount === 0) {
-      alert("Keine gültigen Aufräum-Regeln in dieser Datei gefunden.");
+      alert(_("cleanup_import_invalid"));
       return;
     }
 
@@ -3841,7 +3838,7 @@ async function importCleanupRulesFromFile(event) {
     const found = await findCleanupRuleForCurrentSelection();
     updateCleanupRuleInfo(found?.scope, found?.rule || null, `${importedCount} Regel(n) importiert.`);
   } catch (err) {
-    alert("Import fehlgeschlagen: " + err.message);
+    alert(_("cleanup_import_failed", [err.message]));
   } finally {
     if (input) input.value = "";
   }
@@ -4849,11 +4846,8 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
   // unklar, warum nach der Aktion noch Mails übrig sind.
   if (response?.failedCount > 0) {
     const affected = response.movedCount ?? response.taggedCount ?? response.markedCount ?? 0;
-    const actionLabel = type === "tag" ? "markiert" : type === "markAsRead" ? "als gelesen markiert" : "verschoben";
-    alert(
-      `${affected} Mail(s) ${actionLabel}, ${response.failedCount} konnten nicht ${actionLabel} ` +
-      "werden (veraltete Nachrichten-IDs). Ein erneuter Scan aktualisiert die Liste.",
-    );
+    const actionLabel = type === "tag" ? _("partialActionTagged") : type === "markAsRead" ? _("partialActionRead") : _("partialActionMoved");
+    alert(_("partialActionFailure", [affected, actionLabel, response.failedCount]));
   }
 
   // Der Schnellpfad unten entfernt ganze Absender aus state.allSenders. Das ist
@@ -5166,7 +5160,7 @@ async function handleUndo() {
   const response = await browser.runtime.sendMessage({ action: "undo" });
   if (response?.error) { alert(response.error); return; }
   if (response?.failedCount > 0) {
-    alert(`${response.failedCount} message(s) could not be restored. Please review your mailbox.`);
+    alert(_("undo_partial_failure", [response.failedCount]));
   }
   await startScan();
 }
@@ -5417,7 +5411,7 @@ async function importProtectedEmailsFromFile(event) {
     $("statsLabel").textContent =
       `${importedEmails.length} geschützte Absender importiert.`;
   } catch (err) {
-    alert("Import fehlgeschlagen: " + err.message);
+    alert(_("cleanup_import_failed", [err.message]));
   } finally {
     if (input) input.value = "";
   }
@@ -5598,7 +5592,7 @@ async function copyDiagnosticsToClipboard() {
 function handleExport(format) {
   $("exportDialog").close();
   const senders = state.filteredSenders;
-  if (senders.length === 0) { alert("Keine Daten zum Exportieren."); return; }
+  if (senders.length === 0) { alert(_("export_no_data")); return; }
 
   const date     = new Date().toISOString().slice(0, 10);
   const content  = format === "csv" ? toCSV(senders) : toJSON(senders);
@@ -5718,15 +5712,17 @@ async function quickEmptyFolder() {
         const msg = `${_("quickEmptySuccessSpam")} (${resp.count || 0} ${_("colCount").toLowerCase()})`;
         showUndoToast(msg);
         if (resp.failedCount > 0) {
-          alert(`${resp.failedCount} message(s) could not be moved.`);
+          alert(_("quickempty_partial_failure", [resp.failedCount]));
         }
       } else {
         showToast(_("quickEmptySuccessSpam") + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
         if (resp.failedCount > 0) {
-          showToast(`${resp.failedCount} message(s) could not be moved.`);
+          showToast(_("quickempty_partial_failure", [resp.failedCount]));
         }
       }
       await startScan();
+    } else {
+      showToast(_("quickEmptyAlreadyEmptySpam"));
     }
   } catch (err) {
     showError(_("quickEmptyFailed", [err.message]));

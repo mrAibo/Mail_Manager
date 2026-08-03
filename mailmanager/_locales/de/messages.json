@@ -1195,5 +1195,77 @@
   },
   "errorUnknownActionDynamic": {
     "message": "Unbekannte Aktion: $1"
+  },
+  "cleanupScoreHelp": {
+    "message": "Aufräum-Score: Priorität fürs Mailbox-Aufräumen. Berechnet aus Mail-Volumen, Ungelesen-Rate und Inaktivität. Hoher Wert bedeutet: guter Kandidat zum Löschen, Archivieren, Sortieren oder Abmelden."
+  },
+  "undo_partial_failure": {
+    "message": "$1 Nachricht(en) konnten nicht wiederhergestellt werden. Bitte prüfe dein Postfach."
+  },
+  "quickempty_partial_failure": {
+    "message": "$1 Nachricht(en) konnten nicht verschoben werden."
+  },
+  "cleanup_import_invalid": {
+    "message": "Keine gültigen Aufräum-Regeln in dieser Datei gefunden."
+  },
+  "cleanup_import_failed": {
+    "message": "Import fehlgeschlagen: $1"
+  },
+  "export_no_data": {
+    "message": "Keine Daten zum Exportieren."
+  },
+  "partialActionTagged": {
+    "message": "markiert"
+  },
+  "partialActionRead": {
+    "message": "als gelesen markiert"
+  },
+  "partialActionMoved": {
+    "message": "verschoben"
+  },
+  "partialActionFailure": {
+    "message": "$1 Mail(s) $2, $3 konnten nicht $2 werden (veraltete Nachrichten-IDs). Ein erneuter Scan aktualisiert die Liste."
+  },
+  "quickEmptyAlreadyEmptySpam": {
+    "message": "Der Spam-Ordner ist bereits leer."
+  },
+  "relativeToday": {
+    "message": "heute"
+  },
+  "relativeYesterday": {
+    "message": "gestern"
+  },
+  "relativeDaysAgo": {
+    "message": "vor $1 Tagen"
+  },
+  "relativeWeeksAgo": {
+    "message": "vor $1 Wochen"
+  },
+  "relativeMonthsAgo": {
+    "message": "vor $1 Monaten"
+  },
+  "cleanupScoreTooltipScore": {
+    "message": "Aufräum-Score: $1/100"
+  },
+  "cleanupScoreTooltipMeaning": {
+    "message": "Bedeutung:"
+  },
+  "cleanupScoreTooltipHigh": {
+    "message": "Hoher Wert = guter Kandidat zum Aufräumen."
+  },
+  "cleanupScoreTooltipSafe": {
+    "message": "Kein Spam- oder Sicherheitsrisiko."
+  },
+  "cleanupScoreTooltipMails": {
+    "message": "Mails: $1"
+  },
+  "cleanupScoreTooltipUnread": {
+    "message": "Ungelesen: $1 ($2%)"
+  },
+  "cleanupScoreTooltipLastUnknown": {
+    "message": "Letzte Mail: unbekannt"
+  },
+  "cleanupScoreTooltipLastDays": {
+    "message": "Letzte Mail vor: $1 Tag(en)"
   }
 }
