@@ -1556,7 +1556,7 @@ dialog::-webkit-scrollbar-thumb:hover {
 .dashboard-action { grid-column: 2; grid-row: 1; align-self: center; width: auto; border: 0; color: var(--accent); background: transparent; padding: .2rem; }
 .dashboard-select { grid-column: 2; grid-row: 2; align-self: center; width: auto; border: 0; color: var(--accent); background: transparent; padding: .2rem; }
 .welcome-banner { margin: auto; max-width: 600px; border: 1px solid var(--border); background: var(--bg-elevated); box-shadow: 0 8px 30px rgba(0,0,0,.06); }
-.welcome-icon { width: 2rem; height: 2rem; color: var(--accent); margin-bottom: .6rem; }
+.welcome-hero { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
 .welcome-title { margin: 0; color: var(--text); font-size: 1.35rem; }
 .welcome-copy { color: var(--text-dim); margin: .3rem 0 1.25rem; }
 .welcome-sources { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; width: min(100%, 460px); text-align: left; }
