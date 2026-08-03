@@ -788,6 +788,9 @@
   "quickFilter_unsubscribe": {
     "message": "Abmeldbar"
   },
+  "quickFilter_unsubscribe_check": {
+    "message": "Abmelde-Links prüfen"
+  },
   "quickFilter_selected": {
     "message": "Ausgewählt"
   },

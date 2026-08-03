@@ -788,6 +788,9 @@
   "quickFilter_unsubscribe": {
     "message": "Отписываемые"
   },
+  "quickFilter_unsubscribe_check": {
+    "message": "Проверить отписку"
+  },
   "quickFilter_selected": {
     "message": "Выбранные"
   },
