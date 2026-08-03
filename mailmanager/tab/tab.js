@@ -5346,6 +5346,12 @@ async function importProtectedEmailsFromFile(event) {
 
     if (!ok) return;
 
+    const existingEmails = new Set(
+      [...state.protectedEmails].map(normalizeEmail)
+    );
+    const duplicateCount = importedEmails
+      .filter(email => existingEmails.has(email)).length;
+
     await setProtectedEmailsFromList(mergedEmails);
 
     if (typeof appendActionLog === "function") {
@@ -5619,7 +5625,7 @@ function formatCustomRegexList() {
 }
 
 function renderCustomRegexList() {
-  const list = $("#customRegexList");
+  const list = $("customRegexList");
   if (!list) return;
   list.innerHTML = formatCustomRegexList();
 
