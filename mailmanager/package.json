@@ -7,6 +7,6 @@
   "scripts": {
     "test": "node --test tests/*.mjs",
     "check": "node --check background/background.js && node --check tab/tab.js && node --check shared/utils.js && node --check tab/tab-utilities.js && node --check shared/cleanup-logic.mjs && node --check shared/message-preview.mjs && npm test",
-    "build": "node -e \"require('node:fs').rmSync('../mailmanager.xpi', { force: true })\" && zip -r -X ../mailmanager.xpi . -x '*.DS_Store' 'node_modules/*' 'tests/*' 'package.json' 'README.md'"
+    "build": "node -e \"require('node:fs').rmSync('../mailmanager.xpi', { force: true })\" && zip -r -X -0 ../mailmanager.xpi . -x '*.DS_Store' 'node_modules/*' 'tests/*' 'package.json' 'README.md'"
   }
 }
