@@ -1507,5 +1507,14 @@
   },
   "senderCheckbox_aria": {
     "message": "Выбрать отправителя $1"
+  },
+  "cleanupRuleScopeDomain": {
+    "message": "Домен"
+  },
+  "cleanupRuleScopeSelection": {
+    "message": "Выборка"
+  },
+  "cleanupRuleScopeRule": {
+    "message": "Правило"
   }
 }

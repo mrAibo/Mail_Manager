@@ -1507,5 +1507,14 @@
   },
   "senderCheckbox_aria": {
     "message": "Select sender $1"
+  },
+  "cleanupRuleScopeDomain": {
+    "message": "Domain"
+  },
+  "cleanupRuleScopeSelection": {
+    "message": "Selection"
+  },
+  "cleanupRuleScopeRule": {
+    "message": "Rule"
   }
 }

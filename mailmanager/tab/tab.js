@@ -3520,11 +3520,11 @@ function cleanupRuleTypeLabel(type) {
     case "sender":
       return _("viewSenders");
     case "domain":
-      return "Domain";
+      return _("cleanupRuleScopeDomain");
     case "selection":
-      return "Auswahl";
+      return _("cleanupRuleScopeSelection");
     default:
-      return "Regel";
+      return _("cleanupRuleScopeRule");
   }
 }
 
@@ -3568,10 +3568,10 @@ function renderCleanupRuleManagerEntry(storageKey, rule) {
 
       <div class="cleanup-rule-entry-actions">
         <button type="button" class="cleanup-rule-apply" data-rule-key="${escapeHtml(storageKey)}">
-          Anwenden
+          ${escapeHtml(_("cleanupRuleApply"))}
         </button>
         <button type="button" class="cleanup-rule-delete danger" data-rule-key="${escapeHtml(storageKey)}">
-          Löschen
+          ${escapeHtml(_("cleanupRuleDelete"))}
         </button>
       </div>
     </div>
@@ -5347,7 +5347,8 @@ async function importProtectedEmailsFromFile(event) {
     const duplicateCount = importedEmails
       .filter(email => existingEmails.has(email)).length;
 
-    await setProtectedEmailsFromList(mergedEmails);
+    const saved = await setProtectedEmailsFromList(mergedEmails);
+    if (!saved) return;
 
     if (typeof appendActionLog === "function") {
       await appendActionLog({
