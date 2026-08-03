@@ -2,7 +2,7 @@
 
 MailManager is a local Thunderbird add-on for reviewing and cleaning up large mailboxes. It scans selected folders, groups messages by sender or domain, and lets you inspect the selection before anything happens. The add-on stays inside your Thunderbird profile: no separate server, no cloud sync, no tracking, and no telemetry.
 
-> **Status: early alpha, version 0.2.0.** Safety features are not a substitute for backups. Back up important mail first, then try the workflow in a non-critical folder. Real Thunderbird integration tests and signing for public distribution are still outstanding.
+> **Status: beta, version 0.3.0-beta.** Safety features are not a substitute for backups. Back up important mail first, then try the workflow in a non-critical folder. Real Thunderbird integration tests are still outstanding.
 
 ## Contents
 
@@ -22,13 +22,15 @@ MailManager helps you clean up mail; it does not delete mail automatically. A sc
 ### What the interface provides
 
 - **Source selection and scan profiles:** one account, one folder, or every non-system folder; full scan, mail older than one year, newsletters/bulk mail, unread mail, or cleanup candidates.
+- **Three-column workspace:** filters in the sidebar, a sender list in the middle, and a detail panel for the selected sender.
 - **Sender and domain views:** compare senders or group related domains; sort by cleanup score, count, size, age, activity, or A–Z.
-- **Filters and candidate review:** search, quick filters, and combinable advanced filters for size, age/activity, and read status. These include newsletter/bulk mail, senders with unsubscribe options, high scores, large groups, and protected senders.
+- **Smart Cleanup dashboard:** “Cleanup suggestions” cards highlight newsletter/bulk mail, storage-heavy senders, and senders inactive for more than two years; each card can filter or select its matches.
+- **Filters and candidate review:** the sidebar groups quick filters under View, Recommended, Criteria, and Unsubscribe. Filter pills narrow the list; full-width action buttons check unsubscribe links and start bulk unsubscribe. Advanced filters can combine size, age/activity, and read status.
 - **Message review:** expand a sender into message rows, loaded newest first in pages of 50. The inline preview extracts a short plain-text excerpt; attachments can be opened or saved.
-- **Actions:** move a selection to Trash or to an existing or new folder, mark it as read, apply Thunderbird tags, check unsubscribe information, or export scan data as CSV or JSON.
+- **Actions:** move a selection to Trash or to an existing or new folder, mark it as read, apply Thunderbird tags, check unsubscribe information, or export scan data as CSV or JSON. Select multiple senders and unsubscribe in one step: `https:` links open in the browser and `mailto:` links open prefilled compose windows.
 - **Local administration:** cleanup rules, a protection list, action log, diagnostics view, visible columns, and custom regular-expression rules for labels.
 - **Interaction:** context menus, keyboard navigation in expanded message lists, shift-click range selection, and drag and drop to a destination folder.
-- **Appearance and languages:** light and dark color schemes, with German, English, and Russian translations.
+- **Appearance and languages:** light and dark color schemes, SVG interface icons, and German, English, and Russian translations through the shared `_()` function.
 
 ### Cleanup score and bulk detection
 
@@ -43,12 +45,12 @@ Cleaning up a mailbox has an awkward property: one match can mean hundreds of me
 ### Before an action
 
 - System folders such as Sent, Drafts, Archive, Trash, Spam/Junk, and Outbox are not offered as scan targets.
-- Protected senders and protected source folders are checked again in the background before Trash, move, or tag actions. If reliable folder data is unavailable, the action fails rather than guessing.
+- Protected senders and protected source folders are checked again in the background before Trash, move, archive, or tag actions. If reliable folder data is unavailable, the action fails rather than guessing.
 - The Trash dialog calculates the count, size, and messages excluded by rules in advance. Changing a rule locks confirmation until a fresh preview is available.
 - Warnings cover very recent mail, personal senders, small groups, mostly read selections, large volumes, and mixed domains. High warning levels require another confirmation.
 - Saved rules can restrict candidates to older mail and keep the newest *N* messages per sender.
 - The normal cleanup flow moves messages to Trash. There is no publicly reachable permanent-delete action, and the add-on does not request the `messagesDelete` permission.
-- Undo works only when Thunderbird returns new message IDs after a move; undo entries are separate for each MailManager tab.
+- Undo works only when Thunderbird returns new message IDs after a move. For tags and read status, it restores the saved state; undo entries are separate for each MailManager tab.
 - CSV export escapes quotation marks and neutralizes formula prefixes in sender fields, so spreadsheet software does not execute them as formulas.
 
 ### Why local processing?
@@ -120,7 +122,7 @@ flowchart TD
 
 | Path | Purpose |
 |---|---|
-| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, Thunderbird 150.0 minimum version, permissions, and background entry point |
+| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, permanent extension UUID, author, SVG/PNG icons, Thunderbird 150.0 minimum version, permissions, and background entry point |
 | [`mailmanager/background/background.js`](mailmanager/background/background.js) | Message router, folder and scan interface, protection checks, actions, and undo |
 | [`mailmanager/tab/tab.js`](mailmanager/tab/tab.js) | UI state, rendering, filters, selection, dialogs, and action creation |
 | [`mailmanager/shared/cleanup-logic.mjs`](mailmanager/shared/cleanup-logic.mjs) | Cleanup and bulk scores, domain normalization, protection suggestions, and rule suggestions |
@@ -159,7 +161,7 @@ npm run build     # creates ../mailmanager.xpi
 
 [`mailmanager.xpi`](mailmanager.xpi) in the repository root is the canonical package artifact. [`dist/mailmanager.xpi`](dist/mailmanager.xpi) is the tracked copy. The build excludes tests, `node_modules`, `package.json`, and the nested README. CI runs `npm run check`, builds the XPI, verifies it with `unzip -t`, and uploads `mailmanager.xpi` as a build artifact.
 
-A locally built XPI with the permanent ID in `manifest.json` can be installed permanently through Thunderbird Add-ons Manager; Mozilla signing is not required. For public distribution, publish through [addons.thunderbird.net](https://addons.thunderbird.net/) as a versioned release.
+A permanently installable XPI requires a permanent extension ID (set in `manifest.json`). Thunderbird does not require Mozilla signing for local installation — a locally built XPI with a permanent ID can be installed via the Add-ons Manager. For public distribution through [addons.thunderbird.net](https://addons.thunderbird.net/), the XPI will be signed automatically upon submission.
 
 ### Test coverage
 

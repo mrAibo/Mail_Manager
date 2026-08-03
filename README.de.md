@@ -2,7 +2,7 @@
 
 MailManager ist ein lokales Thunderbird-Add-on zum Prüfen und Aufräumen großer Postfächer. Es scannt ausgewählte Ordner, fasst Nachrichten nach Absender oder Domain zusammen und lässt dich die Auswahl vor einer Aktion kontrollieren. Das Add-on arbeitet im Thunderbird-Profil: kein eigener Server, keine Cloud-Synchronisation, kein Tracking und keine Telemetrie.
 
-> **Status: frühe Alpha, Version 0.2.0.** Sichere Funktionen ersetzen kein Backup. Vor dem Einsatz mit wichtigen Mails zuerst ein Backup anlegen und den Ablauf in einem unkritischen Ordner testen. Reale Thunderbird-Integrationstests und eine Signierung für die öffentliche Verteilung stehen noch aus.
+> **Status: Beta, Version 0.3.0-beta.** Sichere Funktionen ersetzen kein Backup. Vor dem Einsatz mit wichtigen Mails zuerst ein Backup anlegen und den Ablauf in einem unkritischen Ordner testen. Reale Thunderbird-Integrationstests stehen noch aus.
 
 ## Inhalt
 
@@ -22,13 +22,15 @@ MailManager hilft beim Aufräumen, nicht beim automatischen Löschen. Ein Scan l
 ### Was die Oberfläche bietet
 
 - **Quellauswahl und Scan-Profile**: ein Konto, ein Ordner oder alle nicht systemeigenen Ordner; Vollscan, nur Mails älter als ein Jahr, nur Newsletter/Bulk, nur ungelesene Mails oder Aufräum-Kandidaten.
+- **Drei-Spalten-Arbeitsbereich**: Filter in der Sidebar, die Absenderliste in der Mitte und ein Detailbereich für den ausgewählten Absender.
 - **Absender- und Domainansicht**: Absender vergleichen oder zusammengehörige Domains bündeln; Sortierung nach Aufräum-Score, Anzahl, Größe, Alter, Aktivität oder A–Z.
-- **Filter und Kandidatenprüfung**: Suche, Schnellfilter und kombinierbare erweiterte Filter für Größe, Alter/Aktivität und Lesestatus. Dazu gehören etwa Newsletter/Bulk, abmeldbare Absender, hohe Scores, große Gruppen und geschützte Absender.
+- **Smart-Cleanup-Dashboard**: Karten unter „Aufräumvorschläge“ zeigen Newsletter/Bulk, speicherintensive Absender und seit mehr als zwei Jahren inaktive Absender. Jede Karte kann ihre Treffer filtern oder auswählen.
+- **Filter und Kandidatenprüfung**: Die Sidebar gruppiert Schnellfilter unter VIEW, RECOMMENDED, CRITERIA und UNSUBSCRIBE. Filter-Pills grenzen die Liste ein; Aktionen über die volle Breite prüfen Abmeldelinks und starten die Sammelabmeldung. Erweiterte Filter lassen sich für Größe, Alter/Aktivität und Lesestatus kombinieren.
 - **Nachrichtenprüfung**: Absender lassen sich in Nachrichtenzeilen aufklappen. Diese werden neueste zuerst in Seiten zu 50 Nachrichten geladen. Die Inline-Vorschau extrahiert einen kurzen Klartext-Auszug; Anhänge lassen sich öffnen oder speichern.
-- **Aktionen**: Auswahl in den Papierkorb oder einen bestehenden bzw. neuen Ordner verschieben, als gelesen markieren, Thunderbird-Tags setzen, Abmeldeinformationen prüfen sowie Scan-Daten als CSV oder JSON exportieren.
+- **Aktionen**: Auswahl in den Papierkorb oder einen bestehenden bzw. neuen Ordner verschieben, als gelesen markieren, Thunderbird-Tags setzen, Abmeldeinformationen prüfen sowie Scan-Daten als CSV oder JSON exportieren. Mehrere Absender lassen sich mit einem Schritt abmelden: `https:`-Links öffnen im Browser, `mailto:`-Links ein vorbefülltes Verfassen-Fenster.
 - **Lokale Verwaltung**: Aufräum-Regeln, Schutzliste, Aktionsprotokoll, Diagnoseansicht, sichtbare Spalten und eigene RegEx-Regeln für Markierungen.
 - **Bedienung**: Kontextmenüs, Tastaturnavigation in aufgeklappten Nachrichtenlisten, Bereichsauswahl mit Umschalt-Klick und Drag-and-drop in einen Zielordner.
-- **Darstellung und Sprachen**: helles und dunkles Farbschema; Übersetzungen für Deutsch, Englisch und Russisch.
+- **Darstellung und Sprachen**: helles und dunkles Farbschema, SVG-Icons in der Oberfläche sowie Übersetzungen für Deutsch, Englisch und Russisch über die gemeinsame `_()`-Funktion.
 
 ### Aufräum-Score und Bulk-Erkennung
 
@@ -43,12 +45,12 @@ Mailbox-Aufräumen hat eine unangenehme Eigenschaft: Ein Treffer kann hundert Na
 ### Schutz vor der Aktion
 
 - Systemordner wie Gesendet, Entwürfe, Archiv, Papierkorb, Spam/Junk und Postausgang werden nicht als Scan-Ziel angeboten.
-- Geschützte Absender und geschützte Quellordner werden im Background vor Papierkorb-, Verschiebe- und Tag-Aktionen erneut geprüft. Fehlen verlässliche Ordnerdaten, schlägt die Aktion fehl, statt zu raten.
+- Geschützte Absender und geschützte Quellordner werden im Background vor Papierkorb-, Verschiebe-, Archiv- und Tag-Aktionen erneut geprüft. Fehlen verlässliche Ordnerdaten, schlägt die Aktion fehl, statt zu raten.
 - Der Papierkorb-Dialog berechnet vorab Anzahl, Größe und durch Regeln ausgesparte Nachrichten. Nach einer Regeländerung bleibt die Bestätigung gesperrt, bis eine neue Vorschau vorliegt.
 - Warnungen decken unter anderem sehr neue Mails, persönliche Absender, kleine Gruppen, überwiegend gelesene Auswahl, große Mengen und gemischte Domains ab. Bei hohen Warnungen ist eine zusätzliche Bestätigung nötig.
 - Gespeicherte Regeln können nur ältere Mails berücksichtigen und pro Absender die neuesten *N* Nachrichten behalten.
 - Der normale Aufräumfluss verschiebt in den Papierkorb. Eine öffentlich erreichbare Aktion zum permanenten Löschen wird nicht angeboten und die Berechtigung `messagesDelete` wird nicht angefordert.
-- Rückgängig funktioniert nur, wenn Thunderbird beim Verschieben neue Message-IDs zurückliefert; die Undo-Einträge sind pro MailManager-Tab getrennt.
+- Beim Verschieben funktioniert Rückgängig nur, wenn Thunderbird neue Message-IDs zurückliefert. Bei Tags und Lesestatus stellt es den gespeicherten Zustand wieder her; die Undo-Einträge sind pro MailManager-Tab getrennt.
 - CSV-Export escaped Anführungszeichen und neutralisiert Formelpräfixe in Absenderfeldern, damit ein Tabellenprogramm sie nicht als Formeln ausführt.
 
 ### Warum lokal?
@@ -120,7 +122,7 @@ flowchart TD
 
 | Pfad | Wofür er da ist |
 |---|---|
-| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, Mindestversion Thunderbird 150.0, Berechtigungen und Background-Einstiegspunkt |
+| [`mailmanager/manifest.json`](mailmanager/manifest.json) | Manifest V3, feste Erweiterungs-UUID, Autor, SVG-/PNG-Icons, Mindestversion Thunderbird 150.0, Berechtigungen und Background-Einstiegspunkt |
 | [`mailmanager/background/background.js`](mailmanager/background/background.js) | Nachrichtenrouter, Ordner- und Scanschnittstelle, Schutzprüfung, Aktionen und Undo |
 | [`mailmanager/tab/tab.js`](mailmanager/tab/tab.js) | UI-Zustand, Darstellung, Filter, Auswahl, Dialoge und Aktionserzeugung |
 | [`mailmanager/shared/cleanup-logic.mjs`](mailmanager/shared/cleanup-logic.mjs) | Aufräum- und Bulk-Score, Domain-Normalisierung, Schutzvorschläge und Regelvorschläge |
@@ -159,7 +161,7 @@ npm run build     # erstellt ../mailmanager.xpi
 
 [`mailmanager.xpi`](mailmanager.xpi) im Repository-Root ist das kanonische Paketartefakt. [`dist/mailmanager.xpi`](dist/mailmanager.xpi) ist die mitgeführte Kopie. Der Build schließt Tests, `node_modules`, `package.json` und die Unterordner-README aus. Die CI führt `npm run check` aus, baut das XPI, prüft es mit `unzip -t` und lädt `mailmanager.xpi` als Build-Artefakt hoch.
 
-Ein lokal gebautes XPI mit der permanenten ID in `manifest.json` kann dauerhaft direkt über den Thunderbird-Add-ons-Manager installiert werden; eine Mozilla-Signierung ist nicht erforderlich. Für die öffentliche Verteilung sollte es über [addons.thunderbird.net](https://addons.thunderbird.net/) als versionierter Release veröffentlicht werden.
+Für ein dauerhaft installierbares XPI ist eine feste Erweiterungs-ID nötig (in `manifest.json` gesetzt). Thunderbird verlangt für die lokale Installation keine Mozilla-Signierung: Ein lokal gebautes XPI mit fester ID lässt sich über den Add-ons-Manager installieren. Bei einer Einreichung zur öffentlichen Verteilung über [addons.thunderbird.net](https://addons.thunderbird.net/) wird das XPI automatisch signiert.
 
 ### Testabdeckung
 
