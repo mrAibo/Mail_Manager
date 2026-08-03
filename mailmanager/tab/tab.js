@@ -2427,7 +2427,7 @@ async function trashSingleMessage(meta) {
       options: {},
     });
     if (response?.error) {
-      showError(_("mailMoveFailed", "Could not move message: $1", [response.error]));
+      showError(_("error_mailMoveFailed", [response.error]));
       return;
     }
     // betroffene Mail aus den Caches entfernen, statt den ganzen Bucket zu verwerfen
@@ -2454,7 +2454,7 @@ async function trashSingleMessage(meta) {
     state.messageAttachments.delete(meta.id);
     renderSenders();
   } catch (e) {
-    showError(_("mailMoveFailed", "Could not move message: $1", [e.message]));
+    showError(_("error_mailMoveFailed", [e.message]));
   }
 }
 

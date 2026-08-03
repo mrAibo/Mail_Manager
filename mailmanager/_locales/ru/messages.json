@@ -1416,36 +1416,123 @@
     "message": "Правило применено: $1 $2: $3."
   },
   "cleanupRuleClearConfirm": {
-    "message": "Delete $1 saved cleanup rule(s)?"
+    "message": "Удалить $1 сохранённых правил очистки?"
   },
   "cleanupRuleClearSuccess": {
-    "message": "All saved cleanup rules were deleted."
+    "message": "Все сохранённые правила очистки удалены."
   },
   "cleanupRuleDeleteConfirm": {
-    "message": "Delete rule for $1?"
+    "message": "Удалить правило для $1?"
   },
   "cleanupRuleManagerEmpty": {
-    "message": "No saved cleanup rules."
+    "message": "Нет сохранённых правил очистки."
   },
   "diagnosticsCopied": {
     "message": "Диагностика скопирована в буфер."
   },
   "diagnosticsLoading": {
-    "message": "Loading diagnostics …"
+    "message": "Загрузка диагностики …"
   },
   "protectManagerClearConfirm": {
-    "message": "Unlock $1 protected senders?"
+    "message": "Разблокировать $1 защищённых отправителей?"
   },
   "protectManagerEmpty": {
-    "message": "No protected senders found."
+    "message": "Защищённые отправители не найдены."
   },
   "protectManagerUnlock": {
     "message": "Разблокировать"
   },
   "protectNotInCurrentAnalysis": {
-    "message": "Not in current analysis"
+    "message": "Нет в текущем анализе"
   },
   "replyOpenFailed": {
     "message": "Не удалось открыть окно ответа."
+  },
+  "freshlyScanned": {
+    "message": "только что просканировано"
+  },
+  "scanCannotCancel": {
+    "message": "Сканирование больше не может быть отменено"
+  },
+  "showAttachments": {
+    "message": "Показать вложения"
+  },
+  "selectThisEmail": {
+    "message": "Выбрать это письмо"
+  },
+  "loadMoreEmails": {
+    "message": "Загрузить ещё $1 писем"
+  },
+  "unsubscribeTooltip": {
+    "message": "Проверяет заголовки List-Unsubscribe только для выбранных или видимых кандидатов. Обычное сканирование остаётся быстрым."
+  },
+  "statsMails": {
+    "message": "писем"
+  },
+  "statsSenders": {
+    "message": "отправителей"
+  },
+  "domainUnknown": {
+    "message": "неизвестно"
+  },
+  "cleanupAssistantNoData": {
+    "message": "Нет данных для анализа. Сначала просканируйте папку."
+  },
+  "cleanupAssistantPersonal": {
+    "message": "Личные"
+  },
+  "cleanupAssistantGoodCandidates": {
+    "message": "Хорошие кандидаты для очистки"
+  },
+  "cleanupAssistantUnsubscribable": {
+    "message": "Отписываемые: $1"
+  },
+  "cleanupNewsletterCleanup": {
+    "message": "Очистка рассылок"
+  },
+  "cleanupStorageCleanup": {
+    "message": "Очистка хранилища"
+  },
+  "cleanupOldMailReview": {
+    "message": "Проверка старых писем"
+  },
+  "cleanupUnreadCleanup": {
+    "message": "Очистка непрочитанных"
+  },
+  "trashWarningRecent": {
+    "message": "выбранные отправители имеют письма за последние 30 дней"
+  },
+  "trashWarningCurrent": {
+    "message": "Текущая переписка может быть затронута"
+  },
+  "trashWarningFew": {
+    "message": "только 1–3 письма"
+  },
+  "trashWarningNotBulk": {
+    "message": "не похожи на рассылки"
+  },
+  "trashWarningMostlyRead": {
+    "message": "в основном прочитанные письма"
+  },
+  "trashWarningDomains": {
+    "message": "разные домены"
+  },
+  "trashWarningCount": {
+    "message": "выбрано $1 писем"
+  },
+  "protectionNewMails": {
+    "message": "новые письма"
+  },
+  "protectionFewMails": {
+    "message": "мало писем"
+  },
+  "protectionMostlyRead": {
+    "message": "в основном прочитаны"
+  },
+  "protectionFeelsPersonal": {
+    "message": "кажется личным"
+  },
+  "protectionRecommended": {
+    "message": "Рекомендуется защита"
   }
 }

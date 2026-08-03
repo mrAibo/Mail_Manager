@@ -1416,36 +1416,123 @@
     "message": "Regel angewendet: $1 $2: $3."
   },
   "cleanupRuleClearConfirm": {
-    "message": "Delete $1 saved cleanup rule(s)?"
+    "message": "Gespeicherte Aufräum-Regel(n) ($1) wirklich löschen?"
   },
   "cleanupRuleClearSuccess": {
-    "message": "All saved cleanup rules were deleted."
+    "message": "Alle gespeicherten Aufräum-Regeln wurden gelöscht."
   },
   "cleanupRuleDeleteConfirm": {
-    "message": "Delete rule for $1?"
+    "message": "Regel für $1 wirklich löschen?"
   },
   "cleanupRuleManagerEmpty": {
-    "message": "No saved cleanup rules."
+    "message": "Keine gespeicherten Aufräum-Regeln."
   },
   "diagnosticsCopied": {
     "message": "Diagnose in Zwischenablage kopiert."
   },
   "diagnosticsLoading": {
-    "message": "Loading diagnostics …"
+    "message": "Diagnose wird geladen …"
   },
   "protectManagerClearConfirm": {
-    "message": "Unlock $1 protected senders?"
+    "message": "$1 geschützte Absender entsperren?"
   },
   "protectManagerEmpty": {
-    "message": "No protected senders found."
+    "message": "Keine geschützten Absender gefunden."
   },
   "protectManagerUnlock": {
     "message": "Entsperren"
   },
   "protectNotInCurrentAnalysis": {
-    "message": "Not in current analysis"
+    "message": "Nicht in aktueller Analyse"
   },
   "replyOpenFailed": {
     "message": "Antwort-Fenster konnte nicht geöffnet werden."
+  },
+  "unsubscribeTooltip": {
+    "message": "Prüft List-Unsubscribe-Header nur für ausgewählte oder sichtbare Kandidaten. Der normale Scan bleibt dadurch schnell."
+  },
+  "statsMails": {
+    "message": "Mails"
+  },
+  "statsSenders": {
+    "message": "Absender"
+  },
+  "domainUnknown": {
+    "message": "unbekannt"
+  },
+  "freshlyScanned": {
+    "message": "frisch gescannt"
+  },
+  "scanCannotCancel": {
+    "message": "Scan kann nicht mehr abgebrochen werden"
+  },
+  "showAttachments": {
+    "message": "Anhänge anzeigen"
+  },
+  "selectThisEmail": {
+    "message": "Diese Mail auswählen"
+  },
+  "loadMoreEmails": {
+    "message": "Weitere $1 Mails laden"
+  },
+  "cleanupAssistantNoData": {
+    "message": "Noch keine Analyse. Ordner scannen …"
+  },
+  "cleanupAssistantPersonal": {
+    "message": "Persönlich wirkende"
+  },
+  "cleanupAssistantGoodCandidates": {
+    "message": "Gute Kandidaten"
+  },
+  "cleanupAssistantUnsubscribable": {
+    "message": "Abmeldbar: $1"
+  },
+  "cleanupNewsletterCleanup": {
+    "message": "Newsletter aufräumen"
+  },
+  "cleanupStorageCleanup": {
+    "message": "Speicher aufräumen"
+  },
+  "cleanupOldMailReview": {
+    "message": "Alte Mails prüfen"
+  },
+  "cleanupUnreadCleanup": {
+    "message": "Ungelesene aufräumen"
+  },
+  "trashWarningRecent": {
+    "message": "ausgewählte Absender haben Mails aus den letzten 30 Tagen"
+  },
+  "trashWarningCurrent": {
+    "message": "Aktuelle Kommunikation könnte betroffen sein"
+  },
+  "trashWarningFew": {
+    "message": "nur 1–3 Mails"
+  },
+  "trashWarningNotBulk": {
+    "message": "sehen nicht nach Newsletter/Bulk aus"
+  },
+  "trashWarningMostlyRead": {
+    "message": "überwiegend gelesene Mails"
+  },
+  "trashWarningDomains": {
+    "message": "verschiedene Domains"
+  },
+  "trashWarningCount": {
+    "message": "$1 Mails sind ausgewählt"
+  },
+  "protectionNewMails": {
+    "message": "neue Mails"
+  },
+  "protectionFewMails": {
+    "message": "wenige Mails"
+  },
+  "protectionMostlyRead": {
+    "message": "überwiegend gelesen"
+  },
+  "protectionFeelsPersonal": {
+    "message": "wirkt persönlich"
+  },
+  "protectionRecommended": {
+    "message": "Schutz empfohlen"
   }
 }
