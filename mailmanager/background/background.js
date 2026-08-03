@@ -411,12 +411,13 @@ function searchTree(folders, predicate) {
  *
  * @param {number[]} messageIds
  * @param {object} destination  MailFolder
- * @returns {Promise<{newIds: number[], failedCount: number, movedCount: number}>}
+ * @returns {Promise<{newIds: number[], moves: {oldId: number, newId: number, sourceFolderId: string}[], failedCount: number, movedCount: number}>}
  */
 function moveAndTrackIds(messageIds, destination) {
   return new Promise((resolve) => {
     const wanted = new Set(messageIds);
     const newIds = [];
+    const moves = [];
     let failedCount = 0;
     let settled = false;
 
@@ -427,7 +428,7 @@ function moveAndTrackIds(messageIds, destination) {
       failedCount += wanted.size;
       browser.messages.onMoved.removeListener(listener);
       clearTimeout(timer);
-      resolve({ newIds, failedCount, movedCount: messageIds.length - failedCount });
+      resolve({ newIds, moves, failedCount, movedCount: messageIds.length - failedCount });
     };
 
     const listener = (originalMessages, movedMessages) => {
@@ -437,6 +438,7 @@ function moveAndTrackIds(messageIds, destination) {
         if (wanted.has(orig[i].id) && moved[i]) {
           wanted.delete(orig[i].id);
           newIds.push(moved[i].id);
+          moves.push({ oldId: orig[i].id, newId: moved[i].id, sourceFolderId: orig[i].folder?.id });
         }
       }
       if (wanted.size === 0) finish();
@@ -468,6 +470,15 @@ function moveAndTrackIds(messageIds, destination) {
       }
     }
   });
+}
+
+function restoreGroups(moves) {
+  const groups = new Map();
+  for (const { newId, sourceFolderId } of moves) {
+    if (!groups.has(sourceFolderId)) groups.set(sourceFolderId, []);
+    groups.get(sourceFolderId).push(newId);
+  }
+  return [...groups].map(([sourceFolderId, messageIds]) => ({ sourceFolderId, messageIds }));
 }
 
 // ─── Scan engine ──────────────────────────────────────────────────────────────
@@ -1067,7 +1078,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
         };
       }
 
-      const { newIds, failedCount, movedCount } = await moveAndTrackIds(idsToMove, trash);
+      const { newIds, moves, failedCount, movedCount } = await moveAndTrackIds(idsToMove, trash);
 
       if (movedCount === 0) {
         return {
@@ -1082,7 +1093,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
         [undoKey]: {
           type: "trash",
           messageIds: newIds,
-          sourceFolderId: folderId,
+          restoreGroups: restoreGroups(moves),
           accountId,
         },
       });
@@ -1101,24 +1112,26 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       if (!tagKey) return { error: "Kein tagKey angegeben." };
       const messages = [];
       for (const id of messageIds) messages.push(await browser.messages.get(id));
-      const newlyTagged = messages
+      const newlyTagged = new Set(messages
         .filter(msg => !(msg.tags || []).includes(tagKey))
-        .map(msg => msg.id);
-      await browser.storage.session.set({
-        [undoKey]: { type: "tag", messageIds: newlyTagged, tagKey, accountId },
-      });
+        .map(msg => msg.id));
 
       let taggedCount = 0;
       let failedCount = 0;
+      const successfulIds = [];
       for (const msg of messages) {
         try {
           await browser.messages.update(msg.id, { tags: [...new Set([...(msg.tags || []), tagKey])] });
           taggedCount++;
+          if (newlyTagged.has(msg.id)) successfulIds.push(msg.id);
         } catch {
           failedCount++;
         }
       }
-      return { success: true, undoable: true, taggedCount, failedCount };
+      await browser.storage.session.set({
+        [undoKey]: { type: "tag", messageIds: successfulIds, tagKey, accountId },
+      });
+      return { success: true, undoable: successfulIds.length > 0, taggedCount, failedCount };
     }
 
     case "markAsRead": {
@@ -1127,32 +1140,33 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
         const msg = await browser.messages.get(id);
         previousReadState.push({ id: msg.id, read: msg.read });
       }
-      await browser.storage.session.set({
-        [undoKey]: { type: "markAsRead", previousReadState, accountId },
-      });
-
       let markedCount = 0;
       let failedCount = 0;
-      for (const { id } of previousReadState) {
+      const successfulReadState = [];
+      for (const previousState of previousReadState) {
         try {
-          await browser.messages.update(id, { read: true });
+          await browser.messages.update(previousState.id, { read: true });
           markedCount++;
+          successfulReadState.push(previousState);
         } catch {
           failedCount++;
         }
       }
-      return { success: true, undoable: true, markedCount, failedCount };
+      await browser.storage.session.set({
+        [undoKey]: { type: "markAsRead", previousReadState: successfulReadState, accountId },
+      });
+      return { success: true, undoable: successfulReadState.length > 0, markedCount, failedCount };
     }
 
     case "archive": {
       const archive = await findFolderByType(accountId, "archives");
       if (!archive) return { error: _("errorArchiveNotFound") };
-      const { newIds, failedCount, movedCount } = await moveAndTrackIds(messageIds, archive);
+      const { newIds, moves, failedCount, movedCount } = await moveAndTrackIds(messageIds, archive);
       if (movedCount === 0) {
         return { error: _("errorArchiveFailed", [String(messageIds.length), archive.name]) };
       }
       await browser.storage.session.set({
-        [undoKey]: { type: "archive", messageIds: newIds, sourceFolderId: folderId, accountId },
+        [undoKey]: { type: "archive", messageIds: newIds, restoreGroups: restoreGroups(moves), accountId },
       });
       return { success: true, undoable: newIds.length > 0, movedCount, failedCount };
     }
@@ -1175,7 +1189,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
         if (!parent) return { error: "Übergeordneter Ordner nicht gefunden." };
         targetFolder = await browser.folders.create(parent.id, folderName);
       }
-      const { newIds, failedCount, movedCount } = await moveAndTrackIds(messageIds, targetFolder);
+      const { newIds, moves, failedCount, movedCount } = await moveAndTrackIds(messageIds, targetFolder);
 
       if (movedCount === 0) {
         return {
@@ -1187,7 +1201,7 @@ async function handlePerformAction(type, messageIds, accountId, folderId, option
       }
 
       await browser.storage.session.set({
-        [undoKey]: { type: "folder", messageIds: newIds, sourceFolderId: folderId, accountId },
+        [undoKey]: { type: "folder", messageIds: newIds, restoreGroups: restoreGroups(moves), accountId },
       });
 
       return {
@@ -1212,25 +1226,49 @@ async function handleUndo(tabId) {
   const undoEntry = data[key];
   if (!undoEntry) return { error: "Nichts zum Rückgängigmachen." };
 
+  let failedCount = 0;
   if (undoEntry.type === "trash" || undoEntry.type === "folder" || undoEntry.type === "archive") {
-    const source = await findFolder(undoEntry.accountId, undoEntry.sourceFolderId);
-    if (!source) return { error: "Quell-Ordner nicht gefunden." };
-    await browser.messages.move(undoEntry.messageIds, source.id, { isUserAction: true });
+    const groups = undoEntry.restoreGroups || [{
+      sourceFolderId: undoEntry.sourceFolderId,
+      messageIds: undoEntry.messageIds,
+    }];
+    for (const group of groups) {
+      const source = await findFolder(undoEntry.accountId, group.sourceFolderId);
+      if (!source) {
+        failedCount += group.messageIds.length;
+        continue;
+      }
+      for (const id of group.messageIds) {
+        try {
+          await browser.messages.move([id], source.id, { isUserAction: true });
+        } catch {
+          failedCount++;
+        }
+      }
+    }
   } else if (undoEntry.type === "tag") {
     for (const id of undoEntry.messageIds) {
-      const msg = await browser.messages.get(id);
-      await browser.messages.update(id, {
-        tags: (msg.tags || []).filter(t => t !== undoEntry.tagKey),
-      });
+      try {
+        const msg = await browser.messages.get(id);
+        await browser.messages.update(id, {
+          tags: (msg.tags || []).filter(t => t !== undoEntry.tagKey),
+        });
+      } catch {
+        failedCount++;
+      }
     }
   } else if (undoEntry.type === "markAsRead") {
     for (const { id, read } of undoEntry.previousReadState) {
-      await browser.messages.update(id, { read });
+      try {
+        await browser.messages.update(id, { read });
+      } catch {
+        failedCount++;
+      }
     }
   }
 
   await browser.storage.session.remove(key);
-  return { success: true };
+  return { success: true, failedCount };
 }
 
 // ─── Unsubscribe ──────────────────────────────────────────────────────────────

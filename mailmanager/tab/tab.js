@@ -4860,7 +4860,7 @@ async function dispatchAction(type, options = {}, messageIdsOverride = null) {
   // daher ein vollständiger Rescan, der den Zustand zuverlässig neu aufbaut.
   const needsRescan =
     usedPartialTrashRules || state.selectedMessages.size > 0 || Boolean(messageIdsOverride)
-    || response?.failedCount > 0;
+    || response?.failedCount > 0 || type === "tag" || type === "markAsRead";
 
   if (needsRescan) {
     if (usedPartialTrashRules) {

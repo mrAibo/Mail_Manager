@@ -22,9 +22,10 @@ function storageArea(initial = {}) {
   };
 }
 
-function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpdateIds = [] } = {}) {
+function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpdateIds = [], failMoveIds = [] } = {}) {
   const calls = { moves: [], updates: [], deletes: [] };
   const failedUpdateIds = new Set(failUpdateIds);
+  const failedMoveIds = new Set(failMoveIds);
   const movedListeners = new Set();
   const messages = new Map([
     [1, { id: 1, author: "Protected <protected@example.test>", folder: { id: "inbox" }, tags: [] }],
@@ -51,6 +52,7 @@ function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpd
             id: "root",
             subFolders: [
               { id: "inbox", name: "Inbox", type: "inbox", subFolders: [] },
+              { id: "newsletter", name: "Newsletter", subFolders: [] },
               { id: "trash", name: "Trash", type: "trash", subFolders: [] },
             ],
           },
@@ -70,6 +72,7 @@ function loadBackground({ protectedEmails = [], protectedFolderIds = [], failUpd
       },
       async move(ids, destinationId) {
         calls.moves.push({ ids: [...ids], destinationId });
+        if (ids.some(id => failedMoveIds.has(id))) throw new Error("move failed");
         const moved = ids.map(id => ({ ...messages.get(id), id: id + 1000 }));
         queueMicrotask(() => {
           for (const listener of movedListeners) {
@@ -204,7 +207,7 @@ describe("background action safety", () => {
       "tag", [1, 2], "account-1", "inbox", { tagKey: "tag-a" }, 11
     );
 
-    assert.deepEqual([...tag.session.store.get("undoEntry:11").messageIds], [1, 2]);
+    assert.deepEqual([...tag.session.store.get("undoEntry:11").messageIds], [1]);
     assert.equal(tagResult.taggedCount, 1);
     assert.equal(tagResult.failedCount, 1);
     assert.equal(tag.messages.get(1).tags.includes("tag-a"), true);
@@ -219,12 +222,35 @@ describe("background action safety", () => {
 
     assert.deepEqual(
       JSON.parse(JSON.stringify(read.session.store.get("undoEntry:11").previousReadState)),
-      [{ id: 1, read: true }, { id: 2, read: false }]
+      [{ id: 1, read: true }]
     );
     assert.equal(readResult.markedCount, 1);
     assert.equal(readResult.failedCount, 1);
     assert.equal(read.messages.get(1).read, true);
     assert.equal(read.messages.get(2).read, false);
+  });
+
+  it("restores each moved message to its original folder and continues after an undo failure", async () => {
+    const { context, calls, messages, session } = loadBackground({ failMoveIds: [1002] });
+    messages.get(2).folder = { id: "newsletter" };
+
+    await context.handlePerformAction("trash", [1, 2], "account-1", "inbox", {}, 11);
+
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(session.store.get("undoEntry:11").restoreGroups)),
+      [
+        { sourceFolderId: "inbox", messageIds: [1001] },
+        { sourceFolderId: "newsletter", messageIds: [1002] },
+      ]
+    );
+
+    const undoResult = await context.handleUndo(11);
+
+    assert.equal(undoResult.failedCount, 1);
+    assert.deepEqual(calls.moves.slice(1), [
+      { ids: [1001], destinationId: "inbox" },
+      { ids: [1002], destinationId: "newsletter" },
+    ]);
   });
 
   it("fails closed when the sender has no tab id", async () => {
