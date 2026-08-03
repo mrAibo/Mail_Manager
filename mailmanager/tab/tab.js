@@ -5711,10 +5711,23 @@ async function quickEmptyFolder() {
         undoable: Boolean(resp.undoable),
         senders: [],
       });
-      if (resp.undoable) showUndoToast();
+      if (resp.undoable) {
+        showUndoToast();
+        // ponytail: show success in undo toast; partial failure as separate alert
+        const msg = `${_("quickEmptySuccessSpam")} (${resp.count || 0} ${_("colCount").toLowerCase()})`;
+        const toast = $("undoToast");
+        if (toast) toast.querySelector("span")?.insertAdjacentText("afterbegin", msg + " · ");
+        if (resp.failedCount > 0) {
+          alert(`${resp.failedCount} message(s) could not be moved.`);
+        }
+      } else {
+        showToast(_("quickEmptySuccessSpam") + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
+        if (resp.failedCount > 0) {
+          showToast(`${resp.failedCount} message(s) could not be moved.`);
+        }
+      }
       await startScan();
     }
-    showToast(_("quickEmptySuccessSpam") + ` (${resp.count || 0} ${_("colCount").toLowerCase()})`);
   } catch (err) {
     showError(_("quickEmptyFailed", [err.message]));
   } finally {
