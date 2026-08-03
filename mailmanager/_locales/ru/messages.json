@@ -552,7 +552,7 @@
     "message": "Новые кандидаты на защиту не найдены."
   },
   "errorActionFailed": {
-    "message": "Действие не удалось: $1"
+    "message": "Ошибка: $1"
   },
   "errorOpenMessage": {
     "message": "Не удалось открыть письмо: $1"
@@ -1267,13 +1267,12 @@
   },
   "cleanupScoreTooltipLastDays": {
     "message": "Последнее письмо: $1 дн. назад"
-  }
-,
+  },
   "accountsNoResponse": {
-    "message": "No response from background.js for getAccounts."
+    "message": "Нет ответа от background.js для getAccounts."
   },
   "initializationFailed": {
-    "message": "Initialization failed: $1"
+    "message": "Ошибка инициализации: $1"
   },
   "scanFreshWithProfile": {
     "message": " · freshly scanned · $1"
@@ -1282,10 +1281,10 @@
     "message": "Scan can no longer be cancelled."
   },
   "scanCancelFailed": {
-    "message": "Cancellation failed: $1"
+    "message": "Ошибка отмены: $1"
   },
   "noSubject": {
-    "message": "(no subject)"
+    "message": "(без темы)"
   },
   "attachmentsShow": {
     "message": "Show attachments"
@@ -1297,10 +1296,10 @@
     "message": "Select this email"
   },
   "messageRead": {
-    "message": "read"
+    "message": "прочитано"
   },
   "messageUnread": {
-    "message": "unread"
+    "message": "не прочитано"
   },
   "messageLoadMore": {
     "message": "Load $1 more emails"
@@ -1315,7 +1314,7 @@
     "message": "$1 senders · $2 emails · $3"
   },
   "cleanupAssistantPrepare": {
-    "message": "Prepare cleanup"
+    "message": "Подготовить очистку"
   },
   "cleanupAssistantProtectDescription": {
     "message": "Protect senders that look personal, recent, or frequently read before cleanup."
@@ -1394,24 +1393,59 @@
   },
   "protectionReasonRecommended": {
     "message": "Protection recommended"
+  },
+  "actionFolder": {
+    "message": "В папку"
+  },
+  "actionLogRules": {
+    "message": "Правила: $1"
+  },
+  "actionLogUndoAvailable": {
+    "message": "Отмена была доступна"
+  },
+  "actionRulesImport": {
+    "message": "Импорт правил"
+  },
+  "actionUndo": {
+    "message": "Undo"
+  },
+  "actionUnsubscribe": {
+    "message": "Отписаться"
+  },
+  "cleanupRuleApplied": {
+    "message": "Правило применено: $1 $2: $3."
+  },
+  "cleanupRuleClearConfirm": {
+    "message": "Delete $1 saved cleanup rule(s)?"
+  },
+  "cleanupRuleClearSuccess": {
+    "message": "All saved cleanup rules were deleted."
+  },
+  "cleanupRuleDeleteConfirm": {
+    "message": "Delete rule for $1?"
+  },
+  "cleanupRuleManagerEmpty": {
+    "message": "No saved cleanup rules."
+  },
+  "diagnosticsCopied": {
+    "message": "Диагностика скопирована в буфер."
+  },
+  "diagnosticsLoading": {
+    "message": "Loading diagnostics …"
+  },
+  "protectManagerClearConfirm": {
+    "message": "Unlock $1 protected senders?"
+  },
+  "protectManagerEmpty": {
+    "message": "No protected senders found."
+  },
+  "protectManagerUnlock": {
+    "message": "Разблокировать"
+  },
+  "protectNotInCurrentAnalysis": {
+    "message": "Not in current analysis"
+  },
+  "replyOpenFailed": {
+    "message": "Не удалось открыть окно ответа."
   }
-,
-  "actionFolder": {"message": "To folder"},
-  "actionLogRules": {"message": "Rules: $1"},
-  "actionLogUndoAvailable": {"message": "Undo was available"},
-  "actionRulesImport": {"message": "Rule import"},
-  "actionUndo": {"message": "Undo"},
-  "actionUnsubscribe": {"message": "Unsubscribe"},
-  "cleanupRuleApplied": {"message": "Rule applied: $1 $2: $3."},
-  "cleanupRuleClearConfirm": {"message": "Delete $1 saved cleanup rule(s)?"},
-  "cleanupRuleClearSuccess": {"message": "All saved cleanup rules were deleted."},
-  "cleanupRuleDeleteConfirm": {"message": "Delete rule for $1?"},
-  "cleanupRuleManagerEmpty": {"message": "No saved cleanup rules."},
-  "diagnosticsCopied": {"message": "Diagnostics copied to clipboard."},
-  "diagnosticsLoading": {"message": "Loading diagnostics \u2026"},
-  "protectManagerClearConfirm": {"message": "Unlock $1 protected senders?"},
-  "protectManagerEmpty": {"message": "No protected senders found."},
-  "protectManagerUnlock": {"message": "Unlock"},
-  "protectNotInCurrentAnalysis": {"message": "Not in current analysis"},
-  "replyOpenFailed": {"message": "Could not open reply window."}
 }

@@ -497,9 +497,7 @@ function ensureQuickFilterBar() {
   checkBtn.type = "button";
   checkBtn.className = "filter-action-btn check-unsub-btn";
   checkBtn.innerHTML = `${icon("search")} ${_("quickFilter_unsubscribe_check", "Check Unsubscribe Links")}`;
-  checkBtn.title =
-    "Prüft List-Unsubscribe-Header nur für ausgewählte oder sichtbare Kandidaten. " +
-    "Der normale Scan bleibt dadurch schnell.";
+  checkBtn.title = _("unsubscribeTooltip", "Checks List-Unsubscribe headers only for selected or visible candidates. The normal scan stays fast.");
   checkBtn.addEventListener("click", handleCheckUnsubscribeCandidates);
   actions.appendChild(checkBtn);
 
@@ -1544,7 +1542,7 @@ function updateStatsLabel(extra = "") {
   const bytes = state.allSenders.reduce((n, e) => n + e.totalSizeBytes, 0);
 
   $("statsLabel").textContent =
-    `${mails} Mails · ${state.allSenders.length} Absender · ${formatSize(bytes)}${extra}`;
+    `${mails} ${_("statsMails", "Mails")} · ${state.allSenders.length} ${_("statsSenders", "Absender")} · ${formatSize(bytes)}${extra}`;
 }
 
 function showError(msg) {
@@ -1623,7 +1621,7 @@ function normalizeDomain(hostOrEmail) {
     .map(part => part.trim())
     .filter(Boolean);
 
-  if (labels.length <= 2) return labels.join(".") || "unbekannt";
+  if (labels.length <= 2) return labels.join(".") || _("domainUnknown", "unknown");
 
   while (labels.length > 2 && COMMON_SUBDOMAIN_PREFIXES.has(labels[0])) {
     labels.shift();
@@ -2429,7 +2427,7 @@ async function trashSingleMessage(meta) {
       options: {},
     });
     if (response?.error) {
-      showError("Mail konnte nicht verschoben werden: " + response.error);
+      showError(_("mailMoveFailed", "Could not move message: $1", [response.error]));
       return;
     }
     // betroffene Mail aus den Caches entfernen, statt den ganzen Bucket zu verwerfen
@@ -2456,7 +2454,7 @@ async function trashSingleMessage(meta) {
     state.messageAttachments.delete(meta.id);
     renderSenders();
   } catch (e) {
-    showError("Mail konnte nicht verschoben werden: " + e.message);
+    showError(_("mailMoveFailed", "Could not move message: $1", [e.message]));
   }
 }
 

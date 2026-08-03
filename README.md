@@ -157,7 +157,7 @@ After making changes, select **Reload** in the debugging view. Thunderbird remov
 ```bash
 git clone https://github.com/mrAibo/Mail_Manager.git
 cd Mail_Manager/mailmanager
-npm run check     # syntax checks and 83 unit tests
+npm run check     # syntax checks and full unit-test suite
 npm run build     # creates ../mailmanager.xpi
 ```
 

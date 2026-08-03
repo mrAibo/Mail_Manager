@@ -552,7 +552,7 @@
     "message": "Keine neuen Schutz-Kandidaten gefunden."
   },
   "errorActionFailed": {
-    "message": "Aktion fehlgeschlagen: $1"
+    "message": "Fehler: $1"
   },
   "errorOpenMessage": {
     "message": "Mail konnte nicht geöffnet werden: $1"
@@ -1267,8 +1267,7 @@
   },
   "cleanupScoreTooltipLastDays": {
     "message": "Letzte Mail vor: $1 Tag(en)"
-  }
-,
+  },
   "accountsNoResponse": {
     "message": "Keine Antwort von background.js bei getAccounts."
   },
@@ -1394,24 +1393,59 @@
   },
   "protectionReasonRecommended": {
     "message": "Schutz empfohlen"
+  },
+  "actionFolder": {
+    "message": "In Ordner"
+  },
+  "actionLogRules": {
+    "message": "Regeln: $1"
+  },
+  "actionLogUndoAvailable": {
+    "message": "Undo war möglich"
+  },
+  "actionRulesImport": {
+    "message": "Regel-Import"
+  },
+  "actionUndo": {
+    "message": "Undo"
+  },
+  "actionUnsubscribe": {
+    "message": "Abmelden"
+  },
+  "cleanupRuleApplied": {
+    "message": "Regel angewendet: $1 $2: $3."
+  },
+  "cleanupRuleClearConfirm": {
+    "message": "Delete $1 saved cleanup rule(s)?"
+  },
+  "cleanupRuleClearSuccess": {
+    "message": "All saved cleanup rules were deleted."
+  },
+  "cleanupRuleDeleteConfirm": {
+    "message": "Delete rule for $1?"
+  },
+  "cleanupRuleManagerEmpty": {
+    "message": "No saved cleanup rules."
+  },
+  "diagnosticsCopied": {
+    "message": "Diagnose in Zwischenablage kopiert."
+  },
+  "diagnosticsLoading": {
+    "message": "Loading diagnostics …"
+  },
+  "protectManagerClearConfirm": {
+    "message": "Unlock $1 protected senders?"
+  },
+  "protectManagerEmpty": {
+    "message": "No protected senders found."
+  },
+  "protectManagerUnlock": {
+    "message": "Entsperren"
+  },
+  "protectNotInCurrentAnalysis": {
+    "message": "Not in current analysis"
+  },
+  "replyOpenFailed": {
+    "message": "Antwort-Fenster konnte nicht geöffnet werden."
   }
-,
-  "actionFolder": {"message": "To folder"},
-  "actionLogRules": {"message": "Rules: $1"},
-  "actionLogUndoAvailable": {"message": "Undo was available"},
-  "actionRulesImport": {"message": "Rule import"},
-  "actionUndo": {"message": "Undo"},
-  "actionUnsubscribe": {"message": "Unsubscribe"},
-  "cleanupRuleApplied": {"message": "Rule applied: $1 $2: $3."},
-  "cleanupRuleClearConfirm": {"message": "Delete $1 saved cleanup rule(s)?"},
-  "cleanupRuleClearSuccess": {"message": "All saved cleanup rules were deleted."},
-  "cleanupRuleDeleteConfirm": {"message": "Delete rule for $1?"},
-  "cleanupRuleManagerEmpty": {"message": "No saved cleanup rules."},
-  "diagnosticsCopied": {"message": "Diagnostics copied to clipboard."},
-  "diagnosticsLoading": {"message": "Loading diagnostics \u2026"},
-  "protectManagerClearConfirm": {"message": "Unlock $1 protected senders?"},
-  "protectManagerEmpty": {"message": "No protected senders found."},
-  "protectManagerUnlock": {"message": "Unlock"},
-  "protectNotInCurrentAnalysis": {"message": "Not in current analysis"},
-  "replyOpenFailed": {"message": "Could not open reply window."}
 }

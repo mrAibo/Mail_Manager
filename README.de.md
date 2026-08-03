@@ -157,7 +157,7 @@ Nach Änderungen in der Debug-Ansicht **Neu laden** wählen. Temporäre Add-ons 
 ```bash
 git clone https://github.com/mrAibo/Mail_Manager.git
 cd Mail_Manager/mailmanager
-npm run check     # Syntaxprüfungen und 83 Unit-Tests
+npm run check     # Syntaxprüfungen und vollständige Unit-Test-Suite
 npm run build     # erstellt ../mailmanager.xpi
 ```
 
