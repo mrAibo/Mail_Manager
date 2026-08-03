@@ -5160,7 +5160,10 @@ async function handleUndo() {
 
   const response = await browser.runtime.sendMessage({ action: "undo" });
   if (response?.error) { alert(response.error); return; }
-  await startScan(); // re-scan to reflect restored messages (IDs changed again)
+  if (response?.failedCount > 0) {
+    alert(`${response.failedCount} message(s) could not be restored. Please review your mailbox.`);
+  }
+  await startScan();
 }
 
 // ─── Protect toggle ───────────────────────────────────────────────────────────

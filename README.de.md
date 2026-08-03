@@ -4,7 +4,7 @@
 
 MailManager ist ein lokales Thunderbird-Add-on zum Prüfen und Aufräumen großer Postfächer. Es scannt ausgewählte Ordner, fasst Nachrichten nach Absender oder Domain zusammen und lässt dich die Auswahl vor einer Aktion kontrollieren. Das Add-on arbeitet im Thunderbird-Profil: kein eigener Server, keine Cloud-Synchronisation, kein Tracking und keine Telemetrie.
 
-> **Status: Beta, Version 0.3.0-beta.** Sichere Funktionen ersetzen kein Backup. Vor dem Einsatz mit wichtigen Mails zuerst ein Backup anlegen und den Ablauf in einem unkritischen Ordner testen. Reale Thunderbird-Integrationstests stehen noch aus.
+> **Status: Version 0.3.0.** Sichere Funktionen ersetzen kein Backup. Vor dem Einsatz mit wichtigen Mails zuerst ein Backup anlegen und den Ablauf in einem unkritischen Ordner testen. Reale Thunderbird-Integrationstests stehen noch aus.
 
 ## Inhalt
 
@@ -173,7 +173,7 @@ npm test
 node --check tab/tab.js
 ```
 
-Die Tests decken Score-, Bulk-, Domain-, Filter-, Export- und Vorschau-Logik sowie die Schutzgrenzen im Background mit gemockten Thunderbird-APIs ab. Der aktuelle Lauf umfasst **83 Tests in 5 Testdateien**.
+Die Tests decken Score-, Bulk-, Domain-, Filter-, Export-, Vorschau-Logik, Partial-Failure-Handling, Multi-Folder-Undo, Diakritika-Normalisierung und die Schutzgrenzen im Background mit gemockten Thunderbird-APIs ab.
 
 ## Berechtigungen, Datenschutz und Lizenz
 
